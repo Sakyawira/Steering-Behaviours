@@ -162,13 +162,11 @@
     <ClInclude Include="Initialization.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Object.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="TextLabel.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="Vertices.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\Shaders\AlternatingFragment.txt" />

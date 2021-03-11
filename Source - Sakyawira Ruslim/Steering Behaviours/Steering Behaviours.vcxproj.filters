@@ -45,9 +45,6 @@
     <ClInclude Include="ShaderLoader.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Initialization.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -73,9 +70,6 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Vertices.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="clock.h">
