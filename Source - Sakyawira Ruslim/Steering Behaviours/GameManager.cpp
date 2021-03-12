@@ -86,12 +86,7 @@ GameManager::GameManager()
 		const float random_x = static_cast<float>((rand() % border) * negate);
 		negate = rand() % 2;
 		negate = (negate == 0 ? -1 : 1);
-
 		const float random_y = static_cast<float>((rand() % border) * negate);
-		selectedVehicleBlue = new Vehicle(animateShader, vehicleBlueMesh, v_texture2, random_x, random_y);
-		selectedVehicleBlue->Scale(75.0f);
-		selectedVehicleBlue->RandomOn();
-		vehiclesBlue.push_back(selectedVehicleBlue);
 	}
 
 	// Creating walls around the playable space
@@ -192,25 +187,10 @@ GameManager::~GameManager()
 		delete coinObjects;
 		coinObjects = nullptr;
 	}
-	for (auto& coinObjects2 : vehiclesBlue)
-	{
-		delete coinObjects2;
-		coinObjects2 = nullptr;
-	}
 	for (auto& obstacleObjects : walls)
 	{
 		delete obstacleObjects;
 		obstacleObjects = nullptr;
-	}
-	for (auto& erasedObjects : vehiclesGreenRemoved)
-	{
-		delete erasedObjects;
-		erasedObjects = nullptr;
-	}
-	for (auto& erasedObjects2 : vehiclesBlueRemoved)
-	{
-		delete erasedObjects2;
-		erasedObjects2 = nullptr;
 	}
 	delete clock;
 	clock = nullptr;
@@ -240,20 +220,6 @@ void GameManager::Initialize()
 	// Reset score
 	// m_i_steer = 0;
 	ChangeBehaviourText();
-
-	// Re-enable All Enemies
-	while (!vehiclesGreenRemoved.empty())
-	{
-		vehiclesGreen.push_back(vehiclesGreenRemoved.back());
-		vehiclesGreenRemoved.pop_back();
-		vehiclesGreen.back()->Enable();
-	}
-	while (!vehiclesBlueRemoved.empty())
-	{
-		vehiclesBlue.push_back(vehiclesBlueRemoved.back());
-		vehiclesBlueRemoved.pop_back();
-		vehiclesBlue.back()->Enable();
-	}
 	
 	isInitialised = true;
 	isEnded = false;
@@ -261,10 +227,9 @@ void GameManager::Initialize()
 
 void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 {
-	// steer  
 	if (isInitialised == 1)
 	{
-		float f_deltaT = clock->GetDeltaTick() * 120.0f;
+		float deltaTime = clock->GetDeltaTick() * 120.0f;
 
 		if (isStarted)
 		{
@@ -274,37 +239,11 @@ void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 			}
 			
 			// Process Enemies
-			for (auto& coinObjects : vehiclesGreen)
+			for (auto& vehicle : vehiclesGreen)
 			{
-				coinObjects->process(currentBehaviour, vehiclesGreen, player->GetLocation(), WINDOW_WIDHT, WINDOW_HEIGHT, 0, f_deltaT);
+				vehicle->process(currentBehaviour, vehiclesGreen, player->GetLocation(), WINDOW_WIDHT, WINDOW_HEIGHT, 0, deltaTime);
 			}
-			for (auto& coinObjects2 : vehiclesBlue)
-			{
-				coinObjects2->process(currentBehaviour, vehiclesGreen, player->GetLocation(), WINDOW_WIDHT, WINDOW_HEIGHT, 0, f_deltaT);
-			}
-			// Check if collide with enemy every frame
 
-			// Re-spawn Enemies
-			if (vehiclesGreen.empty())
-			{
-				while (!vehiclesGreenRemoved.empty())
-				{
-					vehiclesGreen.push_back(vehiclesGreenRemoved.back());
-					vehiclesGreenRemoved.pop_back();
-					vehiclesGreen.back()->Enable();
-				}
-				int i = vehiclesGreenRemoved.size();
-			}
-			if (vehiclesBlue.empty())
-			{
-				while (!vehiclesBlueRemoved.empty())
-				{
-					vehiclesBlue.push_back(vehiclesBlueRemoved.back());
-					vehiclesBlueRemoved.pop_back();
-					vehiclesBlue.back()->Enable();
-				}
-				int i = vehiclesBlueRemoved.size();
-			}
 			currentTime = static_cast<float>(glutGet(GLUT_ELAPSED_TIME)); // Get current time.
 			currentTime = currentTime * 0.001f;
 			steerText->SetText(steerString);
@@ -312,16 +251,6 @@ void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 			steerText->SetScale(0.78f);
 			steerText->SetColor(glm::vec3(0.91f, 0.13f, 0.13f));
 
-			if (player->GetScale() <= 0.13f)
-			{
-				menuString = "You're Burnt Out!";
-				instructionString = "Press 'R' to play again...";
-				menuText->SetText(menuString);
-				instructionText->SetText(instructionString);
-				camera.SetPosX(0.0f);
-				camera.SetPosY(0.0f);
-				isEnded = true;
-			}
 			instructionString = "Press: (1) Seek, (2) Arrive, (3) Containment, (4) Wander, (5) Flock, (6) Leader Follow";
 			instructionText->SetText(instructionString);
 			instructionText->SetPosition(glm::vec2(-351.0f, -365.0f));
@@ -390,58 +319,6 @@ bool GameManager::CollisionCheck(float _top, float _bottom, float _left, float _
 	return false;
 }
 
-void GameManager::EnemyCollisionCheck()
-{
-	// Check whether or not a position is occupied by a m_enemy_earth
-	std::vector<Vehicle*>::iterator it_vec_game_object;
-	for (auto& gameObjects : players)
-	{
-		for (auto& gameObjects2 : vehiclesGreen)
-		{
-			if (gameObjects->GetPosition(RIGHT) >= gameObjects2->GetPosition(LEFT)
-				&& gameObjects->GetPosition(LEFT) <= gameObjects2->GetPosition(RIGHT)
-				&& gameObjects->GetPosition(BOTTOM) <= gameObjects2->GetPosition(TOP)
-				&& gameObjects->GetPosition(TOP) >= gameObjects2->GetPosition(BOTTOM))
-			{
-				std::cout << "m_enemy_earth found!" << std::endl;
-				gameObjects2->Disable();
-				vehiclesGreenRemoved.push_back(gameObjects2);
-				// if you remove it from the vector, it will not be deleted
-				// but if you don't, it will still be checked every frame, and you will still collide with it
-				it_vec_game_object = std::remove(vehiclesGreen.begin(), vehiclesGreen.end(), gameObjects2);
-				// There I push it to another vector to keep it's address, so I can delete it at the end of the game
-				vehiclesGreen.erase(it_vec_game_object);
-			}
-		}
-	}
-}
-
-void GameManager::EnemyCollisionCheck2()
-{
-	// Check whether or not a position is occupied by a m_enemy_earth
-	std::vector<Vehicle*>::iterator it_vec_game_object;
-	for (auto& gameObjects : players)
-	{
-		for (auto& gameObjects2 : vehiclesBlue)
-		{
-			if (gameObjects->GetPosition(RIGHT) >= gameObjects2->GetPosition(LEFT)
-				&& gameObjects->GetPosition(LEFT) <= gameObjects2->GetPosition(RIGHT)
-				&& gameObjects->GetPosition(BOTTOM) <= gameObjects2->GetPosition(TOP)
-				&& gameObjects->GetPosition(TOP) >= gameObjects2->GetPosition(BOTTOM))
-			{
-				std::cout << "m_enemy_earth found!" << std::endl;
-				gameObjects2->Disable();
-				vehiclesBlueRemoved.push_back(gameObjects2);
-				// if you remove it from the vector, it will not be deleted
-				// but if you don't, it will still be checked every frame, and you will still collide with it
-				it_vec_game_object = std::remove(vehiclesBlue.begin(), vehiclesBlue.end(), gameObjects2);
-				// There I push it to another vector to keep it's address, so I can delete it at the end of the game
-				vehiclesBlue.erase(it_vec_game_object);
-			}
-		}
-	}
-}
-
 void GameManager::Render()
 {
 	if (isInitialised == 1)
@@ -456,12 +333,6 @@ void GameManager::Render()
 		for (auto& playerObjects : players)
 		{
 			playerObjects->Draw(camera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
-		}
-
-		// Drawing all obstacles
-		for (auto& coinObjects2 : vehiclesBlue)
-		{
-			coinObjects2->Draw(camera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
 		}
 		
 		// Drawing all obstacles

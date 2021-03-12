@@ -46,8 +46,6 @@ public:
 	void Initialize();
 	void ProcessGame(Audio& audio, glm::vec3 mouse_location);
 	bool CollisionCheck(float _top, float _bottom, float _left, float _right);
-	void EnemyCollisionCheck();
-	void EnemyCollisionCheck2();
 	void Render();
 	bool IsStarted();
 	bool IsEnded();
@@ -108,7 +106,6 @@ private:
 	Mesh* playerMesh;
 	Mesh* staticMesh;
 
-	Vehicle* selectedVehicleBlue;
 	Vehicle* selectedVehicleGreen;
 
 	GameObject* wall;
@@ -117,9 +114,6 @@ private:
 
 	// Vectors
 	std::vector<Vehicle*> vehiclesGreen;
-	std::vector<Vehicle*> vehiclesBlue;
-	std::vector<Vehicle*> vehiclesGreenRemoved;
-	std::vector<Vehicle*> vehiclesBlueRemoved;
 	std::vector<GameObject*> walls;
 	std::vector<GameObject*> backgrounds;
 	std::vector<GameObject*> players;
