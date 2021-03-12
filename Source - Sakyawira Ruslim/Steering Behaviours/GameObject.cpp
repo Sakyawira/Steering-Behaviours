@@ -118,7 +118,7 @@ float GameObject::GetPosition(int COORDINATE_ID)
 	{
 		return 0.0f;
 	}
-	// std::cout << fi;
+	// // std::cout << fi;
 }
 
 glm::vec3 GameObject::GetLocation()

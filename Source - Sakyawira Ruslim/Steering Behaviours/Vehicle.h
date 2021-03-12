@@ -16,21 +16,21 @@ class Vehicle : public GameObject
 	public:
 		Vehicle(Shader* _shader, Mesh* _mesh, std::vector<Texture*>& _textures, float _initial_x, float _initial_y);
 		~Vehicle() = default;
-		void process(Behaviour steer, std::vector<Vehicle*>& v_boids, glm::vec3 target_location, int window_width, int window_height, int player_size, float delta_time);
+		void Process(Behaviour steer, std::vector<Vehicle*>& v_boids, glm::vec3 target_location, int window_width, int window_height, int player_size, float delta_time);
 		void RandomOn();
-		void limit(glm::vec3& _vector3,float _maxMagnitude);
-		void apply_force(glm::vec3 _force);
-		void seek(glm::vec3 _target);
-		glm::vec3 get_seek(glm::vec3 _target);
-		void arrive(glm::vec3 _target, float delta_time);
-		glm::vec3 get_arrive(glm::vec3 _target, float delta_time);
-		void wander(float delta_time);
-		void containment(float width, float height, float d);
-		glm::vec3 separate(std::vector<Vehicle*>& v_boids);
-		glm::vec3 alignment(std::vector<Vehicle*>& v_boids);
-		glm::vec3 cohesion(std::vector<Vehicle*>& v_boids);
-		void flock(std::vector<Vehicle*>& v_boids);
-		void lead_following(std::vector<Vehicle*>& v_boids, glm::vec3 target_location, float delta_time);
+		void Limit(glm::vec3& _vector3,float _maxMagnitude);
+		void ApplyForce(glm::vec3 _force);
+		void Seek(glm::vec3 _target);
+		glm::vec3 GetSeek(glm::vec3 _target);
+		void Arrive(glm::vec3 _target, float delta_time);
+		glm::vec3 GetArrive(glm::vec3 _target, float delta_time);
+		void Wander(float delta_time);
+		void Containment(float width, float height, float d);
+		glm::vec3 Seperate(std::vector<Vehicle*>& v_boids);
+		glm::vec3 Alignment(std::vector<Vehicle*>& v_boids);
+		glm::vec3 Cohesion(std::vector<Vehicle*>& v_boids);
+		void Flock(std::vector<Vehicle*>& v_boids);
+		void LeadFollowing(std::vector<Vehicle*>& v_boids, glm::vec3 target_location, float delta_time);
 	
 	private:
 		glm::vec3 m_acceleration = glm::vec3(0.0f, 0.0f, 0.0f);;
@@ -44,7 +44,7 @@ class Vehicle : public GameObject
 		float m_max_force = 0.05f;    // Maximum steering force
 		float m_max_speed = 3.0f;     // Maximum speed
 
-		float m_wander_theta = 0.0f;
+		float m_wander_theta = 0.5f;
 	
 		int m_wander_counter = 10;
 };

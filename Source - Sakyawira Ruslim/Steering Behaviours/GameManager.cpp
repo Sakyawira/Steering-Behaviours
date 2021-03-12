@@ -241,7 +241,7 @@ void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 			// Process Enemies
 			for (auto& vehicle : vehiclesGreen)
 			{
-				vehicle->process(currentBehaviour, vehiclesGreen, player->GetLocation(), WINDOW_WIDHT, WINDOW_HEIGHT, 0, deltaTime);
+				vehicle->Process(currentBehaviour, vehiclesGreen, player->GetLocation(), WINDOW_WIDHT, WINDOW_HEIGHT, 0, deltaTime);
 			}
 
 			currentTime = static_cast<float>(glutGet(GLUT_ELAPSED_TIME)); // Get current time.

@@ -20,18 +20,18 @@ public:
 		}
 
 		MouseState[button] = (state == GLUT_DOWN) ? INPUT_DOWN : INPUT_UP;
-		std::cout << "Clicked Once x: " << x << " | y: " << y << std::endl;
+		// std::cout << "Clicked Once x: " << x << " | y: " << y << std::endl;
 	}
 
 	void MousePassiveMove(int x, int y)
 	{
-		std::cout << "Passive x: " << x << " | y: " << y << std::endl;
+		// std::cout << "Passive x: " << x << " | y: " << y << std::endl;
 		m_mouse_location = glm::vec3(x - 400.0f, - y + 400.0f, 0.0f);
 	}
 
 	void MouseMove(int x, int y)
 	{
-		std::cout << "Clicked x: " << x << " | y: " << y << std::endl;
+		// std::cout << "Clicked x: " << x << " | y: " << y << std::endl;
 	}
 	void KeyboardDown(unsigned char key, int x, int y)
 	{
