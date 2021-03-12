@@ -41,8 +41,8 @@ class Vehicle : public GameObject
 		bool randomMove = false;
 
 		float r = 6.0f;
-		float maxForce = 0.05f;    // Maximum steering force
-		float maxSpeed = 3.0f;     // Maximum speed
+		const float maxForce = 0.05f;    // Maximum steering force
+		const float maxSpeed = 3.0f;     // Maximum speed
 
 		float wanderTheta = 0.5f;
 };

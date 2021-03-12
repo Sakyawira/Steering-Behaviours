@@ -1,5 +1,8 @@
 #include "Initialization.h"
 #include "TextLabel.h"
+#include <iostream>
+#include <chrono>
+#include <ctime>   
 #include <random>
 
 void Update()
@@ -44,10 +47,13 @@ void MouseMove(int x, int y)
 
 int main(int argc, char **argv)
 {
-	//assert(AudioInit() == true);
+	auto start = std::chrono::system_clock::now();
+	std::time_t t = std::chrono::system_clock::to_time_t(start);
+	std::time_t* iTime = new time_t(t);
+	srand(time(iTime));
+	delete iTime;
+
 	audio.Load();
-	// audio.Play(SOUND_BGM1); 
-	//audio.Play(SOUND_VICTORY);
 		
 	// Setup and create at glut controlled window
 	glutInit(&argc, argv);

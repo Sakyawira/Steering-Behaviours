@@ -60,7 +60,6 @@ GameManager::GameManager()
 	player = new GameObject(animateShader, playerMesh, v_texture2, 0.0f, 0.0f);
 	players.push_back(player);
 
-	srand(static_cast<unsigned>(std::random_device()()));
 	int border = 375 - static_cast<int>(player->GetScale()) * 2;
 	
 	// Creating multiple coins

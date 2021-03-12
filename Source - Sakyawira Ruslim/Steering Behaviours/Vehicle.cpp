@@ -1,17 +1,8 @@
-#include "Vehicle.h"
-#include <iostream>
-#include <chrono>
-#include <ctime>    
+#include "Vehicle.h" 
 #include <utility>
 
 Vehicle::Vehicle(Shader * _shader, Mesh * _mesh, std::vector<Texture*>& _textures, float _initialX, float _initialY)
 {
-	auto start = std::chrono::system_clock::now();
-	std::time_t t = std::chrono::system_clock::to_time_t(start);
-	std::time_t* iTime = new time_t(t);
-	srand(time(iTime));
-	delete iTime;
-
 	shader = _shader;
 	mesh = _mesh;
 	xPos = _initialX;
@@ -48,16 +39,12 @@ void Vehicle::Process(const Behaviour _steer, std::vector<Vehicle*>& _boids, glm
 	else if (_steer == WANDER)
 	{
 		Wander(_deltaTime);
-		maxForce *= 1.4f;
 		Containment(static_cast<float>(_windowWidth) , static_cast<float>(_windowHeight), 400.0f );
-		maxForce /= 1.4f;
 	}
 	else if (_steer == FLOCK)
 	{
-		maxForce *= 1.2f;
-		Containment(static_cast<float>(_windowWidth), static_cast<float>(_windowHeight), 400.0f);
-		maxForce /= 1.2f;
 		Flock(_boids);
+		Containment(static_cast<float>(_windowWidth), static_cast<float>(_windowHeight), 400.0f);
 	}
 	else if (_steer == LEAD_FOLLOWING)
 	{
@@ -107,7 +94,7 @@ void Vehicle::Seek(glm::vec3 _target)
 	// Steering = Desired minus velocity
 	glm::vec3 steer = desired - velocity;
 	// Limit to maximum steering force
-	Limit(steer,maxForce);  
+	Limit(steer, maxForce);  
 	ApplyForce(steer);
 }
 
@@ -352,10 +339,9 @@ void Vehicle::Flock(std::vector<Vehicle*>& _boids)
 	sep *= 1.5;
 	ali *= 1.0;
 	coh *= 1.0;
+
 	// Add the forces to acceleration
-	maxForce *= 1.8f;
 	ApplyForce(sep);
-	maxForce /= 1.8f;
 	ApplyForce(ali);
 	ApplyForce(coh);
 }
