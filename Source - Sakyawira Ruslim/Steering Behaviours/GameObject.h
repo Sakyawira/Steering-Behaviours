@@ -74,50 +74,41 @@ class GameObject
 	
 		void Disable();
 
-		bool m_currently_moved = false;
+		bool currentlyMoved = false;
 	
 	protected:
-
-	
-	
 		// Enable Drawing
-		bool m_bool_enable = true;
+		bool enable = true;
 		
 		// Shader
-		Shader* m_shader;
+		Shader* shader;
 	
 		// Mesh
-		Mesh* m_mesh;
+		Mesh* mesh;
 	
-		// Camera
-		/*Camera m_camera;*/
-		
 		// Texture Vector
-		std::vector<Texture*> m_textures;
+		std::vector<Texture*> textures;
 	
 		// Position
-		float m_xPos = 200.0f;
-		float m_yPos = 200.0f;
+		float xPos = 200.0f;
+		float yPos = 200.0f;
 	
 		// Scale
-		float m_scale = 1.0f;
+		float scale = 1.0f;
 		
 		// Translation Matrix
-		glm::vec3 m_objPosition = glm::vec3(m_xPos, m_yPos, 0.0f);
-		glm::mat4 m_translationMatrix = glm::translate(glm::mat4(), m_objPosition);
+		glm::vec3 objPosition = glm::vec3(xPos, yPos, 0.0f);
+		glm::mat4 translationMatrix = glm::translate(glm::mat4(), objPosition);
 	
 		// Rotation
-		glm::vec3 m_rotationAxisZ = glm::vec3(0.0f, 0.0f, 1.0f);
-		float m_rotationAngle = 0.0f;
-		glm::mat4 m_rotationZ = glm::rotate(glm::mat4(), glm::radians(m_rotationAngle), m_rotationAxisZ);
+		glm::vec3 rotationAxisZ = glm::vec3(0.0f, 0.0f, 1.0f);
+		float rotationAngle = 0.0f;
+		glm::mat4 rotationZ = glm::rotate(glm::mat4(), glm::radians(rotationAngle), rotationAxisZ);
 	
 		// Scaling 
-		glm::vec3 m_objScale = glm::vec3(1.0f * m_scale, 1.0f * m_scale, 0.0f);
-		glm::mat4 m_scaleMatrix = glm::scale(glm::mat4(), m_objScale);
+		glm::vec3 objScale = glm::vec3(1.0f * scale, 1.0f * scale, 0.0f);
+		glm::mat4 scaleMatrix = glm::scale(glm::mat4(), objScale);
 	
 		// Model matrix
-		glm::mat4 m_modelMatrix = m_translationMatrix * m_rotationZ * m_scaleMatrix;
-	
-		// Vertices
-		
+		glm::mat4 modelMatrix = translationMatrix * rotationZ * scaleMatrix;
 };

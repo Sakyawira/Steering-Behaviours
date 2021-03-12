@@ -44,97 +44,85 @@ public:
 	~GameManager();
 
 	void Initialize();
-	
 	void ProcessGame(Audio& audio, glm::vec3 mouse_location);
-
-	float g_player_size = 1;
-
-	bool collision_check(float _top, float _bottom, float _left, float _right);
-
-	void Enemy_Collision_Check();
-
-	void Enemy_Collision_Check2();
-
+	bool CollisionCheck(float _top, float _bottom, float _left, float _right);
+	void EnemyCollisionCheck();
+	void EnemyCollisionCheck2();
 	void Render();
-
 	bool IsStarted();
-
 	bool IsEnded();
-
 	void StartGame();
-
-	void set_behaviour(behaviour steer);
-
-	void change_behaviour_text();
-
+	void SetBehaviour(Behaviour steer);
+	void ChangeBehaviourText();
 	CClock* GetClock();
 
 	GameObject* player;
 	Camera camera;
+	float playerSize = 1;
 	
 private:
 
 	// Enum for behaviour type
-	behaviour m_steering = SEEK;
+	Behaviour currentBehaviour = SEEK;
 	
 	// Clock
-	CClock* m_clock;
+	CClock* clock;
 
 	// Check whether or not m_program has been initialized
-	bool m_b_initialized = false;
+	bool isInitialised = false;
 	
 	// Control whether the game has been started
-	bool m_b_start = false;
-	bool m_b_ended = false;
+	bool isStarted = false;
+	bool isEnded = false;
 	
 	// Declaring Strings
-	int m_i_steer = 0;
-	std::string m_string_steer;
-	TextLabel* m_text_steer;
+	int steerNumber = 0;
+	std::string steerString;
+	TextLabel* steerText;
 
 	// Menu Text
-	std::string m_string_menu = "Sakyawira's Burnt Out";
-	TextLabel* m_text_menu;
+	std::string menuString = "Sakyawira's Burnt Out";
+	TextLabel* menuText;
 
 	// Instruction Text
-	std::string m_string_instruction = "Press 'R' to start the game...";
-	TextLabel* m_text_instruction;
+	std::string instructionString = "Press 'R' to start the game...";
+	TextLabel* instructionText;
 
 	// Uniforms
 	GLfloat currentTime;
 	float frameCounts = 0;
 
-	Shader* m_sh_alternating;
-	Shader* m_sh_animate;
-	Shader* m_sh_scroll;
+	Shader* alternatingShader;
+	Shader* animateShader;
+	Shader* scrollingShader;
 
-	Texture* m_tr_stars;
-	Texture* m_tr_background;
-	Texture* m_tr_slimes;
-	Texture* m_tr_water;
-	Texture* m_tr_menu;
+	Texture* starsTexture;
+	Texture* backgroundTexture;
+	Texture* slimesTexture;
+	Texture* waterTexture;
+	Texture* menuTexture;
 
-	Mesh* m_mesh_animate;
-	Mesh* m_mesh_animate2;
-	Mesh* m_mesh_scroll;
-	Mesh* m_mesh_player;
-	Mesh* m_mesh_static;
+	Mesh* vehicleGreenMesh;
+	Mesh* vehicleBlueMesh;
+	Mesh* waterMesh;
+	Mesh* playerMesh;
+	Mesh* staticMesh;
 
-	Vehicle* m_enemy_ice;
-	Vehicle* m_enemy_earth;
+	Vehicle* selectedVehicleBlue;
+	Vehicle* selectedVehicleGreen;
 
 	GameObject* wall;
 	GameObject *Menu;
 	GameObject* background;
 
 	// Vectors
-	std::vector<Vehicle*> m_vector_enemyEarth;
-	std::vector<Vehicle*> m_vector_enemyIce;
-	std::vector<GameObject*> m_vector_obstacleObjects;
-	std::vector<GameObject*> m_vector_backgroundObjects;
-	std::vector<GameObject*> m_vector_playerObjects;
-	std::vector<Vehicle*> m_vector_erasedEarth;
-	std::vector<Vehicle*> m_vector_erasedIce;
+	std::vector<Vehicle*> vehiclesGreen;
+	std::vector<Vehicle*> vehiclesBlue;
+	std::vector<Vehicle*> vehiclesGreenRemoved;
+	std::vector<Vehicle*> vehiclesBlueRemoved;
+	std::vector<GameObject*> walls;
+	std::vector<GameObject*> backgrounds;
+	std::vector<GameObject*> players;
 
 	std::vector<GLfloat> static_vertices =
 	{

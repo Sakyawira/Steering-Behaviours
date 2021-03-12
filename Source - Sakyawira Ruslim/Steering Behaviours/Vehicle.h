@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-enum behaviour
+enum Behaviour
 {
 	SEEK,
 	ARRIVE,
@@ -16,7 +16,7 @@ class Vehicle : public GameObject
 	public:
 		Vehicle(Shader* _shader, Mesh* _mesh, std::vector<Texture*>& _textures, float _initial_x, float _initial_y);
 		~Vehicle() = default;
-		void process(behaviour steer, std::vector<Vehicle*>& v_boids, glm::vec3 target_location, int window_width, int window_height, int player_size, float delta_time);
+		void process(Behaviour steer, std::vector<Vehicle*>& v_boids, glm::vec3 target_location, int window_width, int window_height, int player_size, float delta_time);
 		void RandomOn();
 		void limit(glm::vec3& _vector3,float _maxMagnitude);
 		void apply_force(glm::vec3 _force);

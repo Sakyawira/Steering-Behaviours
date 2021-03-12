@@ -20,11 +20,9 @@
 
 class Camera
 {
-	//Square 1
 public:
 	Camera() = default;
 	~Camera() = default;
-
 
 	void UseCamera(GLuint program/*, glm::mat4 view, glm::mat4 proj*/)
 	{
@@ -60,26 +58,21 @@ public:
 	}
 	
 private:
-	// Camera
+	 // Camera
 	 glm::vec3 camPos = glm::vec3(0.0f, 0.0f, 3.0f);
 	 glm::vec3 camLookDir = glm::vec3(0.0f, 0.0f, -1.0f);
 	 glm::vec3 camUpDir = glm::vec3(0.0f, 1.0f, 0.0f);
 
-	/// View Matrix 
-	glm::mat4 view = glm::lookAt(camPos, camPos + camLookDir, camUpDir);
+	 // View Matrix 
+	 glm::mat4 view = glm::lookAt(camPos, camPos + camLookDir, camUpDir);
 
-	// Screen Size
+	 // Screen Size
 	 unsigned int SCR_WIDTH = 800;
 	 unsigned int SCR_HEIGHT = 800;
 
 	 float halfScreenWidth = (float)SCR_WIDTH * 0.5f;
 	 float halfScreenHeight = (float)SCR_HEIGHT * 0.5f;
 
-	// Projection Space
-
-		// Perspective
-			/*glm::mat4 proj = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);*/
-
-		// Orthographic
+	 // Orthographic
 	 glm::mat4 proj = glm::ortho(-halfScreenWidth, halfScreenWidth, -halfScreenHeight, halfScreenHeight, 0.1f, 100.0f);
 };

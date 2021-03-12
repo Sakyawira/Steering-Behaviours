@@ -13,55 +13,41 @@
 //
 
 #pragma once
-
 #if !defined(__CLOCK_H__)
 #define __CLOCK_H__
 
 // Library Includes
 #include <windows.h>
 
-// Local Includes
-
-// Types
-
-// Constants
-
 // Prototypes
 class CClock
 {
     // Member Functions
-public:
-    CClock();
-    ~CClock();
+    public:
+        CClock();
+        ~CClock();
 
-    bool Initialise();
+        bool Initialise();
+        void Process();
+        float GetDeltaTick();
 
-    void Process();
+    protected:
 
-    float GetDeltaTick();
+    private:
+        CClock(const CClock& _kr);
 
-	int CountFramesPerSecond(float _DeltaTick);
+        // Member Variables
+    public:
 
-protected:
+    protected:
+        double m_fTimeElapsed;
+	    double m_fDeltaTime;
+	    double m_fLastTime;
+	    double m_fCurrentTime;
+	    double m_SecondsPerCount;
+	    int m_iFrameCount = 0;
 
-private:
-    CClock(const CClock& _kr);
-    CClock& operator= (const CClock& _kr);
-
-    // Member Variables
-public:
-
-protected:
-    double m_fTimeElapsed;
-	double m_fDeltaTime;
-	double m_fLastTime;
-	double m_fCurrentTime;
-	double m_SecondsPerCount;
-	int m_iFrameCount = 0;
-
-private:
+    private:
 
 };
-
-
-#endif    // __CLOCK_H__
+#endif
