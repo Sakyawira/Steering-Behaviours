@@ -78,46 +78,7 @@ CClock::Process()
 	m_fTimeElapsed += m_fDeltaTime;
 }
 
-//void
-//CClock::Process()
-//{
-//	m_fLastTime = m_fCurrentTime;
-//
-//	m_fCurrentTime = static_cast<float>(timeGetTime());
-//
-//	if (m_fLastTime == 0.0f)
-//	{
-//		m_fLastTime = m_fCurrentTime;
-//	}
-//
-//	m_fDeltaTime = m_fCurrentTime - m_fLastTime;
-//
-//	m_fTimeElapsed += m_fDeltaTime;
-//}
-
-
-//float
-//CClock::GetDeltaTick()
-//{
-//	return (float)(m_fDeltaTime / 1000.0f);
-//}
-
 float CClock::GetDeltaTick()
 {
 	return static_cast<float>(m_fDeltaTime);
 }
-
-
-//int
-//CClock::CountFramesPerSecond(float m_fDeltaTime)
-//{
-//	m_iFrameCount++;
-//	m_fTimeElapsed += m_fDeltaTime;
-//
-//	if (m_fTimeElapsed >= 1.0f)
-//	{
-//		m_iFrameCount = 0;
-//		m_fTimeElapsed = 0.0f;
-//	}
-//	return m_iFrameCount;
-//}

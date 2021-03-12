@@ -26,11 +26,11 @@ GameManager::GameManager()
 	scrollingShader = new Shader("Resources/Shaders/ScrollingVertex.txt", "Resources/Shaders/AnimationFragment.txt");
 
 	// Create Mesh
-	staticMesh = new Mesh(animation_indices, static_vertices);
-	vehicleGreenMesh = new Mesh(animation_indices, animation_vertices);
-	vehicleBlueMesh = new Mesh(animation_indices, enemy2_vertices);
-	waterMesh = new Mesh(animation_indices, animation_vertices);
-	playerMesh = new Mesh(animation_indices, player_animation_vertices);
+	staticMesh = new Mesh(animationIndices, fullVertices);
+	vehicleGreenMesh = new Mesh(animationIndices, slicedVertices3);
+	vehicleBlueMesh = new Mesh(animationIndices, slicedVertices2);
+	waterMesh = new Mesh(animationIndices, slicedVertices3);
+	playerMesh = new Mesh(animationIndices, slicedVertices);
 
 	// Text
 	std::string m_string_menu = "Sakyawira's Steering Behaviours";

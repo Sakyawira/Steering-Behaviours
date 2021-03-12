@@ -4,24 +4,18 @@
 #include <ctime>    
 #include <utility>
 
-Vehicle::Vehicle(Shader * _shader, Mesh * _mesh, std::vector<Texture*>& _textures, float _initial_x, float _initial_y)
+Vehicle::Vehicle(Shader * _shader, Mesh * _mesh, std::vector<Texture*>& _textures, float _initialX, float _initialY)
 {
 	auto start = std::chrono::system_clock::now();
-
 	std::time_t t = std::chrono::system_clock::to_time_t(start);
-
 	std::time_t* iTime = new time_t(t);
-
 	srand(time(iTime));
-
 	delete iTime;
 
 	shader = _shader;
 	mesh = _mesh;
-	xPos = _initial_x;
-	yPos = _initial_y;
-	// This creates a copy (even though was passed a s a reference) and therefore did not work
-	// m_camera = _camera;
+	xPos = _initialX;
+	yPos = _initialY;
 	textures = _textures;
 
 	objPosition = glm::vec3(xPos, yPos, 0.0f);
@@ -30,61 +24,52 @@ Vehicle::Vehicle(Shader * _shader, Mesh * _mesh, std::vector<Texture*>& _texture
 
 	// Pick a start direction (positive / negative)
 	int negate = rand() % 2;
-	m_bool_dir = (negate == 0 ? false : true);
+	dir = (negate == 0 ? false : true);
 
 	// Pick a start direction (vetical / horizontal)
 	negate = rand() % 2;
-	m_bool_vertical = (negate == 0 ? false : true);
+	vertical = (negate == 0 ? false : true);
 }
 
-void Vehicle::Process(const Behaviour steer, std::vector<Vehicle*>& v_boids, glm::vec3 target_location, const int window_width, const int window_height, int player_size, const float delta_time)
+void Vehicle::Process(const Behaviour _steer, std::vector<Vehicle*>& _boids, glm::vec3 _targetLocation, const int _windowWidth, const int _windowHeight, int _playerSize, const float _deltaTime)
 {
-	if (steer == SEEK)
+	if (_steer == SEEK)
 	{
-		Seek(target_location);
+		Seek(_targetLocation);
 	}
-
-	else if (steer == ARRIVE)
+	else if (_steer == ARRIVE)
 	{
-		Arrive(target_location, delta_time);
+		Arrive(_targetLocation, _deltaTime);
 	}
-
-	else if (steer == CONTAINMENT)
+	else if (_steer == CONTAINMENT)
 	{
-		Containment(static_cast<float>(window_width)* 1.4f, static_cast<float>(window_height)* 1.4f, 400.0f* 1.4f);
+		Containment(static_cast<float>(_windowWidth)* 1.4f, static_cast<float>(_windowHeight)* 1.4f, 400.0f* 1.4f);
 	}
-
-	else if (steer == WANDER)
+	else if (_steer == WANDER)
 	{
-		Wander(delta_time);
-		m_max_force *= 1.4f;
-		Containment(static_cast<float>(window_width) , static_cast<float>(window_height), 400.0f );
-		m_max_force /= 1.4f;
+		Wander(_deltaTime);
+		maxForce *= 1.4f;
+		Containment(static_cast<float>(_windowWidth) , static_cast<float>(_windowHeight), 400.0f );
+		maxForce /= 1.4f;
 	}
-
-	else if (steer == FLOCK)
+	else if (_steer == FLOCK)
 	{
-		m_max_force *= 1.2f;
-		Containment(static_cast<float>(window_width), static_cast<float>(window_height), 400.0f);
-		m_max_force /= 1.2f;
-		Flock(v_boids);
+		maxForce *= 1.2f;
+		Containment(static_cast<float>(_windowWidth), static_cast<float>(_windowHeight), 400.0f);
+		maxForce /= 1.2f;
+		Flock(_boids);
 	}
-
-	else if (steer == LEAD_FOLLOWING)
+	else if (_steer == LEAD_FOLLOWING)
 	{
-		LeadFollowing(v_boids, target_location, delta_time);
+		LeadFollowing(_boids, _targetLocation, _deltaTime);
 	}
 	// Update velocity
-	m_velocity += m_acceleration;
-	
+	velocity += acceleration;
 	// Limit speed
-	Limit(m_velocity, m_max_speed);
-	
-	objPosition += m_velocity * delta_time;
-	
+	Limit(velocity, maxSpeed);
+	objPosition += velocity * _deltaTime;
 	// Reset acceleration to 0 each cycle
-	m_acceleration *= 0;
-
+	acceleration *= 0;
 	// Update Model Matrix
 	translationMatrix = glm::translate(glm::mat4(), objPosition);
 	modelMatrix = translationMatrix * rotationZ * scaleMatrix;
@@ -92,7 +77,7 @@ void Vehicle::Process(const Behaviour steer, std::vector<Vehicle*>& v_boids, glm
 
 void Vehicle::RandomOn()
 {
-	m_bool_random_move = true;
+	randomMove = true;
 }
 
 void Vehicle::Limit(glm::vec3& _vector3, float _maxMagnitude)
@@ -106,28 +91,23 @@ void Vehicle::Limit(glm::vec3& _vector3, float _maxMagnitude)
 
 void Vehicle::ApplyForce(glm::vec3 _force)
 {
-	m_acceleration += _force;
+	acceleration += _force;
 }
 
 void Vehicle::Seek(glm::vec3 _target)
 {
 	// A vector pointing from the location to the target
 	glm::vec3 desired = _target - objPosition;  
-
-   // Normalize desired and scale to maximum speed
+    // Normalize desired and scale to maximum speed
 	if (glm::length(desired) > 0.0f)
 	{
 		desired = glm::normalize(desired);
 	}
-	
-	desired *= m_max_speed;
-	
+	desired *= maxSpeed;
 	// Steering = Desired minus velocity
-	glm::vec3 steer = desired - m_velocity;
-
+	glm::vec3 steer = desired - velocity;
 	// Limit to maximum steering force
-	Limit(steer,m_max_force);  
-
+	Limit(steer,maxForce);  
 	ApplyForce(steer);
 }
 
@@ -135,43 +115,35 @@ glm::vec3 Vehicle::GetSeek(glm::vec3 _target)
 {
 	// A vector pointing from the location to the target
 	glm::vec3 desired = _target - objPosition;  
-
-   // Normalize desired and scale to maximum speed
+    // Normalize desired and scale to maximum speed
 	if (glm::length(desired) > 0.0f)
 	{
 		desired = glm::normalize(desired);
 	}
-
-	desired *= m_max_speed;
-
+	desired *= maxSpeed;
 	// Steering = Desired minus velocity
-	glm::vec3 steer = desired - m_velocity;
-
+	glm::vec3 steer = desired - velocity;
 	// Limit to maximum steering force
-	Limit(steer, m_max_force);  
-	
+	Limit(steer, maxForce);  
 	return steer;
 }
 
-void Vehicle::Arrive(glm::vec3 _target, float delta_time)
+void Vehicle::Arrive(glm::vec3 _target, float _deltaTime)
 {
 	// A vector pointing from the location to the target
 	glm::vec3 desired = _target - objPosition;
-
 	// Get the magnitude of desired
 	const float d = glm::length(desired);
-	
 	// Normalize desired
 	if (glm::length(desired) > 0.0f)
 	{
 		desired = glm::normalize(desired);
 	}
-
 	// Map the speed depends on its distance to the target
-	if (d < m_max_speed * 50.0f)
+	if (d < maxSpeed * 50.0f)
 	{
-		const float m = 0 + (m_max_speed - 0) * ((d -0)/(m_max_speed * 50.0f - 0)) ; //* delta_time;
-		if (d <= m_max_speed * 15.0f)
+		const float m = 0 + (maxSpeed - 0) * ((d -0)/(maxSpeed * 50.0f - 0)) ; //* delta_time;
+		if (d <= maxSpeed * 15.0f)
 		{
 			desired *= (glm::floor(m) /** 1.0001f*/);
 		}
@@ -180,38 +152,32 @@ void Vehicle::Arrive(glm::vec3 _target, float delta_time)
 			desired *= (glm::ceil(m));
 		}
 	}
-
 	else 
 	{
-		desired *= m_max_speed;// * delta_time;
+		desired *= maxSpeed;// * delta_time;
 	}
-
 	// Steering = Desired minus Velocity
-	glm::vec3 steer = desired - m_velocity;
+	glm::vec3 steer = desired - velocity;
 	// Limit to maximum steering force
-	Limit(steer, (m_max_force * m_max_speed));  
+	Limit(steer, (maxForce * maxSpeed));  
 	ApplyForce(steer);
 }
 
-glm::vec3 Vehicle::GetArrive(glm::vec3 _target, float delta_time)
+glm::vec3 Vehicle::GetArrive(glm::vec3 _target, float _deltaTime)
 {
 	// A vector pointing from the location to the target
 	glm::vec3 desired = _target - objPosition;
-
-	
 	const float d = glm::length(desired);
-
 	// Normalize desired
 	if (glm::length(desired) > 0.0f)
 	{
 		desired = glm::normalize(desired);
 	}
-
 	// Map the speed depends on its distance to the target
-	if (d < m_max_speed * 50.0f)
+	if (d < maxSpeed * 50.0f)
 	{
-		const float m = 0 + (m_max_speed - 0) * ((d - 0) / (m_max_speed * 50.0f - 0)); //* delta_time;
-		if (d <= m_max_speed * 15.0f)
+		const float m = 0 + (maxSpeed - 0) * ((d - 0) / (maxSpeed * 50.0f - 0)); //* delta_time;
+		if (d <= maxSpeed * 15.0f)
 		{
 			desired *= (glm::floor(m) /** 1.0001f*/);
 		}
@@ -220,95 +186,72 @@ glm::vec3 Vehicle::GetArrive(glm::vec3 _target, float delta_time)
 			desired *= (glm::ceil(m));
 		}
 	}
-
 	else
 	{
-		desired *= m_max_speed;// * delta_time;
+		desired *= maxSpeed;// * delta_time;
 	}
-
 	// Steering = Desired minus Velocity
-	glm::vec3 steer = desired - m_velocity;
-	Limit(steer, (m_max_force * m_max_speed));  // Limit to maximum steering force
+	glm::vec3 steer = desired - velocity;
+	Limit(steer, (maxForce * maxSpeed));  // Limit to maximum steering force
 	return steer;
 }
 
-void Vehicle::Wander(float delta_time)
+void Vehicle::Wander(float _deltaTime)
 {	
-	if (m_velocity == glm::vec3(0.0f, .0f, 0.0f))
+	if (velocity == glm::vec3(0.0f, .0f, 0.0f))
 	{
-		m_velocity = glm::vec3(0.0f, 0.1f, 0.0f);
+		velocity = glm::vec3(0.0f, 0.1f, 0.0f);
 	}
-	
-	/*if (m_wander_counter == 0)
-	{*/
-		// Distance from vehicle to imaginary circle"
-		const float wander_distance = 8.0f;         
-		glm::vec3 target = objPosition + glm::normalize(m_velocity) * wander_distance;
-
-		// Radius of our imaginary circle
-		const float wander_radius = 1.0f;			
-
-		// Get random point
-
-		const int random_point = rand() % 45;
-
-		std::cout << random_point << std::endl;
-
-		const float theta = 2.0f * 3.1415926f * float(random_point) / float(45);
-		// Calculate the x component 
-		const float x = wander_radius * cosf(theta);
-		// Calculate the y component
-		const float y = wander_radius * sinf(theta);							
-
-		target.x += x;
-		target.y += y;
-
-		//m_max_speed *= 2.0f;
-		Seek(target);
-		//m_max_speed /= 2.0f;
-
-	//	m_wander_counter = 2;
-	//}
-	//m_wander_counter--;
+	// Distance from vehicle to imaginary circle"
+	const float wander_distance = 8.0f;         
+	glm::vec3 target = objPosition + glm::normalize(velocity) * wander_distance;
+	// Radius of our imaginary circle
+	const float wander_radius = 1.0f;			
+	// Get random point
+	const int random_point = rand() % 45;
+	const float theta = 2.0f * 3.1415926f * float(random_point) / float(45);
+	// Calculate the x component 
+	const float x = wander_radius * cosf(theta);
+	// Calculate the y component
+	const float y = wander_radius * sinf(theta);							
+	target.x += x;
+	target.y += y;
+	Seek(target);
 }
 
-void Vehicle::Containment(float width, float height, float d)
+void Vehicle::Containment(float _width, float _height, float _d)
 {
 	glm::vec3 desired = glm::vec3(0.0f, 0.0f, 0.0f);
-
-	if (objPosition.x < /*width/2*/ - d)
+	if (objPosition.x < - _d)
 	{
-		desired = glm::vec3(m_max_speed, m_velocity.y, 0.0f);
+		desired = glm::vec3(maxSpeed, velocity.y, 0.0f);
 	}
-	else if (objPosition.x > width - d) {
-		desired = glm::vec3(-m_max_speed, m_velocity.y, 0.0f);
+	else if (objPosition.x > _width - _d) {
+		desired = glm::vec3(-maxSpeed, velocity.y, 0.0f);
 	}
-
-	if (objPosition.y < /*height/2*/ - d) {
-		desired = glm::vec3(m_velocity.x, m_max_speed, 0.0f);
+	if (objPosition.y < - _d) {
+		desired = glm::vec3(velocity.x, maxSpeed, 0.0f);
 	}
-	else if (objPosition.y > height - d) {
-		desired = glm::vec3(m_velocity.x, -m_max_speed, 0.0f);
+	else if (objPosition.y > _height - _d) {
+		desired = glm::vec3(velocity.x, -maxSpeed, 0.0f);
 	}
-
 	if (desired != glm::vec3(0.0f, 0.0f, 0.0f))
 	{
 		desired = glm::normalize(desired);
-		desired = desired * m_max_speed;
-		glm::vec3 steer = desired - m_velocity;
-		Limit(steer, m_max_force);
-		
+		desired = desired * maxSpeed;
+		glm::vec3 steer = desired - velocity;
+		Limit(steer, maxForce);
 		ApplyForce(steer);
 	}
 }
 
-glm::vec3 Vehicle::Seperate(std::vector<Vehicle*>& v_boids)
+glm::vec3 Vehicle::Seperate(std::vector<Vehicle*>& _boids)
 {
 	const float desired_separation = 137.5f;
 	glm::vec3 steer = glm::vec3(0, 0, 0);
 	int count = 0;
 	// Check if any boid in the vector is too close
-	for (auto boid : v_boids) 
+	for (auto boid : _boids) 
 	{
 		float d = glm::length(objPosition - boid->GetLocation());
 		// If the distance is greater than 0 and less than desired distance
@@ -329,30 +272,29 @@ glm::vec3 Vehicle::Seperate(std::vector<Vehicle*>& v_boids)
 	{
 		steer /= static_cast<float>(count);
 	}
-
 	// If the vector is greater than 0
 	if (glm::length(steer) > 0) 
 	{
 		// Steering = Desired - Velocity
 		steer = glm::normalize(steer);
-		steer *= m_max_speed;
-		steer -= m_velocity;
-		Limit(steer, m_max_force);
+		steer *= maxSpeed;
+		steer -= velocity;
+		Limit(steer, maxForce);
 	}
 	return steer;
 }
 
-glm::vec3 Vehicle::Alignment(std::vector<Vehicle*>& v_boids)
+glm::vec3 Vehicle::Alignment(std::vector<Vehicle*>& _boids)
 {
 	const float neighbor_dist = 75.0f;
 	glm::vec3 sum = glm::vec3(0.0f, 0.0f, 0.0f);
 	int count = 0;
-	for (auto boid : v_boids) 
+	for (auto boid : _boids) 
 	{
 		const float d = glm::length(objPosition - boid->GetLocation());
-		if ((this != boid)/* && (d < neighbor_dist)*/)
+		if ((this != boid))
 		{
-			sum += boid->m_velocity;
+			sum += boid->velocity;
 			count++;
 		}
 	}
@@ -360,9 +302,9 @@ glm::vec3 Vehicle::Alignment(std::vector<Vehicle*>& v_boids)
 	{
 		sum /= static_cast<float>(count);
 		sum = glm::normalize(sum);
-		sum *= m_max_speed;
-		glm::vec3 steer = sum - m_velocity;
-		Limit(steer, m_max_force);
+		sum *= maxSpeed;
+		glm::vec3 steer = sum - velocity;
+		Limit(steer, maxForce);
 		return steer;
 	}
 	else 
@@ -371,15 +313,15 @@ glm::vec3 Vehicle::Alignment(std::vector<Vehicle*>& v_boids)
 	}
 }
 
-glm::vec3 Vehicle::Cohesion(std::vector<Vehicle*>& v_boids)
+glm::vec3 Vehicle::Cohesion(std::vector<Vehicle*>& _boids)
 {
 	const float neighbor_dist = 75.0f;
 	glm::vec3 sum = glm::vec3(0.0f, 0.0f, 0.0f);  
 	int count = 0;
-	for (auto boid : v_boids) 
+	for (auto boid : _boids) 
 	{
 		float d = glm::length(objPosition - boid->GetLocation());
-		if ((this != boid) /*&& (d < neighbor_dist)*/) 
+		if ((this != boid)) 
 		{
 			// Add location
 			sum += boid->objPosition; 
@@ -398,47 +340,42 @@ glm::vec3 Vehicle::Cohesion(std::vector<Vehicle*>& v_boids)
 	}
 }
 
-void Vehicle::Flock(std::vector<Vehicle*>& v_boids)
+void Vehicle::Flock(std::vector<Vehicle*>& _boids)
 {
 	// Calculate separation
-	glm::vec3 sep = Seperate(v_boids);
-
+	glm::vec3 sep = Seperate(_boids);
 	// Calculate alignment
-	glm::vec3 ali = Alignment(v_boids);
-	
+	glm::vec3 ali = Alignment(_boids);
 	// Calculate cohesion
-	glm::vec3 coh = Cohesion(v_boids);
-	
+	glm::vec3 coh = Cohesion(_boids);
 	// Gives weight to these forces
 	sep *= 1.5;
 	ali *= 1.0;
 	coh *= 1.0;
 	// Add the forces to acceleration
-	m_max_force *= 1.8f;
+	maxForce *= 1.8f;
 	ApplyForce(sep);
-	m_max_force /= 1.8f;
+	maxForce /= 1.8f;
 	ApplyForce(ali);
 	ApplyForce(coh);
 }
 
-void Vehicle::LeadFollowing(std::vector<Vehicle*>& v_boids, glm::vec3 target_location, float delta_time)
+void Vehicle::LeadFollowing(std::vector<Vehicle*>& _boids, glm::vec3 _targetLocation, float _deltaTime)
 {
 	std::vector<Vehicle*>::iterator it;
-	for (it = v_boids.begin(); it < v_boids.end(); ++it)
+	for (it = _boids.begin(); it < _boids.end(); ++it)
 	{
 		// First vehicle in the vector arrive to the target
-		if (*it == v_boids[0])
+		if (*it == _boids[0])
 		{
-			(*it)->Arrive((target_location * 0.91f), delta_time);
+			(*it)->Arrive((_targetLocation * 0.91f), _deltaTime);
 		}
 		// The rest of the vehicle arrive to the negated velocity of the previous vehicle
 		else
 		{
 			std::vector<Vehicle*>::iterator PrevIt = it - 1;
-			(*it)->Arrive(((*PrevIt)->GetLocation() - (*PrevIt)->m_velocity * -1.0f), delta_time);
-			(*it)->ApplyForce((*it)->Seperate(v_boids));
+			(*it)->Arrive(((*PrevIt)->GetLocation() - (*PrevIt)->velocity * -1.0f), _deltaTime);
+			(*it)->ApplyForce((*it)->Seperate(_boids));
 		}
 	}
 }
-
-

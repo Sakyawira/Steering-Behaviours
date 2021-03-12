@@ -91,6 +91,30 @@ void Input::ProcessInput(GameManager* Game)
 	}
 }
 
+void Input::MouseClick(int button, int state, int x, int y)
+{
+	if (button >= 3)
+	{
+		return;
+	}
+	MouseState[button] = (state == GLUT_DOWN) ? INPUT_DOWN : INPUT_UP;
+}
+
+void Input::MousePassiveMove(int x, int y)
+{
+	m_mouse_location = glm::vec3(x - 400.0f, -y + 400.0f, 0.0f);
+}
+
+void Input::KeyboardDown(unsigned char key, int x, int y)
+{
+	KeyState[key] = INPUT_DOWN;
+}
+
+void Input::KeyboardUp(unsigned char key, int x, int y)
+{
+	KeyState[key] = INPUT_UP;
+}
+
 glm::vec3 Input::GetLocation()
 {
 	return m_mouse_location;

@@ -22,7 +22,6 @@
 // Prototypes
 class CClock
 {
-    // Member Functions
     public:
         CClock();
         ~CClock();
@@ -31,21 +30,15 @@ class CClock
         void Process();
         float GetDeltaTick();
 
-    protected:
-
     private:
         CClock(const CClock& _kr);
-
-        // Member Variables
-    public:
-
     protected:
-        double m_fTimeElapsed;
-	    double m_fDeltaTime;
-	    double m_fLastTime;
-	    double m_fCurrentTime;
-	    double m_SecondsPerCount;
-	    int m_iFrameCount = 0;
+         double m_fTimeElapsed;
+         double m_fDeltaTime;
+         double m_fLastTime;
+         double m_fCurrentTime;
+         double m_SecondsPerCount;
+         int m_iFrameCount = 0;
 
     private:
 

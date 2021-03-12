@@ -118,7 +118,7 @@ private:
 	std::vector<GameObject*> backgrounds;
 	std::vector<GameObject*> players;
 
-	std::vector<GLfloat> static_vertices =
+	std::vector<GLfloat> fullVertices =
 	{
 		// Position				// Color			// Texture Coords
 		-0.5f,  0.5f, 0.0f,		0.0f, 1.0f,	1.0f,	0.0f, 0.0f,			// Top-Left
@@ -127,7 +127,7 @@ private:
 		 0.5f, -0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	1.0f, 1.0f,			// Bottom-Right
 	};
 
-	std::vector<GLfloat> player_animation_vertices =
+	std::vector<GLfloat> slicedVertices =
 	{
 		// Position				// Color			// Texture Coords
 		-0.5f,  0.5f, 0.0f,		0.0f, 1.0f,	1.0f,	0.0f, 0.001f,		// Top-Left
@@ -136,7 +136,7 @@ private:
 		 0.5f, -0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	0.125f, 0.2f,		// Bottom-Right
 	};
 
-	std::vector<GLfloat> enemy2_vertices =
+	std::vector<GLfloat> slicedVertices2 =
 	{
 		// Position				// Color			// Texture Coords
 		-0.5f,  0.5f, 0.0f,		0.0f, 1.0f,	1.0f,	0.0f, 0.2f,			// Top-Left
@@ -146,7 +146,7 @@ private:
 	};
 
 	// Animation has 4 textures in one image
-	std::vector<GLfloat> animation_vertices =
+	std::vector<GLfloat> slicedVertices3 =
 	{
 		// Position				// Color			// Texture Coords
 		-0.5f,  0.5f, 0.0f,		0.0f, 1.0f,	1.0f,	0.0f, 0.4f,			// Top-Left
@@ -155,7 +155,7 @@ private:
 		 0.5f, -0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	0.125f, 0.6f,		// Bottom-Right
 	};
 
-	std::vector<GLfloat> water_scrolling_vertices =
+	std::vector<GLfloat> waterVertices =
 	{
 		// Position				// Color			// Texture Coords
 		-0.5f,  0.5f, 0.0f,		0.0f, 1.0f,	1.0f,	0.0f, 0.4f,			// Top-Left
@@ -173,7 +173,7 @@ private:
 		1, 5, 2,
 	};
 
-	std::vector<GLuint> animation_indices =
+	std::vector<GLuint> animationIndices =
 	{
 		1, 2, 3, // First Triangle
 		1, 0, 2, // Second Triangle

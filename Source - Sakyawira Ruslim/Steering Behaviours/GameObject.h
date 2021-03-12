@@ -1,18 +1,10 @@
 /***********************
-  Bachelor of Software Engineering
-  Media Design School
-  Auckland
-  New Zealand
-
-  (c) 2018 Media Design School
-
   File Name   :   GameObject.h
   Description :   contains declaration of GameObject class which control the updates and drawing pipeline of an object
   Author      :   Sakyawira Nanda Ruslim
-  Mail        :   Sakyawira.Rus8080@mediadesign.school.nz
+  Mail        :   Sakyawira@gmail.com
 ********************/
 #pragma once
-
 // Library Includes
 #include <vector>
 
@@ -30,20 +22,23 @@
 #include "Camera.h"
 
 // Move identifiers
-#define	MOVE_UP      0
-#define	MOVE_DOWN    1
-#define MOVE_RIGHT   2
-#define	MOVE_LEFT    3
+enum MoveDirection {
+	MOVE_UP    = 0,
+	MOVE_DOWN  = 1,
+	MOVE_RIGHT = 2,
+	MOVE_LEFT  = 3
+};
 
 // Used for returning coordinates
 typedef std::pair<float, float> Coordinate;
 
 // Coordinate identifiers
-#define TOP			0
-#define BOTTOM		1
-#define LEFT		2
-#define RIGHT		3
-
+enum CoordinateID {
+	TOP		= 0,
+	BOTTOM	= 1,
+	LEFT	= 2,
+	RIGHT	= 3
+};
 
 class GameObject
 {
@@ -54,24 +49,19 @@ class GameObject
 	
 		// OverLoad that takes one uniform
 		void Draw(Camera& _camera, const GLchar* s_currentTime, GLfloat f_currentTime);
-	
 		// Overload that takes two uniforms
 		void Draw(Camera& _camera, const GLchar* s_currentTime, GLfloat f_currentTime, const GLchar* s_frameTime, GLint i_frameTime);
-	
-		void SetPosition(float _x_pos, float _y_pos);
-	
-		float GetPosition(int COORDINATE_ID);
 
+		void SetPosition(float _x_pos, float _y_pos);
+		float GetPosition(int COORDINATE_ID);
 		glm::vec3 GetLocation();
 	
 		void Move(int MOVE_ID, float SPEED);
 
 		float GetScale();
-
 		void Scale(float _scale);
 	
 		void Enable();
-	
 		void Disable();
 
 		bool currentlyMoved = false;

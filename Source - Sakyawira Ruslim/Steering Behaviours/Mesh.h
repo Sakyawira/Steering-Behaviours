@@ -36,9 +36,5 @@ private:
 
 	// These are copies, they can not be used to control the actual one
 	std::vector<GLfloat> m_vertices;
-
 	int m_indicesSize;
-
-	// These are copies
-	//const std::vector<GLuint> m_indices;
 };
