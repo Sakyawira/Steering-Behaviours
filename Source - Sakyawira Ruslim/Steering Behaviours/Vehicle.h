@@ -17,7 +17,6 @@ class Vehicle : public GameObject
 		Vehicle(Shader* _shader, Mesh* _mesh, std::vector<Texture*>& _textures, float _initialX, float _initialY);
 		~Vehicle() = default;
 		void Process(Behaviour _steer, std::vector<Vehicle*>& _boids, glm::vec3 _targetLocation, int _windowWidth, int _windowHeight, int _playerSize, float _deltaTime);
-		void RandomOn();
 		void Limit(glm::vec3& _vector3,float _maxMagnitude);
 		void ApplyForce(glm::vec3 _force);
 		void Seek(glm::vec3 _target);
@@ -26,7 +25,7 @@ class Vehicle : public GameObject
 		glm::vec3 GetArrive(glm::vec3 _target, float _deltaTime);
 		void Wander(float _deltaTime);
 		void Containment(float _width, float _height, float _d);
-		glm::vec3 Seperate(std::vector<Vehicle*>& _boids);
+		glm::vec3 Seperate(std::vector<Vehicle*>& _boids, const float _desiredSeparation = 137.5f);
 		glm::vec3 Alignment(std::vector<Vehicle*>& _boids);
 		glm::vec3 Cohesion(std::vector<Vehicle*>& _boids);
 		void Flock(std::vector<Vehicle*>& _boids);

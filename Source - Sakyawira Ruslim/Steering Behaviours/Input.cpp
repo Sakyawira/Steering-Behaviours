@@ -9,7 +9,7 @@ void Input::ProcessInput(GameManager* Game)
 		if (!Game->CollisionCheck(Game->playerSize + 1, 0, 0, 0) && Game->IsStarted())
 		{
 			Game->player->Move(MOVE_UP, 2 * Game->GetClock()->GetDeltaTick() * 120.0f);
-			Game->camera.MovePosY(2.0f * Game->GetClock()->GetDeltaTick() * 120.0f);
+			Game->camera->MovePosY(2.0f * Game->GetClock()->GetDeltaTick() * 120.0f);
 			Game->player->currentlyMoved = true;
 		}
 	}
@@ -20,7 +20,7 @@ void Input::ProcessInput(GameManager* Game)
 		if (!Game->CollisionCheck(0, Game->playerSize + 1, 0, 0) && Game->IsStarted())
 		{
 			Game->player->Move(MOVE_DOWN, 2 * Game->GetClock()->GetDeltaTick() * 120.0f);
-			Game->camera.MovePosY(-2.0f * Game->GetClock()->GetDeltaTick() * 120.0f);
+			Game->camera->MovePosY(-2.0f * Game->GetClock()->GetDeltaTick() * 120.0f);
 			Game->player->currentlyMoved = true;
 		}
 	}
@@ -31,7 +31,7 @@ void Input::ProcessInput(GameManager* Game)
 		if (!Game->CollisionCheck(0, 0, 0, Game->playerSize + 1) && Game->IsStarted())
 		{
 			Game->player->Move(MOVE_RIGHT, 2 * Game->GetClock()->GetDeltaTick() * 120.0f);
-			Game->camera.MovePosX(2.0f * Game->GetClock()->GetDeltaTick() * 120.0f);
+			Game->camera->MovePosX(2.0f * Game->GetClock()->GetDeltaTick() * 120.0f);
 			Game->player->currentlyMoved = true;
 		}
 	}
@@ -42,7 +42,7 @@ void Input::ProcessInput(GameManager* Game)
 		if (!Game->CollisionCheck(0, 0, Game->playerSize + 1, 0) && Game->IsStarted())
 		{
 			Game->player->Move(MOVE_LEFT, 2 * Game->GetClock()->GetDeltaTick() * 120.0f);
-			Game->camera.MovePosX(-2.0f * Game->GetClock()->GetDeltaTick() * 120.0f);
+			Game->camera->MovePosX(-2.0f * Game->GetClock()->GetDeltaTick() * 120.0f);
 			Game->player->currentlyMoved = true;
 		}
 	}

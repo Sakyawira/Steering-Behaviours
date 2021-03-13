@@ -33,9 +33,8 @@
 #include "clock.h"
 #include "Audio.h"
 
-
-const int WINDOW_WIDHT = 800;
-const int WINDOW_HEIGHT = 800;
+const int windowWidth = 720;
+const int windowHeight = 720;
 
 class GameManager
 {
@@ -55,7 +54,7 @@ public:
 	CClock* GetClock();
 
 	GameObject* player;
-	Camera camera;
+	Camera* camera;
 	float playerSize = 1;
 	
 private:

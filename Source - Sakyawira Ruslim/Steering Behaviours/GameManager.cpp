@@ -18,6 +18,8 @@ GameManager::GameManager()
 {
 	isInitialised = false;
 
+	camera = new Camera(windowWidth, windowHeight);
+
 	// Create Clock
 	clock = new CClock();
 	// Create Shader
@@ -35,9 +37,9 @@ GameManager::GameManager()
 	// Text
 	std::string m_string_menu = "Sakyawira's Steering Behaviours";
 	std::string m_string_instruction = "Press 'R' to start the game...";
-	steerText = new TextLabel(WINDOW_WIDHT, WINDOW_HEIGHT, steerString, "Resources/Fonts/arial.ttf", glm::vec2(-350.0f, 350.0f));
-	menuText = new TextLabel(WINDOW_WIDHT, WINDOW_HEIGHT, m_string_menu, "Resources/Fonts/arial.ttf", glm::vec2(-169, 250.0f));
-	instructionText = new TextLabel(WINDOW_WIDHT, WINDOW_HEIGHT, m_string_instruction, "Resources/Fonts/arial.ttf", glm::vec2(-108, -250.0f));
+	steerText = new TextLabel(windowWidth, windowHeight, steerString, "Resources/Fonts/arial.ttf", glm::vec2(-350.0f, 350.0f));
+	menuText = new TextLabel(windowWidth, windowHeight, m_string_menu, "Resources/Fonts/arial.ttf", glm::vec2(-169, 250.0f));
+	instructionText = new TextLabel(windowWidth, windowHeight, m_string_instruction, "Resources/Fonts/arial.ttf", glm::vec2(-108, -250.0f));
 
 	// Texture
 	starsTexture = new Texture("Resources/Textures/stars.png");
@@ -89,40 +91,40 @@ GameManager::GameManager()
 	}
 
 	// Creating walls around the playable space
-	for (int j = -WINDOW_HEIGHT; j <= WINDOW_HEIGHT;)
+	for (int j = -windowHeight; j <= windowHeight;)
 	{
-		for (int i = -WINDOW_WIDHT; i < WINDOW_WIDHT;)
+		for (int i = -windowWidth; i < windowWidth;)
 		{
 			wall = new GameObject(scrollingShader, waterMesh, v_water_texture, static_cast<float>(i), static_cast<float>(j));
 			wall->Scale(50.0f);
 			walls.push_back(wall);
 			i += 50;
 		}
-		j += WINDOW_HEIGHT * 2;
+		j += windowHeight * 2;
 	}
-	for (int j = -WINDOW_HEIGHT; j <= WINDOW_HEIGHT;)
+	for (int j = -windowHeight; j <= windowHeight;)
 	{
-		for (int i = -WINDOW_WIDHT; i < WINDOW_WIDHT;)
+		for (int i = -windowWidth; i < windowWidth;)
 		{
 			wall = new GameObject(scrollingShader, waterMesh, v_water_texture, static_cast<float>(j), static_cast<float>(i));
 			wall->Scale(50.0f);
 			walls.push_back(wall);
 			i += 50;
 		}
-		j += WINDOW_WIDHT * 2;
+		j += windowWidth * 2;
 	}
 
 	// Creates Background
-	for (int j = -WINDOW_HEIGHT; j <= WINDOW_HEIGHT;)
+	for (int j = -windowHeight; j <= windowHeight;)
 	{
-		for (int i = -WINDOW_WIDHT; i < WINDOW_WIDHT * 2;)
+		for (int i = -windowWidth; i < windowWidth * 2;)
 		{
 			background = new GameObject(alternatingShader, staticMesh, bg_texture, static_cast<float>(i), static_cast<float>(j));
 			background->Scale(800.0f);
 			backgrounds.push_back(background);
-			i += WINDOW_WIDHT;
+			i += windowWidth;
 		}
-		j += WINDOW_HEIGHT;
+		j += windowHeight;
 	}
 	
 	this->Initialize();
@@ -193,6 +195,9 @@ GameManager::~GameManager()
 	}
 	delete clock;
 	clock = nullptr;
+
+	delete camera;
+	camera = nullptr;
 }
 
 void GameManager::Initialize()
@@ -213,8 +218,8 @@ void GameManager::Initialize()
 	player->Scale(78.0f);
 
 	// Reset Camera's Position
-	camera.SetPosX(0.0f);
-	camera.SetPosY(0.0f);
+	camera->SetPosX(0.0f);
+	camera->SetPosY(0.0f);
 
 	// Reset score
 	// m_i_steer = 0;
@@ -240,19 +245,19 @@ void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 			// Process Enemies
 			for (auto& vehicle : vehiclesGreen)
 			{
-				vehicle->Process(currentBehaviour, vehiclesGreen, player->GetLocation(), WINDOW_WIDHT, WINDOW_HEIGHT, 0, deltaTime);
+				vehicle->Process(currentBehaviour, vehiclesGreen, player->GetLocation(), windowWidth, windowHeight, 0, deltaTime);
 			}
 
 			currentTime = static_cast<float>(glutGet(GLUT_ELAPSED_TIME)); // Get current time.
 			currentTime = currentTime * 0.001f;
 			steerText->SetText(steerString);
-			steerText->SetPosition(glm::vec2(-390.0f, 350.0f));
+			steerText->SetPosition(glm::vec2(0 - (windowWidth / 2), (windowHeight / 2) - 50.0f) );
 			steerText->SetScale(0.78f);
 			steerText->SetColor(glm::vec3(0.91f, 0.13f, 0.13f));
 
 			instructionString = "Press: (1) Seek, (2) Arrive, (3) Containment, (4) Wander, (5) Flock, (6) Leader Follow";
 			instructionText->SetText(instructionString);
-			instructionText->SetPosition(glm::vec2(-351.0f, -365.0f));
+			instructionText->SetPosition(glm::vec2(-351.0f, 50 - (windowHeight/2)));
 			instructionText->SetColor(glm::vec3(0.26f, 0.0f, 0.26f));
 
 			menuString = "Press: (W), (A), (S), (D) to move the player.";
@@ -292,22 +297,22 @@ bool GameManager::CollisionCheck(float _top, float _bottom, float _left, float _
 					if (_top > 0)
 					{
 						gameObjects->Move(MOVE_DOWN, playerSize + 1);
-						camera.MovePosY(-2.0f);
+						camera->MovePosY(-2.0f);
 					}
 					else if (_bottom > 0)
 					{
 						gameObjects->Move(MOVE_UP, playerSize + 1);
-						camera.MovePosY(2.0f);
+						camera->MovePosY(2.0f);
 					}
 					else if (_left > 0)
 					{
 						gameObjects->Move(MOVE_RIGHT, playerSize + 1);
-						camera.MovePosX(2.0f);
+						camera->MovePosX(2.0f);
 					}
 					else if (_right > 0)
 					{
 						gameObjects->Move(MOVE_LEFT, playerSize + 1);
-						camera.MovePosX(-2.0f);
+						camera->MovePosX(-2.0f);
 					}
 				}
 				return true;
@@ -325,33 +330,33 @@ void GameManager::Render()
 		// Drawing background
 		for (auto& backgroundObjects : backgrounds)
 		{
-			backgroundObjects->Draw(camera, "currentTime", currentTime);
+			backgroundObjects->Draw(*camera, "currentTime", currentTime);
 		}
 
 		// Drawing all players
 		for (auto& playerObjects : players)
 		{
-			playerObjects->Draw(camera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
+			playerObjects->Draw(*camera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
 		}
 		
 		// Drawing all obstacles
 		for (auto& coinObjects : vehiclesGreen)
 		{
-			coinObjects->Draw(camera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
+			coinObjects->Draw(*camera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
 		}
 
 		// Draw all collectables
 		for (auto& obstacleObjects : walls)
 		{
-			obstacleObjects->Draw(camera, "currentTime", currentTime);
+			obstacleObjects->Draw(*camera, "currentTime", currentTime);
 		}
 
 		//m_enemy_ice->Draw(camera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
 
 		if (player->GetScale() <= 0.13f || isStarted == 0)
 		{
-			Menu->Draw(camera, "currentTime", currentTime);
-			player->Draw(camera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
+			Menu->Draw(*camera, "currentTime", currentTime);
+			player->Draw(*camera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
 		}
 		
 		if (steerText != nullptr)

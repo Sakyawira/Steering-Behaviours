@@ -62,11 +62,6 @@ void Vehicle::Process(const Behaviour _steer, std::vector<Vehicle*>& _boids, glm
 	modelMatrix = translationMatrix * rotationZ * scaleMatrix;
 }
 
-void Vehicle::RandomOn()
-{
-	randomMove = true;
-}
-
 void Vehicle::Limit(glm::vec3& _vector3, float _maxMagnitude)
 {
 	if (glm::length(_vector3) > _maxMagnitude) 
@@ -232,23 +227,23 @@ void Vehicle::Containment(float _width, float _height, float _d)
 	}
 }
 
-glm::vec3 Vehicle::Seperate(std::vector<Vehicle*>& _boids)
+glm::vec3 Vehicle::Seperate(std::vector<Vehicle*>& _boids, const float _desiredSeparation)
 {
-	const float desired_separation = 137.5f;
 	glm::vec3 steer = glm::vec3(0, 0, 0);
 	int count = 0;
 	// Check if any boid in the vector is too close
 	for (auto boid : _boids) 
 	{
 		float d = glm::length(objPosition - boid->GetLocation());
-		// If the distance is greater than 0 and less than desired distance
-		if ((this != boid) && (d < desired_separation))
+		// If the distance less than desired distance and is greater than 0
+		if ((this != boid) && (d < _desiredSeparation) && (d > 0.0f))
 		{
 			// Calculate vector pointing away from neighbor
 			glm::vec3 diff = objPosition - boid->GetLocation();
 			diff = glm::normalize(diff);
 			// Weight by distance
-			diff /= d;       
+			diff /= d;
+			// Add to the total
 			steer += diff;
 			// Keep track of how many
 			count++;            

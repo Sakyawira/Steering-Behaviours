@@ -21,7 +21,12 @@
 class Camera
 {
 public:
-	Camera() = default;
+	Camera(unsigned int _screenWidth, unsigned int _screenHeight) 
+	{
+		screenWidth = _screenWidth;
+		screenHeight = _screenHeight;
+	};
+
 	~Camera() = default;
 
 	void UseCamera(GLuint program/*, glm::mat4 view, glm::mat4 proj*/)
@@ -67,11 +72,11 @@ private:
 	 glm::mat4 view = glm::lookAt(camPos, camPos + camLookDir, camUpDir);
 
 	 // Screen Size
-	 unsigned int SCR_WIDTH = 800;
-	 unsigned int SCR_HEIGHT = 800;
+	 unsigned int screenWidth = 800;
+	 unsigned int screenHeight = 800;
 
-	 float halfScreenWidth = (float)SCR_WIDTH * 0.5f;
-	 float halfScreenHeight = (float)SCR_HEIGHT * 0.5f;
+	 float halfScreenWidth = (float)screenWidth * 0.5f;
+	 float halfScreenHeight = (float)screenHeight * 0.5f;
 
 	 // Orthographic
 	 glm::mat4 proj = glm::ortho(-halfScreenWidth, halfScreenWidth, -halfScreenHeight, halfScreenHeight, 0.1f, 100.0f);

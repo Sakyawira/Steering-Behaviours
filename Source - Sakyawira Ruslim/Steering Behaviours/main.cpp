@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(50, 50);
-	glutInitWindowSize(WINDOW_WIDHT, WINDOW_HEIGHT);
+	glutInitWindowSize(windowWidth, windowHeight);
 	glutCreateWindow("OpenGL First Window");
 
 	// Sets up all gl function callbacks based on pc hardware
