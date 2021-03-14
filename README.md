@@ -1,8 +1,14 @@
 # Steering Behaviour
 
+This project showcases my implementation of autonomous agents based on the book 'The Nature of Code' by Daniel Shiffman. There are two things each autonomous agents do: action selection and steering. The autonomous agents (from now we will call them vehicles) will select different sets of actions based on a goal. In this implementation, the user will be able to switch through different goals using their keyboard's number keys. After the vehicles know what their goal is, they will calculate the moves (in this case the vector difference) required to achieve that goal (or for goals that required multiple actions, to achieve each of the actions).
+
+This project is done in C++ and OpenGL.
+
 ## Seek
 
-<img src="https://github.com/Sakyawira/Visual-Novel-Plugin/blob/feature/documentation/ImagesForDocumentation/pasted%20image%200.png?raw=true"/>
+The goal of the 'Seek' behaviour is to move towards a certain location.
+
+<img src="https://github.com/Sakyawira/Steering-Behaviours/blob/main/gifs/seek.gif?raw=true" width="360" height="360"/>
 
 1. A vehicle picks a position vector as a target.
 2. We generate a desired vector based on our position vector, the target’s 
@@ -13,7 +19,9 @@ position vector.
 
 ## Arrive
 
-<img src="https://github.com/Sakyawira/Visual-Novel-Plugin/blob/feature/documentation/ImagesForDocumentation/pasted%20image%200%20(1).png?raw=true"/>
+The goal of the 'Arrive' behaviour is to move towards a certain location. However, we also want it to slow down as it approaches the target.
+
+<img src="https://github.com/Sakyawira/Steering-Behaviours/blob/main/gifs/arrive.gif?raw=true" width="360" height="360"/>
 
 1. Similar to Seek but with one extra process.
 2. We normalize the desired vector and then times it with a magnitude that is 
@@ -23,38 +31,45 @@ until it finally becomes zero when it arrived.
 
 ## Containment
 
-<img src="https://github.com/Sakyawira/Visual-Novel-Plugin/blob/feature/documentation/ImagesForDocumentation/pasted%20image%200%20(3).png?raw=true" />
+The goal of the 'Containment' behaviour is to keep the vehicles within a bounding box.
+
+<img src="https://github.com/Sakyawira/Steering-Behaviours/blob/main/gifs/containment.gif?raw=true" width="360" height="360"/>
 
 1. Set border coordinates.
 2. If the vehicle position exceeds those border, reverse its velocity.
 
 ## Wander
 
-<img src="https://github.com/Sakyawira/Visual-Novel-Plugin/blob/feature/documentation/ImagesForDocumentation/pasted%20image%200%20(2).png?raw=true"/>
+The goal of the 'Wander' behaviour is to let the vehicles moves randomly, but still in a natural way.
 
-1. The vehicle generates a point within a specified distance and creates a circle 
-with a specified radius on it.
+<img src="https://github.com/Sakyawira/Steering-Behaviours/blob/main/gifs/wander.gif?raw=true" width="360" height="360"/>
+
+1. The vehicle generates a point within a specified distance and creates a circle with a specified radius on it.
 2. We get a random point along the circumference of that circle.
 3. We seek that point.
 
 ## Flock
 
-<img src="https://github.com/Sakyawira/Visual-Novel-Plugin/blob/feature/documentation/ImagesForDocumentation/pasted%20image%200%20(4).png?raw=true"/>
+The goal of the 'Flock' behaviour is to make the vehicles moves as a group. We want them to not crash with each other, but we also don't want them to be too far from each other. Lastly, we want them to move towards the same general direction, 
 
-1. Flocking contains three simple steering behaviours.
-2. Separation: it calculates the amount of velocity each vehicle needs to stay 
+<img src="https://github.com/Sakyawira/Steering-Behaviours/blob/main/gifs/flock.gif?raw=true" width="360" height="360"/>
+
+Flocking contains three simple steering behaviours:
+1. Separation: it calculates the amount of velocity each vehicle needs to stay 
 away from other vehicles and set it as your desired vector. This velocity is the 
 average of all the desired vector towards a point between each vehicle with 
 another. It calculates that point by getting the vector from a vehicle that points 
 away from another vehicle and then weighted that vector by dividing it by 
 specified magnitude.
-3. Cohesion: Get the average position of each vehicle and steer towards that 
+2. Cohesion: Get the average position of each vehicle and steer towards that 
 position.
-4. Alignment: Get the average velocity of all vehicles and steer towards it.
+3. Alignment: Get the average velocity of all vehicles and steer towards it.
 
 ## Leader Following
 
-<img src="https://github.com/Sakyawira/Visual-Novel-Plugin/blob/feature/documentation/ImagesForDocumentation/pasted%20image%200%20(5).png?raw=true"/>
+The goal of 'leader following' is to make all the vehicles follow each other in a line, while the leader of the group moves toward a point.
+
+<img src="https://github.com/Sakyawira/Steering-Behaviours/blob/main/gifs/leaderfollowing.gif?raw=true" width="360" height="360"/>
 
 1. Iterate through the vector of vehicles.
 2. The first vehicle arrives at a moving target (a mouse, or in my case, a player 
