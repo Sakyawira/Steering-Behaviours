@@ -19,9 +19,6 @@ bool Audio::Load()
 {
 	audioSystem->createStream("Resources/Audio/Chase LOOP.wav", FMOD_DEFAULT | FMOD_LOOP_NORMAL, 0, &sounds[SOUND_BGM1]);
 	audioSystem->createStream("Resources/Audio/Fire/FIRE_Campfire_Calm_Smooth_01_loop_mono.wav", FMOD_DEFAULT | FMOD_LOOP_NORMAL, 0, &sounds[SOUND_BGM2]);
-	audioSystem->createSound("Resources/Audio/GORE_SPLATS/GORE_Stab_Splat_Only_Bubbles_mono.wav", FMOD_DEFAULT, 0, &sounds[SOUND_GAMEOVER]);
-	audioSystem->createSound("Resources/Audio/THUD_Bright_04_Movement_mono.wav", FMOD_DEFAULT, 0, &sounds[SOUND_MOVE]);
-	audioSystem->createSound("Resources/Audio/EAT_Swallow_mono.wav", FMOD_DEFAULT, 0, &sounds[SOUND_CONSUME]);
 	return true;
 }
 

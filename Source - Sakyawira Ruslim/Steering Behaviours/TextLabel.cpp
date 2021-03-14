@@ -1,15 +1,8 @@
 /***********************
-  Bachelor of Software Engineering
-  Media Design School
-  Auckland
-  New Zealand
-
-  (c) 2018 Media Design School
-
   File Name   :   TextLabel.cpp
   Description :   define the TextLabel class' function and constructor
   Author      :   Sakyawira Nanda Ruslim
-  Mail        :   Sakyawira.Rus8080@mediadesign.school.nz
+  Mail        :   Sakyawira@gmail.com
 ********************/
 #include "TextLabel.h"
 

@@ -1,15 +1,8 @@
 /***********************
-  Bachelor of Software Engineering
-  Media Design School
-  Auckland
-  New Zealand
-
-  (c) 2018 Media Design School
-
-  File Name   :   GameObject.h
-  Description :   contains definition of GameObject class which control the updates and drawing pipeline of an object
+  File Name   :   GameObject.cpp
+  Description :   contains definition of GameObject class which control the position and rendering pipeline of an object
   Author      :   Sakyawira Nanda Ruslim
-  Mail        :   Sakyawira.Rus8080@mediadesign.school.nz
+  Mail        :   Sakyawira@gmail.com
 ********************/
 #include "GameObject.h"
 

@@ -1,15 +1,8 @@
 /***********************
-  Bachelor of Software Engineering
-  Media Design School
-  Auckland
-  New Zealand
-
-  (c) 2018 Media Design School
-
   File Name   :   Shader.h
   Description :   declare the Shader class which contains the program and control the uniform of an object
   Author      :   Sakyawira Nanda Ruslim
-  Mail        :   Sakyawira.Rus8080@mediadesign.school.nz
+  Mail        :   Sakyawira@gmail.com
 ********************/
 #pragma once
 #include <glew.h>

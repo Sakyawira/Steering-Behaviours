@@ -1,4 +1,4 @@
-# Steering Behaviour
+# Steering Behaviours
 
 This project showcases my implementation of autonomous agents based on the book 'The Nature of Code' by Daniel Shiffman. There are two things each autonomous agents do: action selection and steering. The autonomous agents (from now we will call them vehicles) will select different sets of actions based on a goal. In this implementation, the user will be able to switch through different goals using their keyboard's number keys. After the vehicles know what their goal is, they will calculate the moves (in this case the vector difference) required to achieve that goal (or for goals that required multiple actions, to achieve each of the actions).
 

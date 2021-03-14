@@ -1,15 +1,8 @@
 /***********************
-  Bachelor of Software Engineering
-  Media Design School
-  Auckland
-  New Zealand
-
-  (c) 2018 Media Design School
-
-  File Name   :   GameObject.h
-  Description :   contains definition of GameManager class which control the gameplay, rendering of all game objects
+  File Name   :   GameManager.cpp
+  Description :   contains definition of GameManager class which control the creation, processing, and rendering of all objects
   Author      :   Sakyawira Nanda Ruslim
-  Mail        :   Sakyawira.Rus8080@mediadesign.school.nz
+  Mail        :   Sakyawira@gmail.com
 ********************/
 #include "GameManager.h"
 #include <random>

@@ -1,6 +1,6 @@
 /***********************
   File Name   :   GameObject.h
-  Description :   contains declaration of GameObject class which control the updates and drawing pipeline of an object
+  Description :   contains declaration of GameObject class which control the position and rendering pipeline of an object
   Author      :   Sakyawira Nanda Ruslim
   Mail        :   Sakyawira@gmail.com
 ********************/

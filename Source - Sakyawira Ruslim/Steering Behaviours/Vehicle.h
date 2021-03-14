@@ -1,3 +1,10 @@
+/***********************
+  File Name   :   Vehicle.h
+  Description :   contains declaration of Vehicle class which control the steering behaviours of an object
+  Author      :   Sakyawira Nanda Ruslim
+  Mail        :   Sakyawira@gmail.com
+********************/
+
 #pragma once
 #include "GameObject.h"
 
@@ -23,11 +30,11 @@ class Vehicle : public GameObject
 		glm::vec3 GetSeek(glm::vec3 _target);
 		void Arrive(glm::vec3 _target, float _deltaTime);
 		glm::vec3 GetArrive(glm::vec3 _target, float _deltaTime);
-		void Wander(float _deltaTime);
 		void Containment(float _width, float _height, float _d);
+		void Wander(float _deltaTime);		
 		glm::vec3 Seperate(std::vector<Vehicle*>& _boids, const float _desiredSeparation = 137.5f);
-		glm::vec3 Alignment(std::vector<Vehicle*>& _boids);
 		glm::vec3 Cohesion(std::vector<Vehicle*>& _boids);
+		glm::vec3 Alignment(std::vector<Vehicle*>& _boids);
 		void Flock(std::vector<Vehicle*>& _boids);
 		void LeadFollowing(std::vector<Vehicle*>& _boids, glm::vec3 _targetLocation, float _deltaTime);
 	

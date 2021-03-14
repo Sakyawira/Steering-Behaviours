@@ -1,3 +1,10 @@
+/***********************
+  File Name   :   Vehicle.cpp
+  Description :   contains definition of Vehicle class which control the steering behaviours of an object
+  Author      :   Sakyawira Nanda Ruslim
+  Mail        :   Sakyawira@gmail.com
+********************/
+
 #include "Vehicle.h" 
 #include <utility>
 
@@ -178,6 +185,32 @@ glm::vec3 Vehicle::GetArrive(glm::vec3 _target, float _deltaTime)
 	return steer;
 }
 
+void Vehicle::Containment(float _width, float _height, float _d)
+{
+	glm::vec3 desired = glm::vec3(0.0f, 0.0f, 0.0f);
+	if (objPosition.x < -_d)
+	{
+		desired = glm::vec3(maxSpeed, velocity.y, 0.0f);
+	}
+	else if (objPosition.x > _width - _d) {
+		desired = glm::vec3(-maxSpeed, velocity.y, 0.0f);
+	}
+	if (objPosition.y < -_d) {
+		desired = glm::vec3(velocity.x, maxSpeed, 0.0f);
+	}
+	else if (objPosition.y > _height - _d) {
+		desired = glm::vec3(velocity.x, -maxSpeed, 0.0f);
+	}
+	if (desired != glm::vec3(0.0f, 0.0f, 0.0f))
+	{
+		desired = glm::normalize(desired);
+		desired = desired * maxSpeed;
+		glm::vec3 steer = desired - velocity;
+		Limit(steer, maxForce);
+		ApplyForce(steer);
+	}
+}
+
 void Vehicle::Wander(float _deltaTime)
 {	
 	if (velocity == glm::vec3(0.0f, .0f, 0.0f))
@@ -199,32 +232,6 @@ void Vehicle::Wander(float _deltaTime)
 	target.x += x;
 	target.y += y;
 	Seek(target);
-}
-
-void Vehicle::Containment(float _width, float _height, float _d)
-{
-	glm::vec3 desired = glm::vec3(0.0f, 0.0f, 0.0f);
-	if (objPosition.x < - _d)
-	{
-		desired = glm::vec3(maxSpeed, velocity.y, 0.0f);
-	}
-	else if (objPosition.x > _width - _d) {
-		desired = glm::vec3(-maxSpeed, velocity.y, 0.0f);
-	}
-	if (objPosition.y < - _d) {
-		desired = glm::vec3(velocity.x, maxSpeed, 0.0f);
-	}
-	else if (objPosition.y > _height - _d) {
-		desired = glm::vec3(velocity.x, -maxSpeed, 0.0f);
-	}
-	if (desired != glm::vec3(0.0f, 0.0f, 0.0f))
-	{
-		desired = glm::normalize(desired);
-		desired = desired * maxSpeed;
-		glm::vec3 steer = desired - velocity;
-		Limit(steer, maxForce);
-		ApplyForce(steer);
-	}
 }
 
 glm::vec3 Vehicle::Seperate(std::vector<Vehicle*>& _boids, const float _desiredSeparation)
@@ -266,6 +273,33 @@ glm::vec3 Vehicle::Seperate(std::vector<Vehicle*>& _boids, const float _desiredS
 	return steer;
 }
 
+glm::vec3 Vehicle::Cohesion(std::vector<Vehicle*>& _boids)
+{
+	const float neighbor_dist = 75.0f;
+	glm::vec3 sum = glm::vec3(0.0f, 0.0f, 0.0f);
+	int count = 0;
+	for (auto boid : _boids)
+	{
+		float d = glm::length(objPosition - boid->GetLocation());
+		if ((this != boid))
+		{
+			// Add location
+			sum += boid->objPosition;
+			count++;
+		}
+	}
+	if (count > 0)
+	{
+		sum /= static_cast<float>(count);
+		// Return the steering force that seeks toward that location
+		return GetSeek(sum);
+	}
+	else
+	{
+		return glm::vec3(0.0f, 0.0f, 0.0f);
+	}
+}
+
 glm::vec3 Vehicle::Alignment(std::vector<Vehicle*>& _boids)
 {
 	const float neighbor_dist = 75.0f;
@@ -288,33 +322,6 @@ glm::vec3 Vehicle::Alignment(std::vector<Vehicle*>& _boids)
 		glm::vec3 steer = sum - velocity;
 		Limit(steer, maxForce);
 		return steer;
-	}
-	else 
-	{
-		return glm::vec3(0.0f, 0.0f, 0.0f);
-	}
-}
-
-glm::vec3 Vehicle::Cohesion(std::vector<Vehicle*>& _boids)
-{
-	const float neighbor_dist = 75.0f;
-	glm::vec3 sum = glm::vec3(0.0f, 0.0f, 0.0f);  
-	int count = 0;
-	for (auto boid : _boids) 
-	{
-		float d = glm::length(objPosition - boid->GetLocation());
-		if ((this != boid)) 
-		{
-			// Add location
-			sum += boid->objPosition; 
-			count++;
-		}
-	}
-	if (count > 0) 
-	{
-		sum /= static_cast<float>(count);
-		// Return the steering force that seeks toward that location
-		return GetSeek(sum);  
 	}
 	else 
 	{

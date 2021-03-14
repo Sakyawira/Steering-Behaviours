@@ -34,5 +34,3 @@ private:
 	InputState MouseState[3];
 	glm::vec3 m_mouse_location = glm::vec3(0.0f, 0.0f, 0.0f);
 };
-
-
