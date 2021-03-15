@@ -4,6 +4,8 @@ This project showcases my implementation of autonomous agents based on the book 
 
 This project is done in C++ and OpenGL.
 
+IMPORTANT: Please build the game in x86. Some of the libraries in this project won't work in x64.
+
 ## Seek
 
 The goal of the 'Seek' behaviour is to move towards a certain location.
