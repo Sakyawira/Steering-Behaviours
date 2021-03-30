@@ -356,14 +356,14 @@ void Vehicle::LeadFollowing(std::vector<Vehicle*>& _boids, glm::vec3 _targetLoca
 		// First vehicle in the vector arrive to the target
 		if (*it == _boids[0])
 		{
-			(*it)->Arrive((_targetLocation * 0.91f), _deltaTime);
+			(*it)->Arrive((_targetLocation * 0.9f), _deltaTime);
 		}
 		// The rest of the vehicle arrive to the negated velocity of the previous vehicle
 		else
 		{
 			std::vector<Vehicle*>::iterator PrevIt = it - 1;
 			(*it)->Arrive(((*PrevIt)->GetLocation() - (*PrevIt)->velocity * -1.0f), _deltaTime);
-			(*it)->ApplyForce((*it)->Seperate(_boids));
+			// (*it)->ApplyForce((*it)->Seperate(_boids));
 		}
 	}
 }
