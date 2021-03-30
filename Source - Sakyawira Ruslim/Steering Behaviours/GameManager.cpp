@@ -9,6 +9,7 @@
 
 GameManager::GameManager()
 {
+	ThreadPool::GetInstance().Start(numberThreads);
 	isInitialised = false;
 
 	camera = new Camera(windowWidth, windowHeight);
@@ -57,8 +58,8 @@ GameManager::GameManager()
 
 	int border = 375 - static_cast<int>(player->GetScale()) * 2;
 	
-	// Creating multiple coins
-	for (int i = 0; i < 50; ++i)
+	// Creating multiple slimes
+	for (int i = 0; i < numberSlimes; ++i)
 	{
 		int negate = rand() % 2;
 		negate = (negate == 0 ? -1 : 1);
@@ -226,7 +227,7 @@ void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 {
 	if (isInitialised == 1)
 	{
-		float deltaTime = clock->GetDeltaTick() * 120.0f;
+		float deltaTime = clock->GetDeltaTick() / 10.0f;
 
 		if (isStarted)
 		{
@@ -236,10 +237,36 @@ void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 			}
 			
 			// Process Enemies
-			for (auto& vehicle : vehiclesGreen)
+			for (int y = 0; y < numberSlimes - 1;)
+			{
+				int endY = y + static_cast<int>(numberSlimes / numberThreads);
+
+				if (endY > numberSlimes)
+				{
+					endY = numberSlimes;
+				}
+
+				//std::cout << i << std::endl;
+				std::future<void>* newFuture = new std::future<void>;
+
+				*newFuture = ThreadPool::GetInstance().Submit(ProcessVehicles, &vehiclesGreen, y, endY, currentBehaviour, &vehiclesGreen, player->GetLocation(), windowWidth, windowHeight, 0, deltaTime);
+
+				g_vecFuture.push_back(newFuture);
+				y = endY;
+			}
+
+			for (auto& future : g_vecFuture)
+			{
+				future->get();
+				delete future;
+				future = nullptr;
+			}
+			g_vecFuture.clear();
+
+		/*	for (auto& vehicle : vehiclesGreen) 
 			{
 				vehicle->Process(currentBehaviour, vehiclesGreen, player->GetLocation(), windowWidth, windowHeight, 0, deltaTime);
-			}
+			}*/
 
 			currentTime = static_cast<float>(glutGet(GLUT_ELAPSED_TIME)); // Get current time.
 			currentTime = currentTime * 0.001f;
@@ -361,7 +388,7 @@ void GameManager::Render()
 		instructionText->Render();
 		menuText->Render();
 		
-		frameCounts += 1.0f * clock->GetDeltaTick() * 120.0f;
+		frameCounts += 1.0f * clock->GetDeltaTick() / 10.0f;
 	}
 	else
 	{
@@ -418,6 +445,16 @@ void GameManager::ChangeBehaviourText()
 	else if (currentBehaviour == LEAD_FOLLOWING)
 	{
 		steerString = "Leader Following";
+	}
+}
+
+void GameManager::ProcessVehicles(std::vector<Vehicle*>* _vehicles, int y, int endY, Behaviour _steer, std::vector<Vehicle*>* _boids, glm::vec3 _targetLocation, int _windowWidth, int _windowHeight, int _playerSize, float _deltaTime)
+{
+	for (int i = y; i < endY; i++)
+	{
+		// std::cout << "Thread number " << std::this_thread::get_id() << " executing vehicle number " << i << std::endl;
+		std::vector<Vehicle*>& veh = *_vehicles;
+		(veh[i])->Process(_steer, *_boids, _targetLocation, _windowWidth, _windowHeight, _playerSize, _deltaTime);
 	}
 }
 

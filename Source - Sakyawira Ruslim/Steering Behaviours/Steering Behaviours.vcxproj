@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="clock.cpp" />
+    <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="Vehicle.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -156,6 +157,8 @@
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="clock.h" />
+    <ClInclude Include="Task.h" />
+    <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="Vehicle.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
@@ -167,6 +170,7 @@
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="TextLabel.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="WorkQueue.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\Shaders\AlternatingFragment.txt" />

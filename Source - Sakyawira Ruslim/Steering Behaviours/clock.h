@@ -1,46 +1,46 @@
-//
-// Bachelor of Software Engineering
-// Media Design School
-// Auckland
-// New Zealand
-//
-// (c) 2018 Media Design School
-//
-// File Name	: 
-// Description	: 
-// Author		: Your Name
-// Mail			: your.name@mediadesign.school.nz
-//
+
 
 #pragma once
-#if !defined(__CLOCK_H__)
-#define __CLOCK_H__
+
+#ifndef _CLOCK_H_
+#define _CLOCK_H_
 
 // Library Includes
-#include <windows.h>
+#include <chrono>
+#include <vector>
+
 
 // Prototypes
 class CClock
 {
-    public:
-        CClock();
-        ~CClock();
+	// Member Functions
+public:
+	CClock();
+	~CClock();
+	bool Initialise();
+	void Process();
+	float GetDeltaTick();
 
-        bool Initialise();
-        void Process();
-        float GetDeltaTick();
+protected:
 
-    private:
-        CClock(const CClock& _kr);
-    protected:
-         double m_fTimeElapsed;
-         double m_fDeltaTime;
-         double m_fLastTime;
-         double m_fCurrentTime;
-         double m_SecondsPerCount;
-         int m_iFrameCount = 0;
+private:
+	CClock(const CClock& _kr);
+	CClock& operator= (const CClock& _kr);
 
-    private:
+	// Member Variables
+public:
+
+protected:
+	double m_fTimeElapsed;
+	double m_fDeltaTime;
+	std::chrono::high_resolution_clock::time_point m_fLastTime;
+	std::chrono::high_resolution_clock::time_point m_fCurrentTime;
+
+	std::vector<double> m_vecTimeHistory;
+
+	long long m_llNumCounts;
+
+private:
 
 };
-#endif
+#endif // 
