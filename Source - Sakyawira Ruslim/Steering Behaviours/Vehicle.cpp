@@ -351,19 +351,25 @@ void Vehicle::Flock(std::vector<Vehicle*>& _boids)
 void Vehicle::LeadFollowing(std::vector<Vehicle*>& _boids, glm::vec3 _targetLocation, float _deltaTime)
 {
 	std::vector<Vehicle*>::iterator it;
-	for (it = _boids.begin(); it < _boids.end(); ++it)
+	it = _boids.begin();
+	// First vehicle in the vector arrive to the target
+	if (this == (*it)) 
 	{
-		// First vehicle in the vector arrive to the target
-		if (*it == _boids[0])
+		Arrive((_targetLocation * 0.9f), _deltaTime);
+	}
+	else 
+	{
+		for (it = _boids.begin() + 1; it < _boids.end(); ++it)
 		{
-			(*it)->Arrive((_targetLocation * 0.9f), _deltaTime);
-		}
-		// The rest of the vehicle arrive to the negated velocity of the previous vehicle
-		else
-		{
-			std::vector<Vehicle*>::iterator PrevIt = it - 1;
-			(*it)->Arrive(((*PrevIt)->GetLocation() - (*PrevIt)->velocity * -1.0f), _deltaTime);
-			// (*it)->ApplyForce((*it)->Seperate(_boids));
+			// The rest of the vehicle arrive to the negated velocity of the previous vehicle
+			if (this == (*it))
+			{
+				std::vector<Vehicle*>::iterator PrevIt = it - 1;
+				(*it)->Arrive(((*PrevIt)->GetLocation() * 0.9f /*- (*PrevIt)->velocity * -1.0f*/), _deltaTime);
+			}
 		}
 	}
+	// Calculate separation
+	/*glm::vec3 sep = Seperate(_boids);
+	ApplyForce(sep);*/
 }
