@@ -25,6 +25,7 @@
 #include "TextLabel.h"
 #include "clock.h"
 #include "Audio.h"
+#include "ThreadPool.h"
 
 const int windowWidth = 720;
 const int windowHeight = 720;
@@ -44,7 +45,8 @@ public:
 	void StartGame();
 	void SetBehaviour(Behaviour steer);
 	void ChangeBehaviourText();
-	CClock* GetClock();
+	static void ProcessVehicles(std::vector<Vehicle*>* _vehicles, int y, int endY, Behaviour _steer, std::vector<Vehicle*>* _boids, glm::vec3 _targetLocation, int _windowWidth, int _windowHeight, int _playerSize, float _deltaTime);
+	Clock* GetClock();
 
 	GameObject* player;
 	Camera* camera;
@@ -52,11 +54,18 @@ public:
 	
 private:
 
+	int numberThreads = 1;
+	int numberSlimes = 1600;
+
+	// Declaring a vector to store different pointers to the future
+	// Will be used to iterate through and get them
+	std::vector< std::future<void>*> g_vecFuture;
+
 	// Enum for behaviour type
 	Behaviour currentBehaviour = SEEK;
 	
 	// Clock
-	CClock* clock;
+	Clock* clock;
 
 	// Check whether or not m_program has been initialized
 	bool isInitialised = false;

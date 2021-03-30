@@ -1,77 +1,81 @@
-/***********************
-  File Name   :   clock.cpp
-  Description :   
-  Author      :   Sakyawira Nanda Ruslim
-  Mail        :   Sakyawira@gmail.com
-********************/
 
 // Library Includes
-#include <windows.h>
+#include <chrono>
 
 // Local Includes
-#include "Clock.h"
 
-// Static Variables
+// This Includes
+#include "clock.h"
 
-// Static Function Prototypes
 
 // Implementation
-
-CClock::CClock()
-: m_fTimeElapsed(0.0)
-, m_fDeltaTime(0.0)
-, m_fLastTime(0.0)
-, m_fCurrentTime(0.0)
+//****************************************************
+// CClock: CClock Class Constructor
+// @author: 
+// @parameter: No parameters
+//
+// @return: none
+//*****************************************************
+Clock::Clock()
+	: m_fTimeElapsed(0.0f)
+	, m_fDeltaTime(0.0f)
 {
 
 }
 
-CClock::~CClock()
+//****************************************************
+// ~CClock: CClock Class Destructor
+// @author: 
+// @parameter: No parameters
+//
+// @return: none
+//*****************************************************
+Clock::~Clock()
 {
 
 }
 
-bool
-CClock::Initialise()
+//****************************************************
+// Initialise: CClock Class Initialiser - sets the first time values
+// @author: 
+// @parameter: No parameters
+//
+// @return: true if initialisation is successful, false if not
+//*****************************************************
+bool Clock::Initialise()
 {
-	__int64 _TimerFrequency, _currTime;
-	QueryPerformanceFrequency((LARGE_INTEGER*)&_TimerFrequency);
-	m_SecondsPerCount = 1.0 / static_cast<double>(_TimerFrequency);
-
-	QueryPerformanceCounter((LARGE_INTEGER*)&_currTime);
-	m_fCurrentTime = static_cast<double>(_currTime);
-	m_fLastTime = static_cast<double>(_currTime);
-
+	m_fCurrentTime = std::chrono::high_resolution_clock::now();
 	return (true);
 }
 
+//****************************************************
+// Process: processes the change in time since it was last called
+// @author:
+// @parameter: No parameters
+//
+// @return: void
+//*****************************************************
 void
-CClock::Process()
+Clock::Process()
 {
-	//Get the time this frame.
-
-	__int64 currTime;
-
-	QueryPerformanceCounter((LARGE_INTEGER*)&currTime);
-
-	m_fCurrentTime = static_cast<double>(currTime);
-
-	//Time difference between this frame and the previous frame
-	m_fDeltaTime = (m_fCurrentTime - m_fLastTime) * m_SecondsPerCount;
-
-	//Prepare for the next frame
 	m_fLastTime = m_fCurrentTime;
 
-	//Force non-negative
-	if (m_fDeltaTime < 0.0)
-	{
-		m_fDeltaTime = 0.0;
-	}
+	m_fCurrentTime = std::chrono::high_resolution_clock::now();
+
+
+	m_fDeltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(m_fCurrentTime - m_fLastTime).count();
 
 	m_fTimeElapsed += m_fDeltaTime;
 }
 
-float CClock::GetDeltaTick()
+//****************************************************
+// GetDeltaTick: gets the current delta tick value
+// @author: 
+// @parameter: No parameters
+//
+// @return: the current delta tick value
+//*****************************************************
+float Clock::GetDeltaTick()
 {
-	return static_cast<float>(m_fDeltaTime);
+	return (m_fDeltaTime);
 }
