@@ -46,7 +46,7 @@ private:
 	std::atomic_bool m_finished;
 
 	//A WorkQueue of tasks which are packaged tasks
-	std::unique_ptr<CWorkQueue<std::unique_ptr<BasicTask>> > m_unqpWorkQueue;
+	std::unique_ptr<WorkQueue<std::unique_ptr<BasicTask>> > m_unqpWorkQueue;
 
 	//Create a pool of worker threads
 	std::vector<std::thread> m_workerThreads;
@@ -64,8 +64,8 @@ std::future<std::result_of_t<Fun(Args...)>>
 ThreadPool::Submit(Fun func, Args... args)
 {
 	using ResultT = std::result_of_t<Fun(Args...)>;
-	std::unique_ptr<CTask<ResultT>> 
-		task(std::make_unique<CTask<ResultT>>(std::bind(func, args...)));
+	std::unique_ptr<Task<ResultT>> 
+		task(std::make_unique<Task<ResultT>>(std::bind(func, args...)));
 	std::future<ResultT> f = task->task.get_future();
 	m_unqpWorkQueue->push(std::move(task));
 	return f;

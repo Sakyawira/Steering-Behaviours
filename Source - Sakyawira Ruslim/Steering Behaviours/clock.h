@@ -1,5 +1,3 @@
-
-
 #pragma once
 
 #ifndef _CLOCK_H_
@@ -11,12 +9,12 @@
 
 
 // Prototypes
-class CClock
+class Clock
 {
 	// Member Functions
 public:
-	CClock();
-	~CClock();
+	Clock();
+	~Clock();
 	bool Initialise();
 	void Process();
 	float GetDeltaTick();
@@ -24,8 +22,8 @@ public:
 protected:
 
 private:
-	CClock(const CClock& _kr);
-	CClock& operator= (const CClock& _kr);
+	Clock(const Clock& _kr);
+	Clock& operator= (const Clock& _kr);
 
 	// Member Variables
 public:

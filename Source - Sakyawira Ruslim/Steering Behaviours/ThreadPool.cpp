@@ -4,7 +4,7 @@
 ThreadPool* ThreadPool::s_pThreadPool = nullptr;
 
 ThreadPool::ThreadPool()
-	:m_unqpWorkQueue(new CWorkQueue<std::unique_ptr<BasicTask>>())
+	:m_unqpWorkQueue(new WorkQueue<std::unique_ptr<BasicTask>>())
 {
 	m_finished = false;   //Set out finished to false to begin
 	m_iNumberOfThreads = std::thread::hardware_concurrency();

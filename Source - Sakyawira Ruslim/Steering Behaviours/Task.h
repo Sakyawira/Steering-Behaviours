@@ -8,10 +8,10 @@ public:
 };
 
 template <typename Res>
-class CTask : public BasicTask
+class Task : public BasicTask
 {
 public:
-	CTask(std::function<Res()> func)
+	Task(std::function<Res()> func)
 		: task(func) {
 	}
 

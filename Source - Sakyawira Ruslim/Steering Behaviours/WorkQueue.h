@@ -8,10 +8,10 @@
 #include "Task.h"
 
 template <typename T>
-class CWorkQueue
+class WorkQueue
 {
 public:
-	CWorkQueue() {}
+	WorkQueue() {}
 
 	//Insert an item at the back of the queue and signal any thread that might be waiting for the q to be populated
 	void push(T item)

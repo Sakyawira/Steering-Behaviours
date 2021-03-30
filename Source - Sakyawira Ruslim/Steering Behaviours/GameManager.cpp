@@ -9,13 +9,14 @@
 
 GameManager::GameManager()
 {
+	numberThreads = std::thread::hardware_concurrency();
 	ThreadPool::GetInstance().Start(numberThreads);
 	isInitialised = false;
 
 	camera = new Camera(windowWidth, windowHeight);
 
 	// Create Clock
-	clock = new CClock();
+	clock = new Clock();
 	// Create Shader
 	alternatingShader = new Shader("Resources/Shaders/AlternatingVertex.txt", "Resources/Shaders/AlternatingFragment.txt");
 	animateShader = new Shader("Resources/Shaders/AnimationVertex.txt", "Resources/Shaders/AnimationFragment.txt");
@@ -458,7 +459,7 @@ void GameManager::ProcessVehicles(std::vector<Vehicle*>* _vehicles, int y, int e
 	}
 }
 
-CClock * GameManager::GetClock()
+Clock * GameManager::GetClock()
 {
 	return clock;
 }

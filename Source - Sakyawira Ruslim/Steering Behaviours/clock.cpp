@@ -16,7 +16,7 @@
 //
 // @return: none
 //*****************************************************
-CClock::CClock()
+Clock::Clock()
 	: m_fTimeElapsed(0.0f)
 	, m_fDeltaTime(0.0f)
 {
@@ -30,7 +30,7 @@ CClock::CClock()
 //
 // @return: none
 //*****************************************************
-CClock::~CClock()
+Clock::~Clock()
 {
 
 }
@@ -42,7 +42,7 @@ CClock::~CClock()
 //
 // @return: true if initialisation is successful, false if not
 //*****************************************************
-bool CClock::Initialise()
+bool Clock::Initialise()
 {
 	m_fCurrentTime = std::chrono::high_resolution_clock::now();
 	return (true);
@@ -56,7 +56,7 @@ bool CClock::Initialise()
 // @return: void
 //*****************************************************
 void
-CClock::Process()
+Clock::Process()
 {
 	m_fLastTime = m_fCurrentTime;
 
@@ -75,7 +75,7 @@ CClock::Process()
 //
 // @return: the current delta tick value
 //*****************************************************
-float CClock::GetDeltaTick()
+float Clock::GetDeltaTick()
 {
 	return (m_fDeltaTime);
 }

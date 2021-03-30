@@ -46,7 +46,7 @@ public:
 	void SetBehaviour(Behaviour steer);
 	void ChangeBehaviourText();
 	static void ProcessVehicles(std::vector<Vehicle*>* _vehicles, int y, int endY, Behaviour _steer, std::vector<Vehicle*>* _boids, glm::vec3 _targetLocation, int _windowWidth, int _windowHeight, int _playerSize, float _deltaTime);
-	CClock* GetClock();
+	Clock* GetClock();
 
 	GameObject* player;
 	Camera* camera;
@@ -54,7 +54,7 @@ public:
 	
 private:
 
-	int numberThreads = 8;
+	int numberThreads = 1;
 	int numberSlimes = 1600;
 
 	// Declaring a vector to store different pointers to the future
@@ -65,7 +65,7 @@ private:
 	Behaviour currentBehaviour = SEEK;
 	
 	// Clock
-	CClock* clock;
+	Clock* clock;
 
 	// Check whether or not m_program has been initialized
 	bool isInitialised = false;

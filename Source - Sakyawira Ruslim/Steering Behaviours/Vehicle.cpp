@@ -234,7 +234,7 @@ void Vehicle::Wander(float _deltaTime)
 	Seek(target);
 }
 
-glm::vec3 Vehicle::Seperate(std::vector<Vehicle*>& _boids, const float _desiredSeparation)
+glm::vec3 Vehicle::Separate(std::vector<Vehicle*>& _boids, const float _desiredSeparation)
 {
 	glm::vec3 steer = glm::vec3(0, 0, 0);
 	int count = 0;
@@ -332,7 +332,7 @@ glm::vec3 Vehicle::Alignment(std::vector<Vehicle*>& _boids)
 void Vehicle::Flock(std::vector<Vehicle*>& _boids)
 {
 	// Calculate separation
-	glm::vec3 sep = Seperate(_boids);
+	glm::vec3 sep = Separate(_boids);
 	// Calculate alignment
 	glm::vec3 ali = Alignment(_boids);
 	// Calculate cohesion

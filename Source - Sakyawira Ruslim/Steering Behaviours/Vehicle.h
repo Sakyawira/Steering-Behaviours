@@ -32,7 +32,7 @@ class Vehicle : public GameObject
 		glm::vec3 GetArrive(glm::vec3 _target, float _deltaTime);
 		void Containment(float _width, float _height, float _d);
 		void Wander(float _deltaTime);		
-		glm::vec3 Seperate(std::vector<Vehicle*>& _boids, const float _desiredSeparation = 137.5f);
+		glm::vec3 Separate(std::vector<Vehicle*>& _boids, const float _desiredSeparation = 137.5f);
 		glm::vec3 Cohesion(std::vector<Vehicle*>& _boids);
 		glm::vec3 Alignment(std::vector<Vehicle*>& _boids);
 		void Flock(std::vector<Vehicle*>& _boids);
