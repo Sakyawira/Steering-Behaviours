@@ -22,22 +22,19 @@
 #include "Camera.h"
 
 // Move identifiers
-enum MoveDirection {
-	MOVE_UP    = 0,
-	MOVE_DOWN  = 1,
-	MOVE_RIGHT = 2,
-	MOVE_LEFT  = 3
+enum class MoveDirection {
+	MOVE_UP    ,
+	MOVE_DOWN  ,
+	MOVE_RIGHT ,
+	MOVE_LEFT  
 };
 
-// Used for returning coordinates
-typedef std::pair<float, float> Coordinate;
-
 // Coordinate identifiers
-enum CoordinateID {
-	TOP		= 0,
-	BOTTOM	= 1,
-	LEFT	= 2,
-	RIGHT	= 3
+enum class CoordinateID {
+	TOP		,
+	BOTTOM	,
+	LEFT	,
+	RIGHT	
 };
 
 class GameObject
@@ -47,36 +44,26 @@ class GameObject
 		GameObject(Shader* _shader, Mesh* _mesh, std::vector<Texture*>& _textures, float _initial_x, float _initial_y);
 		~GameObject() = default;
 	
-		// OverLoad that takes one uniform
 		void Draw(Camera& _camera, const GLchar* s_currentTime, GLfloat f_currentTime);
-		// Overload that takes two uniforms
 		void Draw(Camera& _camera, const GLchar* s_currentTime, GLfloat f_currentTime, const GLchar* s_frameTime, GLint i_frameTime);
 
+		glm::vec3 GetPosition();
 		void SetPosition(float _x_pos, float _y_pos);
-		float GetPosition(int COORDINATE_ID);
-		glm::vec3 GetLocation();
-	
-		void Move(int MOVE_ID, float SPEED);
-
+		float GetBoundingCoordinate(CoordinateID COORDINATE_ID);
+		void Move(MoveDirection MOVE_ID, float SPEED);
 		float GetScale();
 		void Scale(float _scale);
-	
 		void Enable();
 		void Disable();
 
-		bool currentlyMoved = false;
+		bool CurrentlyMoved = false;
 	
 	protected:
 		// Enable Drawing
 		bool enable = true;
 		
-		// Shader
 		Shader* shader;
-	
-		// Mesh
 		Mesh* mesh;
-	
-		// Texture Vector
 		std::vector<Texture*> textures;
 	
 		// Position

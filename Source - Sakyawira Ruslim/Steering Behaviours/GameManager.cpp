@@ -231,7 +231,7 @@ void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 
 		if (isStarted)
 		{
-			if (Player->currentlyMoved)
+			if (Player->CurrentlyMoved)
 			{
 				// audio.Play(SOUND_CONSUME);
 			}
@@ -248,7 +248,7 @@ void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 
 				std::future<void>* newFuture = new std::future<void>;
 
-				*newFuture = ThreadPool::GetInstance().Submit(processVehicles, &vehiclesGreen, y, endY, currentBehaviour, &vehiclesGreen, Player->GetLocation(), windowWidth, windowHeight, 0, deltaTime);
+				*newFuture = ThreadPool::GetInstance().Submit(processVehicles, &vehiclesGreen, y, endY, currentBehaviour, &vehiclesGreen, Player->GetPosition(), windowWidth, windowHeight, 0, deltaTime);
 
 				futures.push_back(newFuture);
 				y = endY;
@@ -287,7 +287,7 @@ void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 		}
 
 		clock->Process();
-		Player->currentlyMoved = false;
+		Player->CurrentlyMoved = false;
 	}
 	else
 	{
@@ -306,35 +306,35 @@ bool GameManager::CollisionCheck(float _top, float _bottom, float _left, float _
 		for (auto& gameObjects2 : walls)
 		{
 			// Check ahead if the game object will get stuck if continue moving in a certain direction
-			if (gameObjects->GetPosition(RIGHT) + _right >= gameObjects2->GetPosition(LEFT)
-				&& gameObjects->GetPosition(LEFT) - _left <= gameObjects2->GetPosition(RIGHT)
-				&& gameObjects->GetPosition(BOTTOM) - _bottom <= gameObjects2->GetPosition(TOP)
-				&& gameObjects->GetPosition(TOP) + _top >= gameObjects2->GetPosition(BOTTOM))
+			if (gameObjects->GetBoundingCoordinate(CoordinateID::RIGHT) + _right >= gameObjects2->GetBoundingCoordinate(CoordinateID::LEFT)
+				&& gameObjects->GetBoundingCoordinate(CoordinateID::LEFT) - _left <= gameObjects2->GetBoundingCoordinate(CoordinateID::RIGHT)
+				&& gameObjects->GetBoundingCoordinate(CoordinateID::BOTTOM) - _bottom <= gameObjects2->GetBoundingCoordinate(CoordinateID::TOP)
+				&& gameObjects->GetBoundingCoordinate(CoordinateID::TOP) + _top >= gameObjects2->GetBoundingCoordinate(CoordinateID::BOTTOM))
 			{
 				// Push the game object out if it is stuck inside a collision box
-				while (gameObjects->GetPosition(RIGHT) >= gameObjects2->GetPosition(LEFT)
-					&& gameObjects->GetPosition(LEFT) <= gameObjects2->GetPosition(RIGHT)
-					&& gameObjects->GetPosition(BOTTOM) <= gameObjects2->GetPosition(TOP)
-					&& gameObjects->GetPosition(TOP) >= gameObjects2->GetPosition(BOTTOM))
+				while (gameObjects->GetBoundingCoordinate(CoordinateID::RIGHT) >= gameObjects2->GetBoundingCoordinate(CoordinateID::LEFT)
+					&& gameObjects->GetBoundingCoordinate(CoordinateID::LEFT) <= gameObjects2->GetBoundingCoordinate(CoordinateID::RIGHT)
+					&& gameObjects->GetBoundingCoordinate(CoordinateID::BOTTOM) <= gameObjects2->GetBoundingCoordinate(CoordinateID::TOP)
+					&& gameObjects->GetBoundingCoordinate(CoordinateID::TOP) >= gameObjects2->GetBoundingCoordinate(CoordinateID::BOTTOM))
 				{
 					if (_top > 0)
 					{
-						gameObjects->Move(MOVE_DOWN, PlayerSize + 1);
+						gameObjects->Move(MoveDirection::MOVE_DOWN, PlayerSize + 1);
 						GameCamera->MovePosY(-2.0f);
 					}
 					else if (_bottom > 0)
 					{
-						gameObjects->Move(MOVE_UP, PlayerSize + 1);
+						gameObjects->Move(MoveDirection::MOVE_UP, PlayerSize + 1);
 						GameCamera->MovePosY(2.0f);
 					}
 					else if (_left > 0)
 					{
-						gameObjects->Move(MOVE_RIGHT, PlayerSize + 1);
+						gameObjects->Move(MoveDirection::MOVE_RIGHT, PlayerSize + 1);
 						GameCamera->MovePosX(2.0f);
 					}
 					else if (_right > 0)
 					{
-						gameObjects->Move(MOVE_LEFT, PlayerSize + 1);
+						gameObjects->Move(MoveDirection::MOVE_LEFT, PlayerSize + 1);
 						GameCamera->MovePosX(-2.0f);
 					}
 				}

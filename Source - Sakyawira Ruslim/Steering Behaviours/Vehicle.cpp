@@ -277,12 +277,12 @@ glm::vec3 Vehicle::Separate(std::vector<Vehicle*>& _boids, const float _desiredS
 	// Check if any boid in the vector is too close
 	for (auto boid : _boids) 
 	{
-		float d = glm::length(objPosition - boid->GetLocation());
+		float d = glm::length(objPosition - boid->GetPosition());
 		// If the distance less than desired distance and is greater than 0
 		if ((this != boid) && (d < _desiredSeparation) && (d > 0.0f))
 		{
 			// Calculate vector pointing away from neighbor
-			glm::vec3 diff = objPosition - boid->GetLocation();
+			glm::vec3 diff = objPosition - boid->GetPosition();
 			diff = glm::normalize(diff);
 			// Weight by distance
 			diff /= d;
@@ -320,7 +320,7 @@ glm::vec3 Vehicle::Cohesion(std::vector<Vehicle*>& _boids)
 	int count = 0;
 	for (auto boid : _boids)
 	{
-		float d = glm::length(objPosition - boid->GetLocation());
+		float d = glm::length(objPosition - boid->GetPosition());
 		if ((this != boid))
 		{
 			// Add location
@@ -351,7 +351,7 @@ glm::vec3 Vehicle::Alignment(std::vector<Vehicle*>& _boids)
 	int count = 0;
 	for (auto boid : _boids) 
 	{
-		const float d = glm::length(objPosition - boid->GetLocation());
+		const float d = glm::length(objPosition - boid->GetPosition());
 		if ((this != boid))
 		{
 			sum += boid->velocity;
@@ -417,7 +417,7 @@ void Vehicle::LeadFollowing(std::vector<Vehicle*>& _boids, glm::vec3 _targetLoca
 			if (this == (*it))
 			{
 				std::vector<Vehicle*>::iterator PrevIt = it - 1;
-				(*it)->Arrive(((*PrevIt)->GetLocation() * 0.9f /*- (*PrevIt)->velocity * -1.0f*/), _deltaTime);
+				(*it)->Arrive(((*PrevIt)->GetPosition() * 0.9f /*- (*PrevIt)->velocity * -1.0f*/), _deltaTime);
 			}
 		}
 	}

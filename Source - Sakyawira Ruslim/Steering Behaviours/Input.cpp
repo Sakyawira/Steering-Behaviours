@@ -11,9 +11,9 @@ void Input::ProcessInput(GameManager* Game)
 		// to check the collision from further away depends on the player size
 		if (!Game->CollisionCheck(Game->PlayerSize + 1, 0, 0, 0) && Game->IsStarted())
 		{
-			Game->Player->Move(MOVE_UP, 2 * Game->GetClock()->GetDeltaTime() / 10.0f);
+			Game->Player->Move(MoveDirection::MOVE_UP, 2 * Game->GetClock()->GetDeltaTime() / 10.0f);
 			Game->GameCamera->MovePosY(2.0f * Game->GetClock()->GetDeltaTime() / 10.0f);
-			Game->Player->currentlyMoved = true;
+			Game->Player->CurrentlyMoved = true;
 		}
 	}
 	if (KeyState['s'] == INPUT_DOWN)
@@ -22,9 +22,9 @@ void Input::ProcessInput(GameManager* Game)
 		// to check the collision from further away depends on the player size
 		if (!Game->CollisionCheck(0, Game->PlayerSize + 1, 0, 0) && Game->IsStarted())
 		{
-			Game->Player->Move(MOVE_DOWN, 2 * Game->GetClock()->GetDeltaTime() / 10.0f);
+			Game->Player->Move(MoveDirection::MOVE_DOWN, 2 * Game->GetClock()->GetDeltaTime() / 10.0f);
 			Game->GameCamera->MovePosY(-2.0f * Game->GetClock()->GetDeltaTime() / 10.0f);
-			Game->Player->currentlyMoved = true;
+			Game->Player->CurrentlyMoved = true;
 		}
 	}
 	if (KeyState['d'] == INPUT_DOWN)
@@ -33,9 +33,9 @@ void Input::ProcessInput(GameManager* Game)
 		// to check the collision from further away depends on the player size
 		if (!Game->CollisionCheck(0, 0, 0, Game->PlayerSize + 1) && Game->IsStarted())
 		{
-			Game->Player->Move(MOVE_RIGHT, 2 * Game->GetClock()->GetDeltaTime() / 10.0f);
+			Game->Player->Move(MoveDirection::MOVE_RIGHT, 2 * Game->GetClock()->GetDeltaTime() / 10.0f);
 			Game->GameCamera->MovePosX(2.0f * Game->GetClock()->GetDeltaTime() / 10.0f);
-			Game->Player->currentlyMoved = true;
+			Game->Player->CurrentlyMoved = true;
 		}
 	}
 	if (KeyState['a'] == INPUT_DOWN)
@@ -44,9 +44,9 @@ void Input::ProcessInput(GameManager* Game)
 		// to check the collision from further away depends on the player size
 		if (!Game->CollisionCheck(0, 0, Game->PlayerSize + 1, 0) && Game->IsStarted())
 		{
-			Game->Player->Move(MOVE_LEFT, 2 * Game->GetClock()->GetDeltaTime() / 10.0f);
+			Game->Player->Move(MoveDirection::MOVE_LEFT, 2 * Game->GetClock()->GetDeltaTime() / 10.0f);
 			Game->GameCamera->MovePosX(-2.0f * Game->GetClock()->GetDeltaTime() / 10.0f);
-			Game->Player->currentlyMoved = true;
+			Game->Player->CurrentlyMoved = true;
 		}
 	}
 	if (KeyState['r'] == INPUT_DOWN)

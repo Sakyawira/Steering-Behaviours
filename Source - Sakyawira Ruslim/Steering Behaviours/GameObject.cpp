@@ -7,17 +7,16 @@
 #include "GameObject.h"
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   assign the shaders, mesh, and textures of the object, initialise its position
 ********************/
 GameObject::GameObject(Shader* _shader, Mesh* _mesh, std::vector<Texture*>& _textures, float _initial_x, float _initial_y)
 {
 	shader = _shader;
 	mesh = _mesh;
+	textures = _textures;
+
 	xPos = _initial_x;
 	yPos = _initial_y;
-	// This creates a copy (even though was passed a s a reference) and therefore did not work
-	// m_camera = _camera;
-	textures = _textures;
 
 	objPosition = glm::vec3(xPos, yPos, 0.0f);
 	translationMatrix = glm::translate(glm::mat4(), objPosition);
@@ -25,11 +24,11 @@ GameObject::GameObject(Shader* _shader, Mesh* _mesh, std::vector<Texture*>& _tex
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Draw the object to the scene, takes one uniform
 ********************/
 void GameObject::Draw(Camera& _camera, const GLchar* s_currentTime, GLfloat f_currentTime)
 {
-	if (enable)
+	if (enabled)
 	{
 		shader->Activate();
 
@@ -55,11 +54,11 @@ void GameObject::Draw(Camera& _camera, const GLchar* s_currentTime, GLfloat f_cu
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Draws an animated object (this) to the scene, takes two uniforms
 ********************/
 void GameObject::Draw(Camera & _camera, const GLchar * s_currentTime, GLfloat f_currentTime, const GLchar * s_frameTime, GLint i_frameTime)
 {
-	if (enable)
+	if (enabled)
 	{
 		shader->Activate();
 
@@ -87,7 +86,7 @@ void GameObject::Draw(Camera & _camera, const GLchar * s_currentTime, GLfloat f_
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Sets the posiion of this game object
 ********************/
 void GameObject::SetPosition(float _x_pos, float _y_pos)
 {
@@ -100,80 +99,66 @@ void GameObject::SetPosition(float _x_pos, float _y_pos)
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Gets this object bounding box coordinates
 ********************/
-float GameObject::GetPosition(int COORDINATE_ID)
-{
-	// float fi;
-	if (COORDINATE_ID == TOP)
-	{
-		return (yPos + scale/2);
-		//fi = m_mesh->GetVertices().at(1);
-	}
-	else if (COORDINATE_ID == BOTTOM)
-	{
+float GameObject::GetBoundingCoordinate(CoordinateID COORDINATE_ID)
+{	
+	switch (COORDINATE_ID) {
+	case CoordinateID::TOP:
+		return (yPos + scale / 2);
+	case CoordinateID::BOTTOM:
 		return (yPos - scale / 2);
-	}
-	else if (COORDINATE_ID == LEFT)
-	{
-		return (xPos - scale /2);
-	}
-	else if (COORDINATE_ID == RIGHT)
-	{
+	case CoordinateID::LEFT:
+		return (xPos - scale / 2);
+	case CoordinateID::RIGHT:
 		return (xPos + scale / 2);
-	}
-	else
-	{
+	default:
 		return 0.0f;
 	}
-	// // std::cout << fi;
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Gets the position of the game object
 ********************/
-glm::vec3 GameObject::GetLocation()
+glm::vec3 GameObject::GetPosition()
 {
 	return objPosition;
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Move the game object based on speed (must be multiplied with delta time before passed in)
 ********************/
-void GameObject::Move(int MOVE_ID, float SPEED)
+void GameObject::Move(MoveDirection MOVE_ID, float _speed)
 {
 	float xSpeed = 0.0f;
 	float ySpeed = 0.0f;
 	
-	if (MOVE_ID == MOVE_UP)
-	{
-		ySpeed += SPEED;
-		yPos += SPEED;
-	}
-	if (MOVE_ID == MOVE_DOWN)
-	{
-		ySpeed -= SPEED;
-		yPos -= SPEED;
-	}
-	if (MOVE_ID == MOVE_RIGHT)
-	{
-		xSpeed += SPEED;
-		xPos += SPEED;
-	}
-	if (MOVE_ID == MOVE_LEFT)
-	{
-		xSpeed -= SPEED;
-		xPos -= SPEED;
+	switch (MOVE_ID) {
+	case MoveDirection::MOVE_UP:
+		ySpeed += _speed;
+		yPos += _speed;
+		break;
+	case MoveDirection::MOVE_DOWN:
+		ySpeed -= _speed;
+		yPos -= _speed;
+		break;
+	case MoveDirection::MOVE_RIGHT:
+		xSpeed += _speed;
+		xPos += _speed;
+		break;
+	case MoveDirection::MOVE_LEFT:
+		xSpeed -= _speed;
+		xPos -= _speed;
+		break;
 	}
 
-	objPosition += (glm::normalize(glm::vec3(xSpeed, ySpeed, 0.0f))* SPEED);
-	//m_objPosition = glm::normalize(m_objPosition) * SPEED;
+	objPosition += (glm::normalize(glm::vec3(xSpeed, ySpeed, 0.0f))* _speed);
 	translationMatrix = glm::translate(glm::mat4(), objPosition);
 	modelMatrix = translationMatrix * rotationZ * scaleMatrix;
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Gets the scale of the object
 ********************/
 float GameObject::GetScale()
 {
@@ -181,7 +166,7 @@ float GameObject::GetScale()
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Scale the object
 ********************/
 void GameObject::Scale(float _scale)
 {
@@ -192,18 +177,18 @@ void GameObject::Scale(float _scale)
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Enables the drawing of the object
 ********************/
 void GameObject::Enable()
 {
-	enable = true;
+	enabled = true;
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Disables the drawing of the object
 ********************/
 void GameObject::Disable()
 {
-	enable = false;
+	enabled = false;
 }
 
