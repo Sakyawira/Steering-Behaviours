@@ -140,7 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Audio.cpp" />
-    <ClCompile Include="clock.cpp" />
+    <ClCompile Include="Clock.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="Vehicle.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -156,7 +156,7 @@
   <ItemGroup>
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="clock.h" />
+    <ClInclude Include="Clock.h" />
     <ClInclude Include="Task.h" />
     <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="Vehicle.h" />

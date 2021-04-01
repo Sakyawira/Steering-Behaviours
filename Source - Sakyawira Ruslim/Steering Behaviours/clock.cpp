@@ -1,81 +1,60 @@
-
+/***********************
+  File Name   :   Clock.cpp
+  Description :   Class definition of Clock, calcualtes the delta time between frames
+  Author      :   Sakyawira Nanda Ruslim
+  Mail        :   Sakyawira@gmail.com
+********************/
 // Library Includes
 #include <chrono>
-
-// Local Includes
-
 // This Includes
-#include "clock.h"
+#include "Clock.h"
 
 
-// Implementation
-//****************************************************
-// CClock: CClock Class Constructor
-// @author: 
-// @parameter: No parameters
-//
-// @return: none
-//*****************************************************
+/***********************
+ Description :   Constructor, initialise time elapsed and delta time to 0
+********************/
 Clock::Clock()
-	: m_fTimeElapsed(0.0f)
-	, m_fDeltaTime(0.0f)
 {
-
+	timeElapsed = 0.0f;
+	deltaTime = 0.0f;
 }
 
-//****************************************************
-// ~CClock: CClock Class Destructor
-// @author: 
-// @parameter: No parameters
-//
-// @return: none
-//*****************************************************
+/***********************
+ Description :   Destructor
+********************/
 Clock::~Clock()
 {
 
 }
 
-//****************************************************
-// Initialise: CClock Class Initialiser - sets the first time values
-// @author: 
-// @parameter: No parameters
-//
-// @return: true if initialisation is successful, false if not
-//*****************************************************
+/***********************
+ Description :   Sets the first time values, return true if succesful
+********************/
 bool Clock::Initialise()
 {
-	m_fCurrentTime = std::chrono::high_resolution_clock::now();
+	currentTime = std::chrono::high_resolution_clock::now();
 	return (true);
 }
 
-//****************************************************
-// Process: processes the change in time since it was last called
-// @author:
-// @parameter: No parameters
-//
-// @return: void
-//*****************************************************
-void
-Clock::Process()
+/***********************
+ Description :   Processes the change in time since it was last called
+********************/
+void Clock::Process()
 {
-	m_fLastTime = m_fCurrentTime;
+	lastTime = currentTime;
 
-	m_fCurrentTime = std::chrono::high_resolution_clock::now();
+	currentTime = std::chrono::high_resolution_clock::now();
 
 
-	m_fDeltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(m_fCurrentTime - m_fLastTime).count();
+	deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
 
-	m_fTimeElapsed += m_fDeltaTime;
+	timeElapsed += deltaTime;
 }
 
-//****************************************************
-// GetDeltaTick: gets the current delta tick value
-// @author: 
-// @parameter: No parameters
-//
-// @return: the current delta tick value
-//*****************************************************
-float Clock::GetDeltaTick()
+/***********************
+ Description :   Gets the current delta time value
+********************/
+float Clock::GetDeltaTime()
 {
-	return (m_fDeltaTime);
+	return (deltaTime);
 }

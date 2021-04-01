@@ -23,7 +23,7 @@
 #include "Camera.h"
 #include "Vehicle.h"
 #include "TextLabel.h"
-#include "clock.h"
+#include "Clock.h"
 #include "Audio.h"
 #include "ThreadPool.h"
 
@@ -45,12 +45,15 @@ public:
 	void StartGame();
 	void SetBehaviour(Behaviour steer);
 	void ChangeBehaviourText();
-	static void ProcessVehicles(std::vector<Vehicle*>* _vehicles, int y, int endY, Behaviour _steer, std::vector<Vehicle*>* _boids, glm::vec3 _targetLocation, int _windowWidth, int _windowHeight, int _playerSize, float _deltaTime);
 	Clock* GetClock();
 
-	GameObject* player;
-	Camera* camera;
-	float playerSize = 1;
+private:
+	static void processVehicles(std::vector<Vehicle*>* _vehicles, int y, int endY, Behaviour _steer, std::vector<Vehicle*>* _boids, glm::vec3 _targetLocation, int _windowWidth, int _windowHeight, int _playerSize, float _deltaTime);
+
+public:
+	GameObject* Player;
+	Camera* GameCamera;
+	float PlayerSize = 1;
 	
 private:
 
@@ -59,7 +62,7 @@ private:
 
 	// Declaring a vector to store different pointers to the future
 	// Will be used to iterate through and get them
-	std::vector< std::future<void>*> g_vecFuture;
+	std::vector< std::future<void>*> futures;
 
 	// Enum for behaviour type
 	Behaviour currentBehaviour = SEEK;
@@ -80,7 +83,7 @@ private:
 	TextLabel* steerText;
 
 	// Menu Text
-	std::string menuString = "Sakyawira's Burnt Out";
+	std::string menuString = "Sakyawira's Steering Behaviour";
 	TextLabel* menuText;
 
 	// Instruction Text
@@ -110,7 +113,7 @@ private:
 	Vehicle* selectedVehicleGreen;
 
 	GameObject* wall;
-	GameObject *Menu;
+	GameObject *menu;
 	GameObject* background;
 
 	// Vectors

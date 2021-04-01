@@ -1,3 +1,9 @@
+/***********************
+  File Name   :   Audio.h
+  Description :   Class declaration of audio system using the FMOD library
+  Author      :   Sakyawira Nanda Ruslim
+  Mail        :   Sakyawira@gmail.com
+********************/
 #pragma once
 
 #include "fmod.hpp" //fmod c++ header
@@ -17,19 +23,13 @@ public:
 
 	bool Load();
 	void Play(int sound_id);
-	void Stop(/*int sound_id*/);
-	void SmoothStop(int sound_id);
 	void StopAll();
 	void Update();
 
-	FMOD::System*		audioSystem;			//handle to FMOD engine
-	FMOD::Sound*		sounds[NUM_SOUNDS];		//sound that will be loaded and played
-	FMOD::Channel*		ambient1Channel;
-	FMOD::Channel*		ambient2Channel;
+private:
+	FMOD::System*		audioSystem;			// Handle to FMOD engine
+	FMOD::Sound*		sounds[NUM_SOUNDS];		// Sound that will be loaded and played
+	FMOD::Channel*		bgmChannel;
+	FMOD::Channel*		ambientChannel;
 	FMOD::Channel*		sfxChannel;
-	FMOD::DSP*			dspSmoothStop;
-
-	FMOD::Sound*		fxThump;
-	FMOD::Sound*		trackBackground;
-	FMOD_RESULT			result;
 };

@@ -17,6 +17,7 @@ int main(int argc, char **argv)
 	delete iTime;
 
 	audio.Load();
+	// audio.Play(SOUND_BGM1);
 		
 	// Setup and create at glut controlled window
 	glutInit(&argc, argv);

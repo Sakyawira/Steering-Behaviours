@@ -1,23 +1,22 @@
+/***********************
+  File Name   :   Clock.h
+  Description :   contains prototype of clock which calculate the delta time between frames
+  Author      :   Sakyawira Nanda Ruslim
+  Mail        :   Sakyawira@gmail.com
+********************/
 #pragma once
-
-#ifndef _CLOCK_H_
-#define _CLOCK_H_
-
 // Library Includes
 #include <chrono>
 #include <vector>
 
-
-// Prototypes
 class Clock
 {
-	// Member Functions
 public:
 	Clock();
 	~Clock();
 	bool Initialise();
 	void Process();
-	float GetDeltaTick();
+	float GetDeltaTime();
 
 protected:
 
@@ -25,20 +24,18 @@ private:
 	Clock(const Clock& _kr);
 	Clock& operator= (const Clock& _kr);
 
-	// Member Variables
 public:
 
 protected:
-	double m_fTimeElapsed;
-	double m_fDeltaTime;
-	std::chrono::high_resolution_clock::time_point m_fLastTime;
-	std::chrono::high_resolution_clock::time_point m_fCurrentTime;
+	double timeElapsed;
+	double deltaTime;
+	std::chrono::high_resolution_clock::time_point lastTime;
+	std::chrono::high_resolution_clock::time_point currentTime;
 
-	std::vector<double> m_vecTimeHistory;
+	std::vector<double> timeHistory;
 
-	long long m_llNumCounts;
+	long long numCounts;
 
 private:
 
 };
-#endif // 

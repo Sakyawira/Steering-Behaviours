@@ -2,7 +2,7 @@
 #include <iostream>
 #include "GameManager.h"
 #include <freeglut.h>
-#include "clock.h"
+#include "Clock.h"
 
 class Input
 {
