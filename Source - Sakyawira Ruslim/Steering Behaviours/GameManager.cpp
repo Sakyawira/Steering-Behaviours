@@ -7,6 +7,9 @@
 #include "GameManager.h"
 #include <random>
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 GameManager::GameManager()
 {
 	numberThreads = std::thread::hardware_concurrency();
@@ -125,6 +128,9 @@ GameManager::GameManager()
 	this->Initialize();
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 GameManager::~GameManager()
 {
 	delete instructionText;
@@ -195,6 +201,9 @@ GameManager::~GameManager()
 	camera = nullptr;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameManager::Initialize()
 {
 	clock->Initialise();
@@ -224,6 +233,9 @@ void GameManager::Initialize()
 	isEnded = false;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 {
 	if (isInitialised == 1)
@@ -296,6 +308,9 @@ void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 	}
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 bool GameManager::CollisionCheck(float _top, float _bottom, float _left, float _right)
 {
 	// Check whether or not the position is occupied by an obstacle
@@ -344,6 +359,9 @@ bool GameManager::CollisionCheck(float _top, float _bottom, float _left, float _
 	return false;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameManager::Render()
 {
 	if (isInitialised == 1)
@@ -397,26 +415,41 @@ void GameManager::Render()
 	}
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 bool GameManager::IsStarted()
 {
 	return isStarted;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 bool GameManager::IsEnded()
 {
 	return isEnded;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameManager::StartGame()
 {
 	isStarted = true;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameManager::SetBehaviour(Behaviour steer)
 {
 	currentBehaviour = steer;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameManager::ChangeBehaviourText()
 {
 	if (currentBehaviour == SEEK)
@@ -449,6 +482,9 @@ void GameManager::ChangeBehaviourText()
 	}
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameManager::ProcessVehicles(std::vector<Vehicle*>* _vehicles, int y, int endY, Behaviour _steer, std::vector<Vehicle*>* _boids, glm::vec3 _targetLocation, int _windowWidth, int _windowHeight, int _playerSize, float _deltaTime)
 {
 	for (int i = y; i < endY; i++)
@@ -459,6 +495,9 @@ void GameManager::ProcessVehicles(std::vector<Vehicle*>* _vehicles, int y, int e
 	}
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 Clock * GameManager::GetClock()
 {
 	return clock;

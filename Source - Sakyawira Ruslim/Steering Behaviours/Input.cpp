@@ -1,5 +1,8 @@
 #include "Input.h"
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Input::ProcessInput(GameManager* Game)
 {
 	if (KeyState['w'] == INPUT_DOWN)
@@ -91,6 +94,9 @@ void Input::ProcessInput(GameManager* Game)
 	}
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Input::MouseClick(int button, int state, int x, int y)
 {
 	if (button >= 3)
@@ -100,21 +106,33 @@ void Input::MouseClick(int button, int state, int x, int y)
 	MouseState[button] = (state == GLUT_DOWN) ? INPUT_DOWN : INPUT_UP;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Input::MousePassiveMove(int x, int y)
 {
 	m_mouse_location = glm::vec3(x - 400.0f, -y + 400.0f, 0.0f);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Input::KeyboardDown(unsigned char key, int x, int y)
 {
 	KeyState[key] = INPUT_DOWN;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Input::KeyboardUp(unsigned char key, int x, int y)
 {
 	KeyState[key] = INPUT_UP;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 glm::vec3 Input::GetLocation()
 {
 	return m_mouse_location;

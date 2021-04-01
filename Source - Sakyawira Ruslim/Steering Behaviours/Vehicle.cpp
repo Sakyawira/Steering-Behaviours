@@ -29,33 +29,33 @@ Vehicle::Vehicle(Shader * _shader, Mesh * _mesh, std::vector<Texture*>& _texture
 	vertical = (negate == 0 ? false : true);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+ Author      :   Sakyawira Nanda Ruslim
+********************/
 void Vehicle::Process(const Behaviour _steer, std::vector<Vehicle*>& _boids, glm::vec3 _targetLocation, const int _windowWidth, const int _windowHeight, int _playerSize, const float _deltaTime)
 {
-	if (_steer == SEEK)
-	{
+	switch (_steer) {
+	case SEEK:
 		Seek(_targetLocation);
-	}
-	else if (_steer == ARRIVE)
-	{
+		break;
+	case ARRIVE:
 		Arrive(_targetLocation, _deltaTime);
-	}
-	else if (_steer == CONTAINMENT)
-	{
-		Containment(static_cast<float>(_windowWidth)* 1.4f, static_cast<float>(_windowHeight)* 1.4f, 400.0f* 1.4f);
-	}
-	else if (_steer == WANDER)
-	{
+		break;
+	case CONTAINMENT:
+		Containment(static_cast<float>(_windowWidth) * 1.4f, static_cast<float>(_windowHeight) * 1.4f, 400.0f * 1.4f);
+		break;
+	case WANDER:
 		Wander(_deltaTime);
-		Containment(static_cast<float>(_windowWidth) , static_cast<float>(_windowHeight), 400.0f );
-	}
-	else if (_steer == FLOCK)
-	{
+		Containment(static_cast<float>(_windowWidth), static_cast<float>(_windowHeight), 400.0f);
+		break;
+	case FLOCK:
 		Flock(_boids);
 		Containment(static_cast<float>(_windowWidth), static_cast<float>(_windowHeight), 400.0f);
-	}
-	else if (_steer == LEAD_FOLLOWING)
-	{
+		break;
+	case LEAD_FOLLOWING:
 		LeadFollowing(_boids, _targetLocation, _deltaTime);
+		break;
 	}
 	// Update velocity
 	velocity += acceleration;
@@ -69,6 +69,10 @@ void Vehicle::Process(const Behaviour _steer, std::vector<Vehicle*>& _boids, glm
 	modelMatrix = translationMatrix * rotationZ * scaleMatrix;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+ Author      :   Sakyawira Nanda Ruslim
+********************/
 void Vehicle::Limit(glm::vec3& _vector3, float _maxMagnitude)
 {
 	if (glm::length(_vector3) > _maxMagnitude) 
@@ -78,11 +82,19 @@ void Vehicle::Limit(glm::vec3& _vector3, float _maxMagnitude)
 	}
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+ Author      :   Sakyawira Nanda Ruslim
+********************/
 void Vehicle::ApplyForce(glm::vec3 _force)
 {
 	acceleration += _force;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+ Author      :   Sakyawira Nanda Ruslim
+********************/
 void Vehicle::Seek(glm::vec3 _target)
 {
 	// A vector pointing from the location to the target
@@ -100,6 +112,10 @@ void Vehicle::Seek(glm::vec3 _target)
 	ApplyForce(steer);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+ Author      :   Sakyawira Nanda Ruslim
+********************/
 glm::vec3 Vehicle::GetSeek(glm::vec3 _target)
 {
 	// A vector pointing from the location to the target
@@ -117,6 +133,10 @@ glm::vec3 Vehicle::GetSeek(glm::vec3 _target)
 	return steer;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+ Author      :   Sakyawira Nanda Ruslim
+********************/
 void Vehicle::Arrive(glm::vec3 _target, float _deltaTime)
 {
 	// A vector pointing from the location to the target
@@ -152,6 +172,10 @@ void Vehicle::Arrive(glm::vec3 _target, float _deltaTime)
 	ApplyForce(steer);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+ Author      :   Sakyawira Nanda Ruslim
+********************/
 glm::vec3 Vehicle::GetArrive(glm::vec3 _target, float _deltaTime)
 {
 	// A vector pointing from the location to the target
@@ -185,6 +209,10 @@ glm::vec3 Vehicle::GetArrive(glm::vec3 _target, float _deltaTime)
 	return steer;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+ Author      :   Sakyawira Nanda Ruslim
+********************/
 void Vehicle::Containment(float _width, float _height, float _d)
 {
 	glm::vec3 desired = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -211,6 +239,10 @@ void Vehicle::Containment(float _width, float _height, float _d)
 	}
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+ Author      :   Sakyawira Nanda Ruslim
+********************/
 void Vehicle::Wander(float _deltaTime)
 {	
 	if (velocity == glm::vec3(0.0f, .0f, 0.0f))
@@ -234,6 +266,10 @@ void Vehicle::Wander(float _deltaTime)
 	Seek(target);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+ Author      :   Sakyawira Nanda Ruslim
+********************/
 glm::vec3 Vehicle::Separate(std::vector<Vehicle*>& _boids, const float _desiredSeparation)
 {
 	glm::vec3 steer = glm::vec3(0, 0, 0);
@@ -273,6 +309,10 @@ glm::vec3 Vehicle::Separate(std::vector<Vehicle*>& _boids, const float _desiredS
 	return steer;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+ Author      :   Sakyawira Nanda Ruslim
+********************/
 glm::vec3 Vehicle::Cohesion(std::vector<Vehicle*>& _boids)
 {
 	const float neighbor_dist = 75.0f;
@@ -300,6 +340,10 @@ glm::vec3 Vehicle::Cohesion(std::vector<Vehicle*>& _boids)
 	}
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+ Author      :   Sakyawira Nanda Ruslim
+********************/
 glm::vec3 Vehicle::Alignment(std::vector<Vehicle*>& _boids)
 {
 	const float neighbor_dist = 75.0f;
@@ -329,6 +373,10 @@ glm::vec3 Vehicle::Alignment(std::vector<Vehicle*>& _boids)
 	}
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+ Author      :   Sakyawira Nanda Ruslim
+********************/
 void Vehicle::Flock(std::vector<Vehicle*>& _boids)
 {
 	// Calculate separation
@@ -348,6 +396,10 @@ void Vehicle::Flock(std::vector<Vehicle*>& _boids)
 	ApplyForce(coh);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+ Author      :   Sakyawira Nanda Ruslim
+********************/
 void Vehicle::LeadFollowing(std::vector<Vehicle*>& _boids, glm::vec3 _targetLocation, float _deltaTime)
 {
 	std::vector<Vehicle*>::iterator it;

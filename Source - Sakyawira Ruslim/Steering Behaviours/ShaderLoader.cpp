@@ -3,8 +3,9 @@
 #include<fstream>
 #include<vector>
 
-//GLuint program;
-
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 ShaderLoader& ShaderLoader::getInstance()
 {
 	static ShaderLoader instance;
@@ -12,7 +13,9 @@ ShaderLoader& ShaderLoader::getInstance()
 	return instance;
 }
 
-
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 GLuint ShaderLoader::CreateProgram(const char* vertexShaderFilename, const char* fragmentShaderFilename)
 {
 	//Create program attach the shader(s) to it
@@ -53,6 +56,9 @@ GLuint ShaderLoader::CreateProgram(const char* vertexShaderFilename, const char*
 	return program;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 GLuint ShaderLoader::CreateShader(GLenum shaderType, const char* shaderName)
 {
 	//Create a shaderID object based on the passed in types
@@ -96,6 +102,9 @@ GLuint ShaderLoader::CreateShader(GLenum shaderType, const char* shaderName)
 	return shaderID;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 std::string ShaderLoader::ReadShaderFile(const char *filename)
 {
 	// Open the file for reading
@@ -120,6 +129,9 @@ std::string ShaderLoader::ReadShaderFile(const char *filename)
 	return shaderCode;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void ShaderLoader::PrintErrorDetails(bool isShader, GLuint id, const char* name)
 {
 	int infoLogLength = 0;

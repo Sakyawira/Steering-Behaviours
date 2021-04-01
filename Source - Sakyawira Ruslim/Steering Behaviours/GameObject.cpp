@@ -6,6 +6,9 @@
 ********************/
 #include "GameObject.h"
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 GameObject::GameObject(Shader* _shader, Mesh* _mesh, std::vector<Texture*>& _textures, float _initial_x, float _initial_y)
 {
 	shader = _shader;
@@ -21,6 +24,9 @@ GameObject::GameObject(Shader* _shader, Mesh* _mesh, std::vector<Texture*>& _tex
 	modelMatrix = translationMatrix * rotationZ * scaleMatrix;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameObject::Draw(Camera& _camera, const GLchar* s_currentTime, GLfloat f_currentTime)
 {
 	if (enable)
@@ -48,6 +54,9 @@ void GameObject::Draw(Camera& _camera, const GLchar* s_currentTime, GLfloat f_cu
 	}
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameObject::Draw(Camera & _camera, const GLchar * s_currentTime, GLfloat f_currentTime, const GLchar * s_frameTime, GLint i_frameTime)
 {
 	if (enable)
@@ -77,6 +86,9 @@ void GameObject::Draw(Camera & _camera, const GLchar * s_currentTime, GLfloat f_
 	}
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameObject::SetPosition(float _x_pos, float _y_pos)
 {
 	xPos = _x_pos;
@@ -87,6 +99,9 @@ void GameObject::SetPosition(float _x_pos, float _y_pos)
 	modelMatrix = translationMatrix * rotationZ * scaleMatrix;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 float GameObject::GetPosition(int COORDINATE_ID)
 {
 	// float fi;
@@ -114,11 +129,17 @@ float GameObject::GetPosition(int COORDINATE_ID)
 	// // std::cout << fi;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 glm::vec3 GameObject::GetLocation()
 {
 	return objPosition;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameObject::Move(int MOVE_ID, float SPEED)
 {
 	float xSpeed = 0.0f;
@@ -151,11 +172,17 @@ void GameObject::Move(int MOVE_ID, float SPEED)
 	modelMatrix = translationMatrix * rotationZ * scaleMatrix;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 float GameObject::GetScale()
 {
 	return scale;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameObject::Scale(float _scale)
 {
 	scale = _scale;
@@ -164,11 +191,17 @@ void GameObject::Scale(float _scale)
 	modelMatrix = translationMatrix * rotationZ * scaleMatrix;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameObject::Enable()
 {
 	enable = true;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameObject::Disable()
 {
 	enable = false;

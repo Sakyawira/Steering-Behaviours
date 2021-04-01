@@ -6,11 +6,17 @@
 ********************/
 #include "Shader.h"
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 Shader::Shader(const char * VertexShaderFilename, const char * FragmentShaderFilename)
 {
 	m_program = ShaderLoader::CreateProgram(VertexShaderFilename, FragmentShaderFilename);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Shader::Transform(glm::mat4 translationMatrix, glm::mat4 rotationZ, glm::mat4 scaleMatrix, glm::mat4 modelMatrix)
 {
 	// Put translation uniform into '*program'
@@ -31,6 +37,9 @@ void Shader::Transform(glm::mat4 translationMatrix, glm::mat4 rotationZ, glm::ma
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMatrix));
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Shader::PassTexture(std::vector<Texture*> v_texture)
 {
 	std::string textureUniform = "tex";
@@ -52,23 +61,35 @@ void Shader::PassTexture(std::vector<Texture*> v_texture)
 	//glUniform1i(glGetUniformLocation(m_program, "tex1"), 1);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Shader::PassUniform(const GLchar * name, GLfloat _float)
 {
 	GLint currentTimeLoc = glGetUniformLocation(m_program, name);
 	glUniform1f(currentTimeLoc, _float);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Shader::PassFrameUniform(const GLchar * name, GLint _int)
 {
 	GLint frameCountsLoc = glGetUniformLocation(m_program, name);
 	glUniform1i(frameCountsLoc, _int);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Shader::Activate()
 {
 	glUseProgram(m_program);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 GLuint Shader::GetProgram()
 {
 	return m_program;

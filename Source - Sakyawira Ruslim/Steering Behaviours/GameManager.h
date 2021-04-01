@@ -55,7 +55,7 @@ public:
 private:
 
 	int numberThreads = 1;
-	int numberSlimes = 1600;
+	int numberSlimes = 800;
 
 	// Declaring a vector to store different pointers to the future
 	// Will be used to iterate through and get them

@@ -6,6 +6,9 @@
 ********************/
 #include "Mesh.h"
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 Mesh::Mesh(const std::vector<GLuint>& indices, const std::vector<GLfloat>& vertices)
 {
 	m_indicesSize = indices.size();
@@ -61,16 +64,25 @@ Mesh::Mesh(const std::vector<GLuint>& indices, const std::vector<GLfloat>& verti
 	glBindVertexArray(0);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Mesh::Bind()
 {
 	glBindVertexArray(m_VAO);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 int Mesh::GetSize()
 {
 	return m_indicesSize;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 std::vector<GLfloat> Mesh::GetVertices()
 {
 	return m_vertices;

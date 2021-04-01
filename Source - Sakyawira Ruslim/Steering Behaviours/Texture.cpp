@@ -6,9 +6,11 @@
 ********************/
 #include "Texture.h"
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 Texture::Texture(const char * textureDir)
 {
-//	textureID = _texture;
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
@@ -27,6 +29,9 @@ Texture::Texture(const char * textureDir)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 GLuint Texture::GetID()
 {
 	return textureID;

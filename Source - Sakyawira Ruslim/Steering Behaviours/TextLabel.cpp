@@ -6,6 +6,9 @@
 ********************/
 #include "TextLabel.h"
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 TextLabel::TextLabel(int _WINDOW_WIDTH, int _WINDOW_HEIGHT, std::string text, std::string font, glm::vec2 pos, glm::vec3 color, float scale)
 {
 	SetText(text);
@@ -82,6 +85,9 @@ TextLabel::TextLabel(int _WINDOW_WIDTH, int _WINDOW_HEIGHT, std::string text, st
 	glBindVertexArray(0);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void TextLabel::Render()
 {
 	// Enable blending
@@ -130,6 +136,9 @@ void TextLabel::Render()
 	//glDisable(GL_BLEND);
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 GLuint TextLabel::GenerateTexture(FT_Face face)
 {
 	GLuint texture;

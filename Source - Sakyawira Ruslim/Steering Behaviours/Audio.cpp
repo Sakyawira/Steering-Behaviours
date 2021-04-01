@@ -1,11 +1,17 @@
 #include "Audio.h"
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 Audio::Audio(void)
 {
 	FMOD::System_Create(&audioSystem);// create an instance of the game engine
 	audioSystem->init(32, FMOD_INIT_NORMAL, 0);// initialise the game engine with 32 channels (cantidad de sonido simultaneo que puede haber)
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 Audio::~Audio(void)
 {
 	for (int i = 0; i < NUM_SOUNDS; i++)
@@ -15,6 +21,9 @@ Audio::~Audio(void)
 	audioSystem->release();
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 bool Audio::Load()
 {
 	audioSystem->createStream("Resources/Audio/Chase LOOP.wav", FMOD_DEFAULT | FMOD_LOOP_NORMAL, 0, &sounds[SOUND_BGM1]);
@@ -22,6 +31,9 @@ bool Audio::Load()
 	return true;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Audio::Play(int sound_id)
 {
 	if (sound_id == SOUND_BGM1)
@@ -41,17 +53,26 @@ void Audio::Play(int sound_id)
 	}
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Audio::Stop(/*int sound_id*/)
 {
 	//sfxChannel->stop();
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Audio::StopAll()
 {
 	ambient1Channel->stop();
 	ambient2Channel->stop();
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Audio::Update()
 {
 	audioSystem->update();
