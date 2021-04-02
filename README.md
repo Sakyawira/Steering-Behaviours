@@ -13,8 +13,7 @@ The goal of the 'Seek' behaviour is to move towards a certain location.
 <img src="https://github.com/Sakyawira/Steering-Behaviours/blob/main/gifs/seek.gif?raw=true" width="360" height="360"/>
 
 1. A vehicle picks a position vector as a target.
-2. We generate a desired vector based on our position vector, the target’s 
-position vector.
+2. We generate the desired vector based on our position vector, the target’s position vector.
 3. A vehicle has a velocity.
 4. Our steering vector is the (desired vector – our current velocity).
 5. We apply that steering vector to our vehicle.
@@ -42,7 +41,7 @@ The goal of the 'Containment' behaviour is to keep the vehicles within a boundin
 
 ## Wander
 
-The goal of the 'Wander' behaviour is to let the vehicles moves randomly, but still in a natural way.
+The goal of the 'Wander' behaviour is to let the vehicles move randomly, but still in a natural way.
 
 <img src="https://github.com/Sakyawira/Steering-Behaviours/blob/main/gifs/wander.gif?raw=true" width="360" height="360"/>
 
@@ -52,13 +51,12 @@ The goal of the 'Wander' behaviour is to let the vehicles moves randomly, but st
 
 ## Flock
 
-The goal of the 'Flock' behaviour is to make the vehicles moves as a group. We want them to not crash with each other, but we also don't want them to be too far from each other. Lastly, we want them to move towards the same general direction, 
+The goal of the 'Flock' behaviour is to make the vehicles move as a group. We want them to not crash with each other, but we also don't want them to be too far from each other. Lastly, we want them to move towards the same general direction, 
 
 <img src="https://github.com/Sakyawira/Steering-Behaviours/blob/main/gifs/flock.gif?raw=true" width="360" height="360"/>
 
 Flocking contains three simple steering behaviours:
-1. Separation: it calculates the amount of velocity each vehicle needs to stay 
-away from other vehicles and set it as your desired vector. This velocity is the 
+1. Separation: it calculates the amount of velocity each vehicle needs to stay away from other vehicles and set it as your desired vector. This velocity is the 
 average of all the desired vector towards a point between each vehicle with 
 another. It calculates that point by getting the vector from a vehicle that points 
 away from another vehicle and then weighted that vector by dividing it by 
@@ -74,6 +72,5 @@ The goal of 'leader following' is to make all the vehicles follow each other in 
 <img src="https://github.com/Sakyawira/Steering-Behaviours/blob/main/gifs/leaderfollowing.gif?raw=true" width="360" height="360"/>
 
 1. Iterate through the vector of vehicles.
-2. The first vehicle arrives at a moving target (a mouse, or in my case, a player 
-character).
+2. The first vehicle arrives at a moving target (a mouse, or in my case, a player character).
 3. The rest of the vehicle arrive at the inverse velocity of the previous vehicle.
