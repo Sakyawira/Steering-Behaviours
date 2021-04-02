@@ -447,10 +447,10 @@ void GameManager::ChangeBehaviourText()
 		steerString = "Arrive";
 		break;
 	case Behaviour::CONTAINMENT:
-		steerString = "Wander";
+		steerString = "Containment";
 		break;
 	case Behaviour::WANDER:
-		steerString = "Containment";
+		steerString = "Wander";
 		break;
 	case Behaviour::FLOCK:
 		steerString = "Flock";
