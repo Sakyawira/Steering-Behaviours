@@ -57,7 +57,7 @@ public:
 private:
 
 	int numberThreads = std::thread::hardware_concurrency();
-	int numberSlimes = 600;
+	int numberSlimes = 240;
 
 	// Declaring a vector to store different pointers to the future
 	// Will be used to iterate through and get them

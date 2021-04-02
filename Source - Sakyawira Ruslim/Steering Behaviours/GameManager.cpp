@@ -12,7 +12,6 @@
 ********************/
 GameManager::GameManager()
 {
-	numberThreads = std::thread::hardware_concurrency();
 	ThreadPool::GetInstance().Start(numberThreads);
 	isInitialised = false;
 

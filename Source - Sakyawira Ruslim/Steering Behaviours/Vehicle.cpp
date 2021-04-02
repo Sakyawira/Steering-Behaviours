@@ -383,6 +383,7 @@ void Vehicle::LeadFollowing(std::vector<Vehicle*>& _boids, glm::vec3 _targetLoca
 		}
 	}
 	// Calculate separation
-	/*glm::vec3 sep = Seperate(_boids);
-	ApplyForce(sep);*/
+	glm::vec3 sep = Separate(_boids);
+	sep *= 1.5f;
+	ApplyForce(sep);
 }
