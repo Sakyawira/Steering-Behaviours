@@ -62,8 +62,8 @@ class GameObject
 		// Enable Drawing
 		bool enabled = true;
 		
-		Shader* shader;
-		Mesh* mesh;
+		Shader* shader = nullptr;
+		Mesh* mesh = nullptr;
 		std::vector<Texture*> textures;
 	
 		// Position

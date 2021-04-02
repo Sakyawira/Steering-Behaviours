@@ -7,7 +7,7 @@
 #include "Texture.h"
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Creates a texture from an image file
 ********************/
 Texture::Texture(const char * textureDir)
 {
@@ -30,7 +30,7 @@ Texture::Texture(const char * textureDir)
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Return the texture id to be passed in to a uniform
 ********************/
 GLuint Texture::GetID()
 {

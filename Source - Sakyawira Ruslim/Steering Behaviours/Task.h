@@ -1,3 +1,9 @@
+/***********************
+  File Name   :   Task.h
+  Description :   A class that store a callback function to be executed in different threads
+  Author      :   Sakyawira Nanda Ruslim
+  Mail        :   Sakyawira@gmail.com
+********************/
 #pragma once
 #include <future>
 class BasicTask

@@ -1,6 +1,6 @@
 /***********************
   File Name   :   Texture.h
-  Description :   declare the Texture class
+  Description :   define the Texture class which contain functions to create a texture and store it within an instance of this class
   Author      :   Sakyawira Nanda Ruslim
   Mail        :   Sakyawira@gmail.com
 ********************/
@@ -13,7 +13,6 @@
 
 class Texture
 {
-	//Square 1
 public:
 	Texture(const char * textureDir);
 	~Texture() = default;

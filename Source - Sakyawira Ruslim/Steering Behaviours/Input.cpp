@@ -60,32 +60,32 @@ void Input::ProcessInput(GameManager* Game)
 	}
 	if (keyState['1'] == InputState::INPUT_DOWN)
 	{
-		Game->SetBehaviour(SEEK);
+		Game->SetBehaviour(Behaviour::SEEK);
 		Game->ChangeBehaviourText();
 	}
 	else if (keyState['2'] == InputState::INPUT_DOWN)
 	{
-		Game->SetBehaviour(ARRIVE);
+		Game->SetBehaviour(Behaviour::ARRIVE);
 		Game->ChangeBehaviourText();
 	}
 	else if (keyState['3'] == InputState::INPUT_DOWN)
 	{
-		Game->SetBehaviour(CONTAINMENT);
+		Game->SetBehaviour(Behaviour::CONTAINMENT);
 		Game->ChangeBehaviourText();
 	}
 	else if (keyState['4'] == InputState::INPUT_DOWN)
 	{
-		Game->SetBehaviour(WANDER);
+		Game->SetBehaviour(Behaviour::WANDER);
 		Game->ChangeBehaviourText();
 	}
 	else if (keyState['5'] == InputState::INPUT_DOWN)
 	{
-		Game->SetBehaviour(FLOCK);
+		Game->SetBehaviour(Behaviour::FLOCK);
 		Game->ChangeBehaviourText();
 	}
 	else if (keyState['6'] == InputState::INPUT_DOWN)
 	{
-		Game->SetBehaviour(LEAD_FOLLOWING);
+		Game->SetBehaviour(Behaviour::LEAD_FOLLOWING);
 		Game->ChangeBehaviourText();
 	}
 }

@@ -4,10 +4,13 @@
   Author      :   Sakyawira Nanda Ruslim
   Mail        :   Sakyawira@gmail.com
 ********************/
-
 #include "Vehicle.h" 
 #include <utility>
 
+/***********************
+ Description :   Assign shaders, mesh, textures, initial position and direction
+ Author      :   Sakyawira Nanda Ruslim
+********************/
 Vehicle::Vehicle(Shader * _shader, Mesh * _mesh, std::vector<Texture*>& _textures, float _initialX, float _initialY)
 {
 	shader = _shader;
@@ -30,30 +33,30 @@ Vehicle::Vehicle(Shader * _shader, Mesh * _mesh, std::vector<Texture*>& _texture
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Process different behaviours
  Author      :   Sakyawira Nanda Ruslim
 ********************/
 void Vehicle::Process(const Behaviour _steer, std::vector<Vehicle*>& _boids, glm::vec3 _targetLocation, const int _windowWidth, const int _windowHeight, int _playerSize, const float _deltaTime)
 {
 	switch (_steer) {
-	case SEEK:
+	case Behaviour::SEEK:
 		Seek(_targetLocation);
 		break;
-	case ARRIVE:
+	case Behaviour::ARRIVE:
 		Arrive(_targetLocation, _deltaTime);
 		break;
-	case CONTAINMENT:
+	case Behaviour::CONTAINMENT:
 		Containment(static_cast<float>(_windowWidth) * 1.4f, static_cast<float>(_windowHeight) * 1.4f, 400.0f * 1.4f);
 		break;
-	case WANDER:
+	case Behaviour::WANDER:
 		Wander(_deltaTime);
 		Containment(static_cast<float>(_windowWidth), static_cast<float>(_windowHeight), 400.0f);
 		break;
-	case FLOCK:
+	case Behaviour::FLOCK:
 		Flock(_boids);
 		Containment(static_cast<float>(_windowWidth), static_cast<float>(_windowHeight), 400.0f);
 		break;
-	case LEAD_FOLLOWING:
+	case Behaviour::LEAD_FOLLOWING:
 		LeadFollowing(_boids, _targetLocation, _deltaTime);
 		break;
 	}
@@ -70,7 +73,7 @@ void Vehicle::Process(const Behaviour _steer, std::vector<Vehicle*>& _boids, glm
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Limits the passed in force to a certain passed in value
  Author      :   Sakyawira Nanda Ruslim
 ********************/
 void Vehicle::Limit(glm::vec3& _vector3, float _maxMagnitude)
@@ -83,7 +86,7 @@ void Vehicle::Limit(glm::vec3& _vector3, float _maxMagnitude)
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Apply the force by adding it to the acceleration of the object
  Author      :   Sakyawira Nanda Ruslim
 ********************/
 void Vehicle::ApplyForce(glm::vec3 _force)
@@ -92,28 +95,16 @@ void Vehicle::ApplyForce(glm::vec3 _force)
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Apply a force that moves the vehicle to a certain target
  Author      :   Sakyawira Nanda Ruslim
 ********************/
 void Vehicle::Seek(glm::vec3 _target)
-{
-	// A vector pointing from the location to the target
-	glm::vec3 desired = _target - objPosition;  
-    // Normalize desired and scale to maximum speed
-	if (glm::length(desired) > 0.0f)
-	{
-		desired = glm::normalize(desired);
-	}
-	desired *= maxSpeed;
-	// Steering = Desired minus velocity
-	glm::vec3 steer = desired - velocity;
-	// Limit to maximum steering force
-	Limit(steer, maxForce);  
-	ApplyForce(steer);
+{ 
+	ApplyForce(GetSeek(_target));
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Calculate a force that moves the vehicle to a certain target
  Author      :   Sakyawira Nanda Ruslim
 ********************/
 glm::vec3 Vehicle::GetSeek(glm::vec3 _target)
@@ -134,46 +125,16 @@ glm::vec3 Vehicle::GetSeek(glm::vec3 _target)
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Apply a force that moves the vehicle to a certain target, slowing it down as it approaches the target
  Author      :   Sakyawira Nanda Ruslim
 ********************/
 void Vehicle::Arrive(glm::vec3 _target, float _deltaTime)
 {
-	// A vector pointing from the location to the target
-	glm::vec3 desired = _target - objPosition;
-	// Get the magnitude of desired
-	const float d = glm::length(desired);
-	// Normalize desired
-	if (glm::length(desired) > 0.0f)
-	{
-		desired = glm::normalize(desired);
-	}
-	// Map the speed depends on its distance to the target
-	if (d < maxSpeed * 50.0f)
-	{
-		const float m = 0 + (maxSpeed - 0) * ((d -0)/(maxSpeed * 50.0f - 0)) ; //* delta_time;
-		if (d <= maxSpeed * 15.0f)
-		{
-			desired *= (glm::floor(m) /** 1.0001f*/);
-		}
-		else
-		{
-			desired *= (glm::ceil(m));
-		}
-	}
-	else 
-	{
-		desired *= maxSpeed;// * delta_time;
-	}
-	// Steering = Desired minus Velocity
-	glm::vec3 steer = desired - velocity;
-	// Limit to maximum steering force
-	Limit(steer, (maxForce * maxSpeed));  
-	ApplyForce(steer);
+	ApplyForce(GetArrive(_target, _deltaTime));
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Calculate a force that moves the vehicle to a certain target, slowing it down as it approaches the target
  Author      :   Sakyawira Nanda Ruslim
 ********************/
 glm::vec3 Vehicle::GetArrive(glm::vec3 _target, float _deltaTime)
@@ -189,10 +150,10 @@ glm::vec3 Vehicle::GetArrive(glm::vec3 _target, float _deltaTime)
 	// Map the speed depends on its distance to the target
 	if (d < maxSpeed * 50.0f)
 	{
-		const float m = 0 + (maxSpeed - 0) * ((d - 0) / (maxSpeed * 50.0f - 0)); //* delta_time;
+		const float m = 0 + (maxSpeed - 0) * ((d - 0) / (maxSpeed * 50.0f - 0));
 		if (d <= maxSpeed * 15.0f)
 		{
-			desired *= (glm::floor(m) /** 1.0001f*/);
+			desired *= (glm::floor(m));
 		}
 		else
 		{
@@ -201,7 +162,7 @@ glm::vec3 Vehicle::GetArrive(glm::vec3 _target, float _deltaTime)
 	}
 	else
 	{
-		desired *= maxSpeed;// * delta_time;
+		desired *= maxSpeed;
 	}
 	// Steering = Desired minus Velocity
 	glm::vec3 steer = desired - velocity;
@@ -210,23 +171,23 @@ glm::vec3 Vehicle::GetArrive(glm::vec3 _target, float _deltaTime)
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Apply a counter force when the vehicle approach the border of the map (defined by highest point, right most point, and the width/height of the bounding box)
  Author      :   Sakyawira Nanda Ruslim
 ********************/
-void Vehicle::Containment(float _width, float _height, float _d)
+void Vehicle::Containment(float _rightMost, float _topMost, float _d)
 {
 	glm::vec3 desired = glm::vec3(0.0f, 0.0f, 0.0f);
 	if (objPosition.x < -_d)
 	{
 		desired = glm::vec3(maxSpeed, velocity.y, 0.0f);
 	}
-	else if (objPosition.x > _width - _d) {
+	else if (objPosition.x > _rightMost - _d) {
 		desired = glm::vec3(-maxSpeed, velocity.y, 0.0f);
 	}
 	if (objPosition.y < -_d) {
 		desired = glm::vec3(velocity.x, maxSpeed, 0.0f);
 	}
-	else if (objPosition.y > _height - _d) {
+	else if (objPosition.y > _topMost - _d) {
 		desired = glm::vec3(velocity.x, -maxSpeed, 0.0f);
 	}
 	if (desired != glm::vec3(0.0f, 0.0f, 0.0f))
@@ -240,7 +201,7 @@ void Vehicle::Containment(float _width, float _height, float _d)
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Calculates random position around the object to seek towards, and then seek to it
  Author      :   Sakyawira Nanda Ruslim
 ********************/
 void Vehicle::Wander(float _deltaTime)
@@ -267,7 +228,7 @@ void Vehicle::Wander(float _deltaTime)
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Calculate a force that separate the vehicle from all other vehicles in the group, make them not clashiing in the same space
  Author      :   Sakyawira Nanda Ruslim
 ********************/
 glm::vec3 Vehicle::Separate(std::vector<Vehicle*>& _boids, const float _desiredSeparation)
@@ -310,7 +271,7 @@ glm::vec3 Vehicle::Separate(std::vector<Vehicle*>& _boids, const float _desiredS
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Calculate a force that keeps the vehicle from straying a way too much from the group
  Author      :   Sakyawira Nanda Ruslim
 ********************/
 glm::vec3 Vehicle::Cohesion(std::vector<Vehicle*>& _boids)
@@ -341,7 +302,7 @@ glm::vec3 Vehicle::Cohesion(std::vector<Vehicle*>& _boids)
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Calculates a force that makes the vehicle to move towards the average direction of all other vehicles in the group
  Author      :   Sakyawira Nanda Ruslim
 ********************/
 glm::vec3 Vehicle::Alignment(std::vector<Vehicle*>& _boids)
@@ -374,7 +335,7 @@ glm::vec3 Vehicle::Alignment(std::vector<Vehicle*>& _boids)
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Calculates and scales separate, alignment, and cohesion. Then apply it to the vehicle.
  Author      :   Sakyawira Nanda Ruslim
 ********************/
 void Vehicle::Flock(std::vector<Vehicle*>& _boids)
@@ -397,7 +358,7 @@ void Vehicle::Flock(std::vector<Vehicle*>& _boids)
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Makes the vehicle to Arrive towards the previous vehicle in the vector or the player if it is the first vehicle in the vector
  Author      :   Sakyawira Nanda Ruslim
 ********************/
 void Vehicle::LeadFollowing(std::vector<Vehicle*>& _boids, glm::vec3 _targetLocation, float _deltaTime)

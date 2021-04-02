@@ -56,15 +56,15 @@ public:
 	
 private:
 
-	int numberThreads = 1;
-	int numberSlimes = 800;
+	int numberThreads = std::thread::hardware_concurrency();
+	int numberSlimes = 600;
 
 	// Declaring a vector to store different pointers to the future
 	// Will be used to iterate through and get them
 	std::vector< std::future<void>*> futures;
 
 	// Enum for behaviour type
-	Behaviour currentBehaviour = SEEK;
+	Behaviour currentBehaviour = Behaviour::SEEK;
 	
 	// Clock
 	Clock* clock;

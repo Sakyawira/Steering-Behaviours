@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 	auto start = std::chrono::system_clock::now();
 	std::time_t t = std::chrono::system_clock::to_time_t(start);
 	std::time_t* iTime = new time_t(t);
-	srand(time(iTime));
+	srand(static_cast<unsigned int>(time(iTime)));
 	delete iTime;
 
 	audio.Load();

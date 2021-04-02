@@ -4,11 +4,10 @@
   Author      :   Sakyawira Nanda Ruslim
   Mail        :   Sakyawira@gmail.com
 ********************/
-
 #pragma once
 #include "GameObject.h"
 
-enum Behaviour
+enum class Behaviour
 {
 	SEEK,
 	ARRIVE,
@@ -31,7 +30,7 @@ class Vehicle : public GameObject
 		void Arrive(glm::vec3 _target, float _deltaTime);
 		glm::vec3 GetArrive(glm::vec3 _target, float _deltaTime);
 		void Containment(float _width, float _height, float _d);
-		void Wander(float _deltaTime);		
+		void Wander(float _deltaTime);
 		glm::vec3 Separate(std::vector<Vehicle*>& _boids, const float _desiredSeparation = 137.5f);
 		glm::vec3 Cohesion(std::vector<Vehicle*>& _boids);
 		glm::vec3 Alignment(std::vector<Vehicle*>& _boids);

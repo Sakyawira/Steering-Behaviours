@@ -30,7 +30,7 @@ private:
 	};
 
 	// Input Container
-	InputState keyState[255];
-	InputState mouseState[3];
+	InputState keyState[255] = { InputState::INPUT_UP };
+	InputState mouseState[3] = { InputState::INPUT_UP };
 	glm::vec3 mousePosition = glm::vec3(0.0f, 0.0f, 0.0f);
 };

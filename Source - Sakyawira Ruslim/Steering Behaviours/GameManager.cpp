@@ -188,6 +188,8 @@ GameManager::~GameManager()
 
 	delete GameCamera;
 	GameCamera = nullptr;
+
+	ThreadPool::DestroyInstance();
 }
 
 /***********************
@@ -439,22 +441,22 @@ void GameManager::SetBehaviour(Behaviour steer)
 void GameManager::ChangeBehaviourText()
 {
 	switch (currentBehaviour) {
-	case SEEK:
+	case Behaviour::SEEK:
 		steerString = "Seek";
 		break;
-	case ARRIVE:
+	case Behaviour::ARRIVE:
 		steerString = "Arrive";
 		break;
-	case CONTAINMENT:
+	case Behaviour::CONTAINMENT:
 		steerString = "Wander";
 		break;
-	case WANDER:
+	case Behaviour::WANDER:
 		steerString = "Containment";
 		break;
-	case FLOCK:
+	case Behaviour::FLOCK:
 		steerString = "Flock";
 		break;
-	case LEAD_FOLLOWING:
+	case Behaviour::LEAD_FOLLOWING:
 		steerString = "Leader Following";
 		break;
 	}
