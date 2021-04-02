@@ -1,12 +1,18 @@
+/***********************
+  File Name   :   ShaderLoader.h
+  Description :   Contains definition of a singleton helper class that loads shaders and attach them to a program
+  Author      :   Sakyawira Nanda Ruslim
+  Mail        :   Sakyawira@gmail.com
+********************/
 #include "ShaderLoader.h" 
 #include<iostream>
 #include<fstream>
 #include<vector>
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Return a singleton instance
 ********************/
-ShaderLoader& ShaderLoader::getInstance()
+ShaderLoader& ShaderLoader::GetInstance()
 {
 	static ShaderLoader instance;
 							 
@@ -14,18 +20,18 @@ ShaderLoader& ShaderLoader::getInstance()
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Creates a program and attach the shaders to it
 ********************/
-GLuint ShaderLoader::CreateProgram(const char* vertexShaderFilename, const char* fragmentShaderFilename)
+GLuint ShaderLoader::CreateProgram(const char* _vertexShaderFilename, const char* _fragmentShaderFilename)
 {
-	//Create program attach the shader(s) to it
+	// Create program attach the shader(s) to it
 	GLuint program = glCreateProgram();
 
-	const GLuint vertexShaderID = CreateShader(GL_VERTEX_SHADER, vertexShaderFilename);
-	const GLuint fragmentShaderID = CreateShader(GL_FRAGMENT_SHADER, fragmentShaderFilename);
+	const GLuint vertexShaderID = createShader(GL_VERTEX_SHADER, _vertexShaderFilename);
+	const GLuint fragmentShaderID = createShader(GL_FRAGMENT_SHADER, _fragmentShaderFilename);
 	std::string combinedShader = std::to_string(vertexShaderID) + std::to_string(fragmentShaderID);
 
-	for (auto &pair : getInstance().shaderMap)
+	for (auto &pair : GetInstance().shaderMap)
 	{
 		if (combinedShader == pair.second)
 		{
@@ -37,37 +43,36 @@ GLuint ShaderLoader::CreateProgram(const char* vertexShaderFilename, const char*
 	glAttachShader(program,vertexShaderID);
 	glAttachShader(program,fragmentShaderID);
 
-	//Linking the program
+	// Linking the program
 	glLinkProgram(program);
-
 
 	// Check for link errors
 	int link_result = 0;
 	glGetProgramiv(program, GL_LINK_STATUS, &link_result);
 	if (link_result == GL_FALSE)
 	{
-		std::string programName = vertexShaderFilename + *fragmentShaderFilename;
-		PrintErrorDetails(false, program, programName.c_str());
+		std::string programName = _vertexShaderFilename + *_fragmentShaderFilename;
+		printErrorDetails(false, program, programName.c_str());
 		return 0;
 	}
 
-	getInstance().shaderMap.insert({ program, combinedShader });
+	GetInstance().shaderMap.insert({ program, combinedShader });
 
 	return program;
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Reads and compile shader, return a shaderId
 ********************/
-GLuint ShaderLoader::CreateShader(GLenum shaderType, const char* shaderName)
+GLuint ShaderLoader::createShader(GLenum _shaderType, const char* _shaderName)
 {
-	//Create a shaderID object based on the passed in types
-	GLuint shaderID = glCreateShader(shaderType);
+	// Create a shaderID object based on the passed in types
+	GLuint shaderID = glCreateShader(_shaderType);
 
-	//Read the shader files and save it as a string
-	std::string shaderSource = ReadShaderFile(shaderName);
+	// Read the shader files and save it as a string
+	std::string shaderSource = readShaderFile(_shaderName);
 
-	for (auto &pair : getInstance().shaderMap)
+	for (auto &pair : GetInstance().shaderMap)
 	{
 		if (shaderSource == pair.second)
 		{
@@ -76,16 +81,16 @@ GLuint ShaderLoader::CreateShader(GLenum shaderType, const char* shaderName)
 		}
 	}
 
-	//Convert shaderSource into a const char* and assign it to a const char*
+	// Convert shaderSource into a const char* and assign it to a const char*
 	const char* cShaderSource = shaderSource.c_str();
 
-	//Get the size of the string
+	// Get the size of the string
 	const int ShaderLength = shaderSource.size();
 
-	//Populate the shaderID object
+	// Populate the shaderID object
 	glShaderSource(shaderID, 1, &cShaderSource, &ShaderLength);
 
-	//Compile the shaderID
+	// Compile the shaderID
 	glCompileShader(shaderID);
 
 	// Check for errors
@@ -93,22 +98,22 @@ GLuint ShaderLoader::CreateShader(GLenum shaderType, const char* shaderName)
 	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compile_result);
 	if (compile_result == GL_FALSE)
 	{
-		PrintErrorDetails(true, shaderID, shaderName);
+		printErrorDetails(true, shaderID, _shaderName);
 		return 0;
 	}
 
-	getInstance().shaderMap.insert({ shaderID, shaderSource });
+	GetInstance().shaderMap.insert({ shaderID, shaderSource });
 
 	return shaderID;
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Reads the shader file
 ********************/
-std::string ShaderLoader::ReadShaderFile(const char *filename)
+std::string ShaderLoader::readShaderFile(const char *_filename)
 {
 	// Open the file for reading
-	std::ifstream file(filename, std::ios::in);
+	std::ifstream file(_filename, std::ios::in);
 	std::string shaderCode;
 
 	// Ensure the file is open and readable
@@ -130,17 +135,17 @@ std::string ShaderLoader::ReadShaderFile(const char *filename)
 }
 
 /***********************
- Description :   Loads main scene and activates loading screen
+ Description :   Prints the details for when compiling a shader fails
 ********************/
-void ShaderLoader::PrintErrorDetails(bool isShader, GLuint id, const char* name)
+void ShaderLoader::printErrorDetails(bool _isShader, GLuint _id, const char* _name)
 {
 	int infoLogLength = 0;
 	// Retrieve the length of characters needed to contain the info log
-	(isShader) ? glGetShaderiv(id, GL_INFO_LOG_LENGTH, &infoLogLength) : glGetProgramiv(id, GL_INFO_LOG_LENGTH, &infoLogLength);
+	(_isShader) ? glGetShaderiv(_id, GL_INFO_LOG_LENGTH, &infoLogLength) : glGetProgramiv(_id, GL_INFO_LOG_LENGTH, &infoLogLength);
 	std::vector<char> log(infoLogLength);
 
 	// Retrieve the log info and populate log variable
-	(isShader) ? glGetShaderInfoLog(id, infoLogLength, NULL, &log[0]) : glGetProgramInfoLog(id, infoLogLength, NULL, &log[0]);		
+	(_isShader) ? glGetShaderInfoLog(_id, infoLogLength, NULL, &log[0]) : glGetProgramInfoLog(_id, infoLogLength, NULL, &log[0]);		
 	// std::cout << "Error compiling " << ((isShader) ? "shader" : "program") << ": " << name << std::endl;
 	// std::cout << &log[0] << std::endl;
 }

@@ -75,9 +75,6 @@
     <ClInclude Include="GameManager.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Path.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Vehicle.h">
       <Filter>Headers</Filter>
     </ClInclude>

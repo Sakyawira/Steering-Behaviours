@@ -43,5 +43,5 @@ void ShutDown();
 void MouseMove(int x, int y);
 void MousePassiveMove(int x, int y);
 void MouseClick(int button, int state, int x, int y);
-void KeyboardDOWN(unsigned char key, int x, int y);
-void KeyboardUP(unsigned char key, int x, int y);
+void KeyboardDown(unsigned char key, int x, int y);
+void KeyboardUp(unsigned char key, int x, int y);

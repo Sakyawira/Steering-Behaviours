@@ -64,7 +64,7 @@ void GameObject::Draw(Camera & _camera, const GLchar * s_currentTime, GLfloat f_
 
 		shader->PassUniform(s_currentTime, f_currentTime);
 
-		shader->PassFrameUniform(s_frameTime, i_frameTime);
+		shader->PassUniform(s_frameTime, i_frameTime);
 
 		// Passing texture to 'program'
 		shader->PassTexture(textures);

@@ -296,7 +296,7 @@ void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 }
 
 /***********************
- Description :   check player collision with walls
+ Description :   Checks player collision with walls
 ********************/
 bool GameManager::CollisionCheck(float _top, float _bottom, float _left, float _right)
 {

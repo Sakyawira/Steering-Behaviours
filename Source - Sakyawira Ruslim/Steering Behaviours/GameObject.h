@@ -60,7 +60,7 @@ class GameObject
 	
 	protected:
 		// Enable Drawing
-		bool enable = true;
+		bool enabled = true;
 		
 		Shader* shader;
 		Mesh* mesh;

@@ -16,12 +16,12 @@ public:
 	void MouseMove(int x, int y) {}
 	void KeyboardDown(unsigned char key, int x, int y);
 	void KeyboardUp(unsigned char key, int x, int y);
-	glm::vec3 GetLocation();
+	glm::vec3 GetMousePosition();
 
 private:
 
 	// Define Input
-	enum InputState
+	enum class InputState
 	{
 		INPUT_UP,
 		INPUT_DOWN,
@@ -30,7 +30,7 @@ private:
 	};
 
 	// Input Container
-	InputState KeyState[255];
-	InputState MouseState[3];
-	glm::vec3 m_mouse_location = glm::vec3(0.0f, 0.0f, 0.0f);
+	InputState keyState[255];
+	InputState mouseState[3];
+	glm::vec3 mousePosition = glm::vec3(0.0f, 0.0f, 0.0f);
 };

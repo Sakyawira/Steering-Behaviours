@@ -47,8 +47,8 @@ int main(int argc, char **argv)
 	glutDisplayFunc(Render);
 	glutIdleFunc(Update);
 
-	glutKeyboardFunc(KeyboardDOWN);
-	glutKeyboardUpFunc(KeyboardUP);
+	glutKeyboardFunc(KeyboardDown);
+	glutKeyboardUpFunc(KeyboardUp);
 
 	glutMouseFunc(MouseClick);
 	glutMotionFunc(MouseMove);
@@ -71,7 +71,7 @@ void Update()
 	audio.Update();
 
 	// Process Game
-	Game->ProcessGame(audio, input.GetLocation());
+	Game->ProcessGame(audio, input.GetMousePosition());
 	// Process Input
 	input.ProcessInput(Game);
 	// Update game information
@@ -107,7 +107,7 @@ void ShutDown()
 /***********************
  Description :   Loads main scene and activates loading screen
 ********************/
-void KeyboardUP(unsigned char key, int x, int y)
+void KeyboardUp(unsigned char key, int x, int y)
 {
 	input.KeyboardUp(key, x, y);
 }
@@ -115,7 +115,7 @@ void KeyboardUP(unsigned char key, int x, int y)
 /***********************
  Description :   Loads main scene and activates loading screen
 ********************/
-void KeyboardDOWN(unsigned char key, int x, int y)
+void KeyboardDown(unsigned char key, int x, int y)
 {
 	input.KeyboardDown(key, x, y);
 }
