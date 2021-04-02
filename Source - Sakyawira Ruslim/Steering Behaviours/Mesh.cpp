@@ -6,26 +6,29 @@
 ********************/
 #include "Mesh.h"
 
-Mesh::Mesh(const std::vector<GLuint>& indices, const std::vector<GLfloat>& vertices)
+/***********************
+ Description :   Reads the vertices as position, color, and texture
+********************/
+Mesh::Mesh(const std::vector<GLuint>& indices, const std::vector<GLfloat>& _vertices)
 {
-	m_indicesSize = indices.size();
+	indicesSize = indices.size();
 
-	m_vertices = vertices;
+	vertices = _vertices;
 
-	glGenVertexArrays(1, &m_VAO);
-	glBindVertexArray(m_VAO);
+	glGenVertexArrays(1, &mVAO);
+	glBindVertexArray(mVAO);
 
-	glGenBuffers(1, &m_EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+	glGenBuffers(1, &mEBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
 	// 3 is the size of each vertex
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices.front(), GL_STATIC_DRAW);
 
-	glGenBuffers(1, &m_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+	glGenBuffers(1, &mVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, mVBO);
 	// 3 is the size of each vertex
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices.front(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(float), &_vertices.front(), GL_STATIC_DRAW);
 
-	/// Position
+	// Position
 	glVertexAttribPointer(
 		0,
 		3,
@@ -36,7 +39,7 @@ Mesh::Mesh(const std::vector<GLuint>& indices, const std::vector<GLfloat>& verti
 
 	glEnableVertexAttribArray(0);
 
-	/// Color
+	// Color
 	glVertexAttribPointer(
 		1,
 		3,
@@ -48,7 +51,7 @@ Mesh::Mesh(const std::vector<GLuint>& indices, const std::vector<GLfloat>& verti
 	glEnableVertexAttribArray(1);
 
 
-	/// Texture
+	// Texture
 	glVertexAttribPointer(
 		2,
 		2,									// 2 float components for coordinates 
@@ -61,17 +64,18 @@ Mesh::Mesh(const std::vector<GLuint>& indices, const std::vector<GLfloat>& verti
 	glBindVertexArray(0);
 }
 
+/***********************
+ Description :   Uses this mesh to draw the next object
+********************/
 void Mesh::Bind()
 {
-	glBindVertexArray(m_VAO);
+	glBindVertexArray(mVAO);
 }
 
+/***********************
+ Description :   Gets the indices size
+********************/
 int Mesh::GetSize()
 {
-	return m_indicesSize;
-}
-
-std::vector<GLfloat> Mesh::GetVertices()
-{
-	return m_vertices;
+	return indicesSize;
 }

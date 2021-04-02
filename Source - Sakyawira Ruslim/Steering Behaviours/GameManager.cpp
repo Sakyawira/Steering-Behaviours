@@ -7,13 +7,15 @@
 #include "GameManager.h"
 #include <random>
 
+/***********************
+ Description :   Creates all the game objects
+********************/
 GameManager::GameManager()
 {
-	numberThreads = std::thread::hardware_concurrency();
 	ThreadPool::GetInstance().Start(numberThreads);
 	isInitialised = false;
 
-	camera = new Camera(windowWidth, windowHeight);
+	GameCamera = new Camera(windowWidth, windowHeight);
 
 	// Create Clock
 	clock = new Clock();
@@ -51,13 +53,13 @@ GameManager::GameManager()
 	std::vector<Texture*> bg_texture = { backgroundTexture, backgroundTexture };
 
 	// Create Menu Object
-	Menu = new GameObject(alternatingShader, staticMesh, v_menu_texture, 0.0f, 0.0f);
+	menu = new GameObject(alternatingShader, staticMesh, v_menu_texture, 0.0f, 0.0f);
 
 	// Create Player
-	player = new GameObject(animateShader, playerMesh, v_texture2, 0.0f, 0.0f);
-	players.push_back(player);
+	Player = new GameObject(animateShader, playerMesh, v_texture2, 0.0f, 0.0f);
+	players.push_back(Player);
 
-	int border = 375 - static_cast<int>(player->GetScale()) * 2;
+	int border = 375 - static_cast<int>(Player->GetScale()) * 2;
 	
 	// Creating multiple slimes
 	for (int i = 0; i < numberSlimes; ++i)
@@ -72,17 +74,6 @@ GameManager::GameManager()
 		selectedVehicleGreen = new Vehicle(animateShader, vehicleGreenMesh, v_texture2, random_x, random_y);
 		selectedVehicleGreen->Scale(50.0f);
 		vehiclesGreen.push_back(selectedVehicleGreen);
-	}
-
-	// Creates enemy
-	for (int i = 0; i < 1; ++i)
-	{
-		int negate = rand() % 2;
-		negate = (negate == 0 ? -1 : 1);
-		const float random_x = static_cast<float>((rand() % border) * negate);
-		negate = rand() % 2;
-		negate = (negate == 0 ? -1 : 1);
-		const float random_y = static_cast<float>((rand() % border) * negate);
 	}
 
 	// Creating walls around the playable space
@@ -125,6 +116,9 @@ GameManager::GameManager()
 	this->Initialize();
 }
 
+/***********************
+ Description :   Deallocate memories from the game objects
+********************/
 GameManager::~GameManager()
 {
 	delete instructionText;
@@ -163,12 +157,12 @@ GameManager::~GameManager()
 	delete steerText;
 	steerText = nullptr;
 
-	delete player;
-	player = nullptr;
+	delete Player;
+	Player = nullptr;
 	//delete m_enemy_ice;
 
-	delete Menu;
-	Menu = nullptr;
+	delete menu;
+	menu = nullptr;
 	delete menuTexture;
 	menuTexture = nullptr;
 
@@ -191,10 +185,15 @@ GameManager::~GameManager()
 	delete clock;
 	clock = nullptr;
 
-	delete camera;
-	camera = nullptr;
+	delete GameCamera;
+	GameCamera = nullptr;
+
+	ThreadPool::DestroyInstance();
 }
 
+/***********************
+ Description :   Initialise values
+********************/
 void GameManager::Initialize()
 {
 	clock->Initialise();
@@ -206,38 +205,39 @@ void GameManager::Initialize()
 	instructionText->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
 	instructionText->SetScale(0.39f);
 	
-	Menu->Scale(800.0f);
+	menu->Scale(800.0f);
 
 	// Reset Player's variable
-	player->SetPosition(0.0f, 0.0f);
-	player->Scale(78.0f);
+	Player->SetPosition(0.0f, 0.0f);
+	Player->Scale(78.0f);
 
 	// Reset Camera's Position
-	camera->SetPosX(0.0f);
-	camera->SetPosY(0.0f);
+	GameCamera->SetPosX(0.0f);
+	GameCamera->SetPosY(0.0f);
 
-	// Reset score
-	// m_i_steer = 0;
 	ChangeBehaviourText();
 	
 	isInitialised = true;
 	isEnded = false;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 {
 	if (isInitialised == 1)
 	{
-		float deltaTime = clock->GetDeltaTick() / 10.0f;
+		float deltaTime = clock->GetDeltaTime() / 10.0f;
 
 		if (isStarted)
 		{
-			if (player->currentlyMoved)
+			if (Player->CurrentlyMoved)
 			{
 				// audio.Play(SOUND_CONSUME);
 			}
 			
-			// Process Enemies
+			// Process Enemies using multi-threads
 			for (int y = 0; y < numberSlimes - 1;)
 			{
 				int endY = y + static_cast<int>(numberSlimes / numberThreads);
@@ -247,24 +247,24 @@ void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 					endY = numberSlimes;
 				}
 
-				//std::cout << i << std::endl;
 				std::future<void>* newFuture = new std::future<void>;
 
-				*newFuture = ThreadPool::GetInstance().Submit(ProcessVehicles, &vehiclesGreen, y, endY, currentBehaviour, &vehiclesGreen, player->GetLocation(), windowWidth, windowHeight, 0, deltaTime);
+				*newFuture = ThreadPool::GetInstance().Submit(processVehicles, &vehiclesGreen, y, endY, currentBehaviour, &vehiclesGreen, Player->GetPosition(), windowWidth, windowHeight, 0, deltaTime);
 
-				g_vecFuture.push_back(newFuture);
+				futures.push_back(newFuture);
 				y = endY;
 			}
 
-			for (auto& future : g_vecFuture)
+			for (auto& future : futures)
 			{
 				future->get();
 				delete future;
 				future = nullptr;
 			}
-			g_vecFuture.clear();
+			futures.clear();
 
-		/*	for (auto& vehicle : vehiclesGreen) 
+			// Use single thread
+			/*	for (auto& vehicle : vehiclesGreen) 
 			{
 				vehicle->Process(currentBehaviour, vehiclesGreen, player->GetLocation(), windowWidth, windowHeight, 0, deltaTime);
 			}*/
@@ -288,7 +288,7 @@ void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 		}
 
 		clock->Process();
-		player->currentlyMoved = false;
+		Player->CurrentlyMoved = false;
 	}
 	else
 	{
@@ -296,6 +296,9 @@ void GameManager::ProcessGame(Audio& audio, glm::vec3 mouse_location)
 	}
 }
 
+/***********************
+ Description :   Checks player collision with walls
+********************/
 bool GameManager::CollisionCheck(float _top, float _bottom, float _left, float _right)
 {
 	// Check whether or not the position is occupied by an obstacle
@@ -304,46 +307,48 @@ bool GameManager::CollisionCheck(float _top, float _bottom, float _left, float _
 		for (auto& gameObjects2 : walls)
 		{
 			// Check ahead if the game object will get stuck if continue moving in a certain direction
-			if (gameObjects->GetPosition(RIGHT) + _right >= gameObjects2->GetPosition(LEFT)
-				&& gameObjects->GetPosition(LEFT) - _left <= gameObjects2->GetPosition(RIGHT)
-				&& gameObjects->GetPosition(BOTTOM) - _bottom <= gameObjects2->GetPosition(TOP)
-				&& gameObjects->GetPosition(TOP) + _top >= gameObjects2->GetPosition(BOTTOM))
+			if (gameObjects->GetBoundingCoordinate(CoordinateID::RIGHT) + _right >= gameObjects2->GetBoundingCoordinate(CoordinateID::LEFT)
+				&& gameObjects->GetBoundingCoordinate(CoordinateID::LEFT) - _left <= gameObjects2->GetBoundingCoordinate(CoordinateID::RIGHT)
+				&& gameObjects->GetBoundingCoordinate(CoordinateID::BOTTOM) - _bottom <= gameObjects2->GetBoundingCoordinate(CoordinateID::TOP)
+				&& gameObjects->GetBoundingCoordinate(CoordinateID::TOP) + _top >= gameObjects2->GetBoundingCoordinate(CoordinateID::BOTTOM))
 			{
 				// Push the game object out if it is stuck inside a collision box
-				while (gameObjects->GetPosition(RIGHT) >= gameObjects2->GetPosition(LEFT)
-					&& gameObjects->GetPosition(LEFT) <= gameObjects2->GetPosition(RIGHT)
-					&& gameObjects->GetPosition(BOTTOM) <= gameObjects2->GetPosition(TOP)
-					&& gameObjects->GetPosition(TOP) >= gameObjects2->GetPosition(BOTTOM))
+				while (gameObjects->GetBoundingCoordinate(CoordinateID::RIGHT) >= gameObjects2->GetBoundingCoordinate(CoordinateID::LEFT)
+					&& gameObjects->GetBoundingCoordinate(CoordinateID::LEFT) <= gameObjects2->GetBoundingCoordinate(CoordinateID::RIGHT)
+					&& gameObjects->GetBoundingCoordinate(CoordinateID::BOTTOM) <= gameObjects2->GetBoundingCoordinate(CoordinateID::TOP)
+					&& gameObjects->GetBoundingCoordinate(CoordinateID::TOP) >= gameObjects2->GetBoundingCoordinate(CoordinateID::BOTTOM))
 				{
 					if (_top > 0)
 					{
-						gameObjects->Move(MOVE_DOWN, playerSize + 1);
-						camera->MovePosY(-2.0f);
+						gameObjects->Move(MoveDirection::MOVE_DOWN, PlayerSize + 1);
+						GameCamera->MovePosY(-2.0f);
 					}
 					else if (_bottom > 0)
 					{
-						gameObjects->Move(MOVE_UP, playerSize + 1);
-						camera->MovePosY(2.0f);
+						gameObjects->Move(MoveDirection::MOVE_UP, PlayerSize + 1);
+						GameCamera->MovePosY(2.0f);
 					}
 					else if (_left > 0)
 					{
-						gameObjects->Move(MOVE_RIGHT, playerSize + 1);
-						camera->MovePosX(2.0f);
+						gameObjects->Move(MoveDirection::MOVE_RIGHT, PlayerSize + 1);
+						GameCamera->MovePosX(2.0f);
 					}
 					else if (_right > 0)
 					{
-						gameObjects->Move(MOVE_LEFT, playerSize + 1);
-						camera->MovePosX(-2.0f);
+						gameObjects->Move(MoveDirection::MOVE_LEFT, PlayerSize + 1);
+						GameCamera->MovePosX(-2.0f);
 					}
 				}
 				return true;
 			}
 		}
 	}
-	
 	return false;
 }
 
+/***********************
+ Description :   Render game objects
+********************/
 void GameManager::Render()
 {
 	if (isInitialised == 1)
@@ -351,33 +356,33 @@ void GameManager::Render()
 		// Drawing background
 		for (auto& backgroundObjects : backgrounds)
 		{
-			backgroundObjects->Draw(*camera, "currentTime", currentTime);
+			backgroundObjects->Draw(*GameCamera, "currentTime", currentTime);
 		}
 
 		// Drawing all players
 		for (auto& playerObjects : players)
 		{
-			playerObjects->Draw(*camera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
+			playerObjects->Draw(*GameCamera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
 		}
 		
 		// Drawing all obstacles
 		for (auto& coinObjects : vehiclesGreen)
 		{
-			coinObjects->Draw(*camera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
+			coinObjects->Draw(*GameCamera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
 		}
 
 		// Draw all collectables
 		for (auto& obstacleObjects : walls)
 		{
-			obstacleObjects->Draw(*camera, "currentTime", currentTime);
+			obstacleObjects->Draw(*GameCamera, "currentTime", currentTime);
 		}
 
 		//m_enemy_ice->Draw(camera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
 
-		if (player->GetScale() <= 0.13f || isStarted == 0)
+		if (Player->GetScale() <= 0.13f || isStarted == 0)
 		{
-			Menu->Draw(*camera, "currentTime", currentTime);
-			player->Draw(*camera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
+			menu->Draw(*GameCamera, "currentTime", currentTime);
+			Player->Draw(*GameCamera, "currentTime", currentTime, "frameCounts", static_cast<int>(frameCounts));
 		}
 		
 		if (steerText != nullptr)
@@ -389,7 +394,7 @@ void GameManager::Render()
 		instructionText->Render();
 		menuText->Render();
 		
-		frameCounts += 1.0f * clock->GetDeltaTick() / 10.0f;
+		frameCounts += 1.0f * clock->GetDeltaTime() / 10.0f;
 	}
 	else
 	{
@@ -397,59 +402,69 @@ void GameManager::Render()
 	}
 }
 
+/***********************
+ Description :   Check if the game has started
+********************/
 bool GameManager::IsStarted()
 {
 	return isStarted;
 }
 
+/***********************
+ Description :   Check if the game has ended
+********************/
 bool GameManager::IsEnded()
 {
 	return isEnded;
 }
 
+/***********************
+ Description :   Start the game
+********************/
 void GameManager::StartGame()
 {
 	isStarted = true;
 }
 
+/***********************
+ Description :   Change the behaviour of the vehicles
+********************/
 void GameManager::SetBehaviour(Behaviour steer)
 {
 	currentBehaviour = steer;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void GameManager::ChangeBehaviourText()
 {
-	if (currentBehaviour == SEEK)
-	{
+	switch (currentBehaviour) {
+	case Behaviour::SEEK:
 		steerString = "Seek";
-	}
-
-	else if (currentBehaviour == ARRIVE)
-	{
+		break;
+	case Behaviour::ARRIVE:
 		steerString = "Arrive";
-	}
-
-	else if (currentBehaviour == WANDER)
-	{
+		break;
+	case Behaviour::CONTAINMENT:
 		steerString = "Wander";
-	}
-
-	else if (currentBehaviour == CONTAINMENT)
-	{
+		break;
+	case Behaviour::WANDER:
 		steerString = "Containment";
-	}
-
-	else if (currentBehaviour == FLOCK)
-	{
+		break;
+	case Behaviour::FLOCK:
 		steerString = "Flock";
-	}
-	else if (currentBehaviour == LEAD_FOLLOWING)
-	{
+		break;
+	case Behaviour::LEAD_FOLLOWING:
 		steerString = "Leader Following";
+		break;
 	}
 }
 
-void GameManager::ProcessVehicles(std::vector<Vehicle*>* _vehicles, int y, int endY, Behaviour _steer, std::vector<Vehicle*>* _boids, glm::vec3 _targetLocation, int _windowWidth, int _windowHeight, int _playerSize, float _deltaTime)
+/***********************
+ Description :   A callback function to be assign to a thread
+********************/
+void GameManager::processVehicles(std::vector<Vehicle*>* _vehicles, int y, int endY, Behaviour _steer, std::vector<Vehicle*>* _boids, glm::vec3 _targetLocation, int _windowWidth, int _windowHeight, int _playerSize, float _deltaTime)
 {
 	for (int i = y; i < endY; i++)
 	{
@@ -459,6 +474,9 @@ void GameManager::ProcessVehicles(std::vector<Vehicle*>* _vehicles, int y, int e
 	}
 }
 
+/***********************
+ Description :   Gets the clock
+********************/
 Clock * GameManager::GetClock()
 {
 	return clock;

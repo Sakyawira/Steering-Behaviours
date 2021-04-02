@@ -1,11 +1,19 @@
 #include "Audio.h"
 
+/***********************
+ Description :   Initialise the audio engine and channels
+********************/
 Audio::Audio(void)
 {
-	FMOD::System_Create(&audioSystem);// create an instance of the game engine
-	audioSystem->init(32, FMOD_INIT_NORMAL, 0);// initialise the game engine with 32 channels (cantidad de sonido simultaneo que puede haber)
+	// create an instance of the audio engine
+	FMOD::System_Create(&audioSystem); 
+	// initialise the audio engine with 32 channels
+	audioSystem->init(32, FMOD_INIT_NORMAL, 0); 
 }
 
+/***********************
+ Description :   Unallocate memories used by FMOD
+********************/
 Audio::~Audio(void)
 {
 	for (int i = 0; i < NUM_SOUNDS; i++)
@@ -15,6 +23,9 @@ Audio::~Audio(void)
 	audioSystem->release();
 }
 
+/***********************
+ Description :   Load .wav that will be used throughout the game
+********************/
 bool Audio::Load()
 {
 	audioSystem->createStream("Resources/Audio/Chase LOOP.wav", FMOD_DEFAULT | FMOD_LOOP_NORMAL, 0, &sounds[SOUND_BGM1]);
@@ -22,17 +33,20 @@ bool Audio::Load()
 	return true;
 }
 
+/***********************
+ Description :  Start  playing passed in sounds
+********************/
 void Audio::Play(int sound_id)
 {
 	if (sound_id == SOUND_BGM1)
 	{
-		audioSystem->playSound(sounds[SOUND_BGM1], 0, false, &ambient1Channel);
-		ambient1Channel->setVolume(0.25f); //between 0 and 1
+		audioSystem->playSound(sounds[SOUND_BGM1], 0, false, &bgmChannel);
+		bgmChannel->setVolume(0.25f); //between 0 and 1
 	}
 	else if (sound_id == SOUND_BGM2) 
 	{
-		audioSystem->playSound(sounds[SOUND_BGM2], 0, false, &ambient2Channel);
-		ambient2Channel->setVolume(0.2f); //between 0 and 1
+		audioSystem->playSound(sounds[SOUND_BGM2], 0, false, &ambientChannel);
+		ambientChannel->setVolume(0.2f); //between 0 and 1
 	}
 	else
 	{
@@ -41,17 +55,18 @@ void Audio::Play(int sound_id)
 	}
 }
 
-void Audio::Stop(/*int sound_id*/)
-{
-	//sfxChannel->stop();
-}
-
+/***********************
+ Description :   Stop all existing channel
+********************/
 void Audio::StopAll()
 {
-	ambient1Channel->stop();
-	ambient2Channel->stop();
+	bgmChannel->stop();
+	ambientChannel->stop();
 }
 
+/***********************
+ Description :   Process the audio engine
+********************/
 void Audio::Update()
 {
 	audioSystem->update();

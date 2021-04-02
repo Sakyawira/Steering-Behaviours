@@ -1,17 +1,20 @@
 /***********************
   File Name   :   TextLabel.cpp
-  Description :   define the TextLabel class' function and constructor
+  Description :   Definition of a class used for configuring and rendering texts
   Author      :   Sakyawira Nanda Ruslim
   Mail        :   Sakyawira@gmail.com
 ********************/
 #include "TextLabel.h"
 
-TextLabel::TextLabel(int _WINDOW_WIDTH, int _WINDOW_HEIGHT, std::string text, std::string font, glm::vec2 pos, glm::vec3 color, float scale)
+/***********************
+ Description :   Configure the shapes of the texts by creating quad vertices and  letters textures 
+********************/
+TextLabel::TextLabel(int _WINDOW_WIDTH, int _WINDOW_HEIGHT, std::string _text, std::string _font, glm::vec2 _pos, glm::vec3 _color, float _scale)
 {
-	SetText(text);
-	SetColor(color);
-	SetScale(scale);
-	SetPosition(pos);
+	SetText(_text);
+	SetColor(_color);
+	SetScale(_scale);
+	SetPosition(_pos);
 
 	// Edit to work with your code
 	// Screen Size
@@ -35,7 +38,7 @@ TextLabel::TextLabel(int _WINDOW_WIDTH, int _WINDOW_HEIGHT, std::string text, st
 		// std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
 	}
 	// Load font as face
-	if (FT_New_Face(ft, font.c_str(), 0, &face) != 0)
+	if (FT_New_Face(ft, _font.c_str(), 0, &face) != 0)
 	{
 		// std::cout << "ERROR::FREETYPE: Failed to Load Font" << std::endl;
 	}
@@ -51,7 +54,7 @@ TextLabel::TextLabel(int _WINDOW_WIDTH, int _WINDOW_HEIGHT, std::string text, st
 			// std::cout << "ERROR::FREETYPE: Failed to load Glyph"<< std::endl;
 			continue;
 		}
-		GLuint texture = GenerateTexture(face); // Generate a texture
+		GLuint texture = generateTexture(face); // Generate a texture
 											// for each char (gylph)
 		// Now to store character for later use
 		FontChar fontChar = {
@@ -60,7 +63,7 @@ TextLabel::TextLabel(int _WINDOW_WIDTH, int _WINDOW_HEIGHT, std::string text, st
 			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
 			(GLuint)face->glyph->advance.x
 		};
-		Characters.insert(std::pair<GLchar, FontChar>(character, fontChar));
+		characters.insert(std::pair<GLchar, FontChar>(character, fontChar));
 	}
 
 	// Destroy FreeType objets once we are finished
@@ -82,6 +85,9 @@ TextLabel::TextLabel(int _WINDOW_WIDTH, int _WINDOW_HEIGHT, std::string text, st
 	glBindVertexArray(0);
 }
 
+/***********************
+ Description :   Render the text like rendering an object
+********************/
 void TextLabel::Render()
 {
 	// Enable blending
@@ -97,7 +103,7 @@ void TextLabel::Render()
 	glm::vec2 textPos = position;
 	for (std::string::const_iterator character = text.begin(); character != text.end(); character++)
 	{
-		FontChar fontChar = Characters[*character];
+		FontChar fontChar = characters[*character];
 		GLfloat xpos = textPos.x + fontChar.Bearing.x * scale;
 		GLfloat ypos = textPos.y - (fontChar.Size.y - fontChar.Bearing.y) * scale;
 		GLfloat charWidth = fontChar.Size.x * scale;
@@ -130,7 +136,10 @@ void TextLabel::Render()
 	//glDisable(GL_BLEND);
 }
 
-GLuint TextLabel::GenerateTexture(FT_Face face)
+/***********************
+ Description :   Creates texture based on a face (in this case, ASCII characters)
+********************/
+GLuint TextLabel::generateTexture(FT_Face _face)
 {
 	GLuint texture;
 	glGenTextures(1, &texture);
@@ -139,11 +148,11 @@ GLuint TextLabel::GenerateTexture(FT_Face face)
 	glTexImage2D(GL_TEXTURE_2D,
 		0,
 		GL_RED,
-		face->glyph->bitmap.width,
-		face->glyph->bitmap.rows,
+		_face->glyph->bitmap.width,
+		_face->glyph->bitmap.rows,
 		0,
 		GL_RED, GL_UNSIGNED_BYTE,
-		face->glyph->bitmap.buffer);
+		_face->glyph->bitmap.buffer);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -152,4 +161,3 @@ GLuint TextLabel::GenerateTexture(FT_Face face)
 
 	return texture;
 }
-

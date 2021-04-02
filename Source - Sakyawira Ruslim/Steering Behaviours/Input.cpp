@@ -1,52 +1,51 @@
 #include "Input.h"
 
+/***********************
+ Description :   Checks for input state every frame
+********************/
 void Input::ProcessInput(GameManager* Game)
 {
-	if (KeyState['w'] == INPUT_DOWN)
+	if (keyState['w'] == InputState::INPUT_DOWN)
 	{
-		// use g_player_size
-		// to check the collision from further away depends on the player size
-		if (!Game->CollisionCheck(Game->playerSize + 1, 0, 0, 0) && Game->IsStarted())
+		// to check the collision from further away
+		if (!Game->CollisionCheck(Game->PlayerSize + 1, 0, 0, 0) && Game->IsStarted())
 		{
-			Game->player->Move(MOVE_UP, 2 * Game->GetClock()->GetDeltaTick() / 10.0f);
-			Game->camera->MovePosY(2.0f * Game->GetClock()->GetDeltaTick() / 10.0f);
-			Game->player->currentlyMoved = true;
+			Game->Player->Move(MoveDirection::MOVE_UP, 2 * Game->GetClock()->GetDeltaTime() / 10.0f);
+			Game->GameCamera->MovePosY(2.0f * Game->GetClock()->GetDeltaTime() / 10.0f);
+			Game->Player->CurrentlyMoved = true;
 		}
 	}
-	if (KeyState['s'] == INPUT_DOWN)
+	if (keyState['s'] == InputState::INPUT_DOWN)
 	{
-		// use g_player_size
-		// to check the collision from further away depends on the player size
-		if (!Game->CollisionCheck(0, Game->playerSize + 1, 0, 0) && Game->IsStarted())
+		// to check the collision from further away
+		if (!Game->CollisionCheck(0, Game->PlayerSize + 1, 0, 0) && Game->IsStarted())
 		{
-			Game->player->Move(MOVE_DOWN, 2 * Game->GetClock()->GetDeltaTick() / 10.0f);
-			Game->camera->MovePosY(-2.0f * Game->GetClock()->GetDeltaTick() / 10.0f);
-			Game->player->currentlyMoved = true;
+			Game->Player->Move(MoveDirection::MOVE_DOWN, 2 * Game->GetClock()->GetDeltaTime() / 10.0f);
+			Game->GameCamera->MovePosY(-2.0f * Game->GetClock()->GetDeltaTime() / 10.0f);
+			Game->Player->CurrentlyMoved = true;
 		}
 	}
-	if (KeyState['d'] == INPUT_DOWN)
+	if (keyState['d'] == InputState::INPUT_DOWN)
 	{
-		// use g_player_size
-		// to check the collision from further away depends on the player size
-		if (!Game->CollisionCheck(0, 0, 0, Game->playerSize + 1) && Game->IsStarted())
+		// to check the collision from further away
+		if (!Game->CollisionCheck(0, 0, 0, Game->PlayerSize + 1) && Game->IsStarted())
 		{
-			Game->player->Move(MOVE_RIGHT, 2 * Game->GetClock()->GetDeltaTick() / 10.0f);
-			Game->camera->MovePosX(2.0f * Game->GetClock()->GetDeltaTick() / 10.0f);
-			Game->player->currentlyMoved = true;
+			Game->Player->Move(MoveDirection::MOVE_RIGHT, 2 * Game->GetClock()->GetDeltaTime() / 10.0f);
+			Game->GameCamera->MovePosX(2.0f * Game->GetClock()->GetDeltaTime() / 10.0f);
+			Game->Player->CurrentlyMoved = true;
 		}
 	}
-	if (KeyState['a'] == INPUT_DOWN)
+	if (keyState['a'] == InputState::INPUT_DOWN)
 	{
-		// use g_player_size
-		// to check the collision from further away depends on the player size
-		if (!Game->CollisionCheck(0, 0, Game->playerSize + 1, 0) && Game->IsStarted())
+		// to check the collision from further away
+		if (!Game->CollisionCheck(0, 0, Game->PlayerSize + 1, 0) && Game->IsStarted())
 		{
-			Game->player->Move(MOVE_LEFT, 2 * Game->GetClock()->GetDeltaTick() / 10.0f);
-			Game->camera->MovePosX(-2.0f * Game->GetClock()->GetDeltaTick() / 10.0f);
-			Game->player->currentlyMoved = true;
+			Game->Player->Move(MoveDirection::MOVE_LEFT, 2 * Game->GetClock()->GetDeltaTime() / 10.0f);
+			Game->GameCamera->MovePosX(-2.0f * Game->GetClock()->GetDeltaTime() / 10.0f);
+			Game->Player->CurrentlyMoved = true;
 		}
 	}
-	if (KeyState['r'] == INPUT_DOWN)
+	if (keyState['r'] == InputState::INPUT_DOWN)
 	{
 		if (Game->IsEnded())
 		{
@@ -59,63 +58,78 @@ void Input::ProcessInput(GameManager* Game)
 			Game->StartGame();
 		}
 	}
-	if (KeyState['1'] == INPUT_DOWN)
+	if (keyState['1'] == InputState::INPUT_DOWN)
 	{
-		Game->SetBehaviour(SEEK);
+		Game->SetBehaviour(Behaviour::SEEK);
 		Game->ChangeBehaviourText();
 	}
-	else if (KeyState['2'] == INPUT_DOWN)
+	else if (keyState['2'] == InputState::INPUT_DOWN)
 	{
-		Game->SetBehaviour(ARRIVE);
+		Game->SetBehaviour(Behaviour::ARRIVE);
 		Game->ChangeBehaviourText();
 	}
-	else if (KeyState['3'] == INPUT_DOWN)
+	else if (keyState['3'] == InputState::INPUT_DOWN)
 	{
-		Game->SetBehaviour(CONTAINMENT);
+		Game->SetBehaviour(Behaviour::CONTAINMENT);
 		Game->ChangeBehaviourText();
 	}
-	else if (KeyState['4'] == INPUT_DOWN)
+	else if (keyState['4'] == InputState::INPUT_DOWN)
 	{
-		Game->SetBehaviour(WANDER);
+		Game->SetBehaviour(Behaviour::WANDER);
 		Game->ChangeBehaviourText();
 	}
-	else if (KeyState['5'] == INPUT_DOWN)
+	else if (keyState['5'] == InputState::INPUT_DOWN)
 	{
-		Game->SetBehaviour(FLOCK);
+		Game->SetBehaviour(Behaviour::FLOCK);
 		Game->ChangeBehaviourText();
 	}
-	else if (KeyState['6'] == INPUT_DOWN)
+	else if (keyState['6'] == InputState::INPUT_DOWN)
 	{
-		Game->SetBehaviour(LEAD_FOLLOWING);
+		Game->SetBehaviour(Behaviour::LEAD_FOLLOWING);
 		Game->ChangeBehaviourText();
 	}
 }
 
+/***********************
+ Description :   Callback function for when mouse is clicked
+********************/
 void Input::MouseClick(int button, int state, int x, int y)
 {
 	if (button >= 3)
 	{
 		return;
 	}
-	MouseState[button] = (state == GLUT_DOWN) ? INPUT_DOWN : INPUT_UP;
+	mouseState[button] = (state == GLUT_DOWN) ? InputState::INPUT_DOWN : InputState::INPUT_UP;
 }
 
+/***********************
+ Description :   Sets the mouse location
+********************/
 void Input::MousePassiveMove(int x, int y)
 {
-	m_mouse_location = glm::vec3(x - 400.0f, -y + 400.0f, 0.0f);
+	mousePosition = glm::vec3(x - windowWidth/2, -y + windowHeight/2, 0.0f);
 }
 
+/***********************
+ Description :   Sets the state of a keyboard key to pressed down
+********************/
 void Input::KeyboardDown(unsigned char key, int x, int y)
 {
-	KeyState[key] = INPUT_DOWN;
+	keyState[key] = InputState::INPUT_DOWN;
 }
 
+/***********************
+ Description :   Sets the state of a keyboard key to released
+********************/
 void Input::KeyboardUp(unsigned char key, int x, int y)
 {
-	KeyState[key] = INPUT_UP;
+	keyState[key] = InputState::INPUT_UP;
 }
 
-glm::vec3 Input::GetLocation()
+/***********************
+ Description :   Gets the location of the mouse
+********************/
+glm::vec3 Input::GetMousePosition()
 {
-	return m_mouse_location;
+	return mousePosition;
 }

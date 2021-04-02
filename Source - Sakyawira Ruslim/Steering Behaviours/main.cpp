@@ -5,55 +5,19 @@
 #include <ctime>   
 #include <random>
 
-void Update()
-{
-	//FMOD_RESULT System::update();
-	audio.Update();
-
-	// Process Game
-	Game->ProcessGame(audio, input.GetLocation());
-	
-	// Process Input
-	input.ProcessInput(Game);
-	
-	// Update game information
-	glutPostRedisplay();
-}
-
-void KeyboardUP(unsigned char key, int x, int y)
-{
-	input.KeyboardUp(key, x, y);
-}
-
-void KeyboardDOWN(unsigned char key, int x, int y)
-{
-	input.KeyboardDown(key, x, y);
-}
-
-void MouseClick(int button, int state, int x, int y)
-{
-	input.MouseClick(button, state, x, y);
-}
-
-void MousePassiveMove(int x, int y)
-{
-	input.MousePassiveMove(x, y);
-}
-
-void MouseMove(int x, int y)
-{
-	input.MouseMove(x, y);
-}
-
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 int main(int argc, char **argv)
 {
 	auto start = std::chrono::system_clock::now();
 	std::time_t t = std::chrono::system_clock::to_time_t(start);
 	std::time_t* iTime = new time_t(t);
-	srand(time(iTime));
+	srand(static_cast<unsigned int>(time(iTime)));
 	delete iTime;
 
 	audio.Load();
+	// audio.Play(SOUND_BGM1);
 		
 	// Setup and create at glut controlled window
 	glutInit(&argc, argv);
@@ -83,8 +47,8 @@ int main(int argc, char **argv)
 	glutDisplayFunc(Render);
 	glutIdleFunc(Update);
 
-	glutKeyboardFunc(KeyboardDOWN);
-	glutKeyboardUpFunc(KeyboardUP);
+	glutKeyboardFunc(KeyboardDown);
+	glutKeyboardUpFunc(KeyboardUp);
 
 	glutMouseFunc(MouseClick);
 	glutMotionFunc(MouseMove);
@@ -98,6 +62,25 @@ int main(int argc, char **argv)
 	return 0;
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
+void Update()
+{
+	//FMOD_RESULT System::update();
+	audio.Update();
+
+	// Process Game
+	Game->ProcessGame(audio, input.GetMousePosition());
+	// Process Input
+	input.ProcessInput(Game);
+	// Update game information
+	glutPostRedisplay();
+}
+
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void Render()
 {
 	glClear((GL_COLOR_BUFFER_BIT));
@@ -113,7 +96,50 @@ void Render()
 	glutSwapBuffers();
 }
 
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
 void ShutDown()
 {
 	delete Game;
+}
+
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
+void KeyboardUp(unsigned char key, int x, int y)
+{
+	input.KeyboardUp(key, x, y);
+}
+
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
+void KeyboardDown(unsigned char key, int x, int y)
+{
+	input.KeyboardDown(key, x, y);
+}
+
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
+void MouseClick(int button, int state, int x, int y)
+{
+	input.MouseClick(button, state, x, y);
+}
+
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
+void MousePassiveMove(int x, int y)
+{
+	input.MousePassiveMove(x, y);
+}
+
+/***********************
+ Description :   Loads main scene and activates loading screen
+********************/
+void MouseMove(int x, int y)
+{
+	input.MouseMove(x, y);
 }

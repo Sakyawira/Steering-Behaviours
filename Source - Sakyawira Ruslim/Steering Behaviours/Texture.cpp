@@ -6,9 +6,11 @@
 ********************/
 #include "Texture.h"
 
+/***********************
+ Description :   Creates a texture from an image file
+********************/
 Texture::Texture(const char * textureDir)
 {
-//	textureID = _texture;
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
@@ -27,6 +29,9 @@ Texture::Texture(const char * textureDir)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+/***********************
+ Description :   Return the texture id to be passed in to a uniform
+********************/
 GLuint Texture::GetID()
 {
 	return textureID;

@@ -1,6 +1,6 @@
 /***********************
   File Name   :   TextLabel.h
-  Description :   declare the TextLabel class' which controls displaying of texts and its properties
+  Description :   Declaration of a class used for configuring and rendering texts
   Author      :   Sakyawira Nanda Ruslim
   Mail        :   Sakyawira@gmail.com
 ********************/
@@ -12,7 +12,6 @@
 #include <SOIL.h>
 #include <glm.hpp>
 #include <fmod.hpp>
-//#include <vld.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -28,8 +27,8 @@
 
 struct FontChar
 {
-	GLuint TextureID; // Texture ID
-	glm::ivec2 Size; // Size of the glyph
+	GLuint TextureID;	// Texture ID
+	glm::ivec2 Size;	// Size of the glyph
 	glm::ivec2 Bearing; // Offset of the glyph (top left) from the baseline
 	GLuint Advance;
 };
@@ -40,23 +39,23 @@ class TextLabel
 		TextLabel(
 			int _WINDOW_WIDTH,
 			int _WINDOW_HEIGHT,
-			std::string newText,
-			std::string newFont,
-			glm::vec2 newPos,
-			glm::vec3 newColor = glm::vec3(1.0f, 1.0f, 1.0f),
-			float scale = 1.0f
+			std::string _text,
+			std::string _font,
+			glm::vec2 _pos,
+			glm::vec3 _color = glm::vec3(1.0f, 1.0f, 1.0f),
+			float _scale = 1.0f
 		);
 	
 		~TextLabel() {};
 	
 		void Render();
-		void SetText(std::string newText) { text = newText; };
-		void SetColor(glm::vec3 newColor) { color = newColor; };
-		void SetScale(GLfloat newScale) { scale = newScale; };
-		void SetPosition(glm::vec2 newPosition) { position = newPosition; };
+		void SetText(std::string _text) { text = _text; };
+		void SetColor(glm::vec3 _color) { color = _color; };
+		void SetScale(GLfloat _scale) { scale = _scale; };
+		void SetPosition(glm::vec2 _position) { position = _position; };
 	
 	private:
-		GLuint GenerateTexture(FT_Face face);
+		GLuint generateTexture(FT_Face _face);
 
 		std::string text;
 		GLfloat scale;
@@ -65,5 +64,5 @@ class TextLabel
 
 		GLuint VAO, VBO, program;
 		glm::mat4 proj;
-		std::map<GLchar, FontChar> Characters;
+		std::map<GLchar, FontChar> characters;
 };
