@@ -9,16 +9,14 @@
 /***********************
  Description :   assign the shaders, mesh, and textures of the object, initialise its position
 ********************/
-GameObject::GameObject(Shader* _shader, Mesh* _mesh, std::vector<Texture*>&& _textures, float _initial_x, float _initial_y)
+GameObject::GameObject(Shader* _shader, Mesh* _mesh, std::vector<Texture*>&& _textures, float _initial_x, float _initial_y) :
+shader(_shader),
+mesh(_mesh),
+textures(_textures),
+xPos(_initial_x),
+yPos(_initial_y),
+objPosition(glm::vec3(xPos, yPos, 0.0f))
 {
-	shader = _shader;
-	mesh = _mesh;
-	textures = _textures;
-
-	xPos = _initial_x;
-	yPos = _initial_y;
-
-	objPosition = glm::vec3(xPos, yPos, 0.0f);
 	translationMatrix = glm::translate(glm::mat4(), objPosition);
 	modelMatrix = translationMatrix * rotationZ * scaleMatrix;
 }

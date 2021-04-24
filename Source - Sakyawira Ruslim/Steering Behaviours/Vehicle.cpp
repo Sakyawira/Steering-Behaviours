@@ -11,18 +11,9 @@
  Description :   Assign shaders, mesh, textures, initial position and direction
  Author      :   Sakyawira Nanda Ruslim
 ********************/
-Vehicle::Vehicle(Shader * _shader, Mesh * _mesh, std::vector<Texture*>&& _textures, float _initialX, float _initialY)
+Vehicle::Vehicle(Shader * _shader, Mesh * _mesh, std::vector<Texture*>&& _textures, float _initialX, float _initialY) : 
+	GameObject(_shader, _mesh, std::move(_textures), _initialX,  _initialY)
 {
-	shader = _shader;
-	mesh = _mesh;
-	xPos = _initialX;
-	yPos = _initialY;
-	textures = _textures;
-
-	objPosition = glm::vec3(xPos, yPos, 0.0f);
-	translationMatrix = glm::translate(glm::mat4(), objPosition);
-	modelMatrix = translationMatrix * rotationZ * scaleMatrix;
-
 	// Pick a start direction (positive / negative)
 	int negate = rand() % 2;
 	dir = (negate == 0 ? false : true);

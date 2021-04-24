@@ -21,7 +21,7 @@ class Vehicle : public GameObject
 {
 	public:
 		Vehicle(Shader* _shader, Mesh* _mesh, std::vector<Texture*>&& _textures, float _initialX, float _initialY);
-		~Vehicle() = default;
+		// ~Vehicle() = default;
 		void Process(Behaviour _steer, std::vector<Vehicle*>& _boids, glm::vec3 _targetLocation, int _windowWidth, int _windowHeight, int _playerSize, float _deltaTime);
 		void Limit(glm::vec3& _vector3,float _maxMagnitude);
 		void ApplyForce(glm::vec3 _force);
