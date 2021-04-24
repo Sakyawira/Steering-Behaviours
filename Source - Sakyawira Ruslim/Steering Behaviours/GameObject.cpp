@@ -9,7 +9,7 @@
 /***********************
  Description :   assign the shaders, mesh, and textures of the object, initialise its position
 ********************/
-GameObject::GameObject(Shader* _shader, Mesh* _mesh, std::vector<Texture*>& _textures, float _initial_x, float _initial_y)
+GameObject::GameObject(Shader* _shader, Mesh* _mesh, std::vector<Texture*>&& _textures, float _initial_x, float _initial_y)
 {
 	shader = _shader;
 	mesh = _mesh;

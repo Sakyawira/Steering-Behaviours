@@ -10,58 +10,40 @@
 /***********************
  Description :   Creates all the game objects
 ********************/
-GameManager::GameManager()
+GameManager::GameManager() :
+	GameCamera(new Camera(windowWidth, windowHeight)),
+	// Create Clock
+	clock(new Clock()),
+	// Create Shader
+	alternatingShader(new Shader("Resources/Shaders/AlternatingVertex.txt", "Resources/Shaders/AlternatingFragment.txt")),
+	animateShader(new Shader("Resources/Shaders/AnimationVertex.txt", "Resources/Shaders/AnimationFragment.txt")),
+	scrollingShader(new Shader("Resources/Shaders/ScrollingVertex.txt", "Resources/Shaders/AnimationFragment.txt")),
+	// Create Mesh
+	vehicleGreenMesh(new Mesh(animationIndices, slicedVertices3)),
+	vehicleBlueMesh(new Mesh(animationIndices, slicedVertices2)),
+	waterMesh(new Mesh(animationIndices, slicedVertices3)),
+	playerMesh(new Mesh(animationIndices, slicedVertices)),
+	staticMesh(new Mesh(animationIndices, fullVertices)),
+	// Text
+	steerText(new TextLabel(windowWidth, windowHeight, steerString, "Resources/Fonts/arial.ttf", glm::vec2(-350.0f, 350.0f))),
+	menuText(new TextLabel(windowWidth, windowHeight, "Sakyawira's Steering Behaviours", "Resources/Fonts/arial.ttf", glm::vec2(-169, 250.0f))),
+	instructionText(new TextLabel(windowWidth, windowHeight, "Press 'R' to start the game...", "Resources/Fonts/arial.ttf", glm::vec2(-108, -250.0f))),
+	// Texture
+	starsTexture(new Texture("Resources/Textures/stars.png")),
+	backgroundTexture(new Texture("Resources/Textures/bg.png")),
+	slimesTexture(new Texture("Resources/Textures/Slimes.png")),
+	waterTexture(new Texture("Resources/Textures/water.png")),
+	menuTexture(new Texture("Resources/Textures/Menu.png"))
 {
 	ThreadPool::GetInstance().Start(numberThreads);
 	isInitialised = false;
-
-	GameCamera = new Camera(windowWidth, windowHeight);
-
-	// Create Clock
-	clock = new Clock();
-	// Create Shader
-	alternatingShader = new Shader("Resources/Shaders/AlternatingVertex.txt", "Resources/Shaders/AlternatingFragment.txt");
-	animateShader = new Shader("Resources/Shaders/AnimationVertex.txt", "Resources/Shaders/AnimationFragment.txt");
-	scrollingShader = new Shader("Resources/Shaders/ScrollingVertex.txt", "Resources/Shaders/AnimationFragment.txt");
-
-	// Create Mesh
-	staticMesh = new Mesh(animationIndices, fullVertices);
-	vehicleGreenMesh = new Mesh(animationIndices, slicedVertices3);
-	vehicleBlueMesh = new Mesh(animationIndices, slicedVertices2);
-	waterMesh = new Mesh(animationIndices, slicedVertices3);
-	playerMesh = new Mesh(animationIndices, slicedVertices);
-
-	// Text
-	std::string m_string_menu = "Sakyawira's Steering Behaviours";
-	std::string m_string_instruction = "Press 'R' to start the game...";
-	steerText = new TextLabel(windowWidth, windowHeight, steerString, "Resources/Fonts/arial.ttf", glm::vec2(-350.0f, 350.0f));
-	menuText = new TextLabel(windowWidth, windowHeight, m_string_menu, "Resources/Fonts/arial.ttf", glm::vec2(-169, 250.0f));
-	instructionText = new TextLabel(windowWidth, windowHeight, m_string_instruction, "Resources/Fonts/arial.ttf", glm::vec2(-108, -250.0f));
-
-	// Texture
-	starsTexture = new Texture("Resources/Textures/stars.png");
-	backgroundTexture = new Texture("Resources/Textures/bg.png");
-	slimesTexture = new Texture("Resources/Textures/Slimes.png");
-	waterTexture = new Texture("Resources/Textures/water.png");
-	menuTexture = new Texture("Resources/Textures/Menu.png");
-
-	// Texture Vectors to be passed in
-	std::vector<Texture*> v_water_texture = { waterTexture, waterTexture };
-	std::vector<Texture*> v_menu_texture = { menuTexture, menuTexture };
-	std::vector<Texture*> v_texture2 = { slimesTexture, slimesTexture };
-	std::vector<Texture*> v_texture = { starsTexture, backgroundTexture };
-	std::vector<Texture*> bg_texture = { backgroundTexture, backgroundTexture };
-
 	// Create Menu Object
-	menu = new GameObject(alternatingShader, staticMesh, v_menu_texture, 0.0f, 0.0f);
-
+	menu = new GameObject(alternatingShader, staticMesh, { menuTexture, menuTexture }, 0.0f, 0.0f);
 	// Create Player
-	Player = new GameObject(animateShader, playerMesh, v_texture2, 0.0f, 0.0f);
+	Player = new GameObject(animateShader, playerMesh, { slimesTexture, slimesTexture }, 0.0f, 0.0f);
 	players.push_back(Player);
-
 	int border = 375 - static_cast<int>(Player->GetScale()) * 2;
-	
-	// Creating multiple slimes
+	// Creating multiple slimes { starsTexture, backgroundTexture }
 	for (int i = 0; i < numberSlimes; ++i)
 	{
 		int negate = rand() % 2;
@@ -71,7 +53,7 @@ GameManager::GameManager()
 		negate = (negate == 0 ? -1 : 1);
 
 		const float random_y = static_cast<float>((rand() % border) * negate);
-		selectedVehicleGreen = new Vehicle(animateShader, vehicleGreenMesh, v_texture2, random_x, random_y);
+		selectedVehicleGreen = new Vehicle(animateShader, vehicleGreenMesh, { slimesTexture, slimesTexture }, random_x, random_y);
 		selectedVehicleGreen->Scale(50.0f);
 		vehiclesGreen.push_back(selectedVehicleGreen);
 	}
@@ -81,7 +63,7 @@ GameManager::GameManager()
 	{
 		for (int i = -windowWidth; i < windowWidth;)
 		{
-			wall = new GameObject(scrollingShader, waterMesh, v_water_texture, static_cast<float>(i), static_cast<float>(j));
+			wall = new GameObject(scrollingShader, waterMesh, { waterTexture, waterTexture }, static_cast<float>(i), static_cast<float>(j));
 			wall->Scale(50.0f);
 			walls.push_back(wall);
 			i += 50;
@@ -92,7 +74,7 @@ GameManager::GameManager()
 	{
 		for (int i = -windowWidth; i < windowWidth;)
 		{
-			wall = new GameObject(scrollingShader, waterMesh, v_water_texture, static_cast<float>(j), static_cast<float>(i));
+			wall = new GameObject(scrollingShader, waterMesh, { waterTexture, waterTexture }, static_cast<float>(j), static_cast<float>(i));
 			wall->Scale(50.0f);
 			walls.push_back(wall);
 			i += 50;
@@ -105,7 +87,7 @@ GameManager::GameManager()
 	{
 		for (int i = -windowWidth; i < windowWidth * 2;)
 		{
-			background = new GameObject(alternatingShader, staticMesh, bg_texture, static_cast<float>(i), static_cast<float>(j));
+			background = new GameObject(alternatingShader, staticMesh, { backgroundTexture, backgroundTexture }, static_cast<float>(i), static_cast<float>(j));
 			background->Scale(800.0f);
 			backgrounds.push_back(background);
 			i += windowWidth;

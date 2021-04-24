@@ -11,7 +11,7 @@
  Description :   Assign shaders, mesh, textures, initial position and direction
  Author      :   Sakyawira Nanda Ruslim
 ********************/
-Vehicle::Vehicle(Shader * _shader, Mesh * _mesh, std::vector<Texture*>& _textures, float _initialX, float _initialY)
+Vehicle::Vehicle(Shader * _shader, Mesh * _mesh, std::vector<Texture*>&& _textures, float _initialX, float _initialY)
 {
 	shader = _shader;
 	mesh = _mesh;

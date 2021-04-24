@@ -41,7 +41,7 @@ class GameObject
 {
 	public:
 		GameObject() = default;
-		GameObject(Shader* _shader, Mesh* _mesh, std::vector<Texture*>& _textures, float _initial_x, float _initial_y);
+		GameObject(Shader* _shader, Mesh* _mesh, std::vector<Texture*>&& _textures, float _initial_x, float _initial_y);
 		~GameObject() = default;
 	
 		void Draw(Camera& _camera, const GLchar* s_currentTime, GLfloat f_currentTime);
