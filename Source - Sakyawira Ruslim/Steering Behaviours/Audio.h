@@ -18,8 +18,8 @@
 class Audio
 {
 public:
-	Audio(void);
-	virtual ~Audio(void);
+	Audio();
+	virtual ~Audio();
 
 	bool Load();
 	void Play(int sound_id);

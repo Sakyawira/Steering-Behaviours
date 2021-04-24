@@ -46,7 +46,7 @@ void Clock::Process()
 	currentTime = std::chrono::high_resolution_clock::now();
 
 
-	deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
+	deltaTime = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count());
 
 	timeElapsed += deltaTime;
 }
@@ -56,5 +56,5 @@ void Clock::Process()
 ********************/
 float Clock::GetDeltaTime()
 {
-	return (deltaTime);
+	return static_cast<float>(deltaTime);
 }

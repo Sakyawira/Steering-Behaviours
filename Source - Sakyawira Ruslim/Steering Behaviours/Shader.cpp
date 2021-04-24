@@ -9,10 +9,8 @@
 /***********************
  Description :   Creates a program using vertex shader and fragment shader
 ********************/
-Shader::Shader(const char * _vertexShaderFilename, const char * _fragmentShaderFilename)
-{
-	program = ShaderLoader::CreateProgram(_vertexShaderFilename, _fragmentShaderFilename);
-}
+Shader::Shader(const char * _vertexShaderFilename, const char * _fragmentShaderFilename) : 
+	program(ShaderLoader::CreateProgram(_vertexShaderFilename, _fragmentShaderFilename)) {}
 
 /***********************
  Description :   Updates the transform uniforms of the program with the object's transform

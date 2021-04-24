@@ -22,7 +22,6 @@ protected:
 
 private:
 	Clock(const Clock& _kr);
-	Clock& operator= (const Clock& _kr);
 
 public:
 
@@ -33,8 +32,6 @@ protected:
 	std::chrono::high_resolution_clock::time_point currentTime;
 
 	std::vector<double> timeHistory;
-
-	long long numCounts;
 
 private:
 

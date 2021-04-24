@@ -9,12 +9,10 @@
 /***********************
  Description :   Reads the vertices as position, color, and texture
 ********************/
-Mesh::Mesh(const std::vector<GLuint>& indices, const std::vector<GLfloat>& _vertices)
+Mesh::Mesh(const std::vector<GLuint>& indices, const std::vector<GLfloat>& _vertices) :
+	indicesSize(indices.size()),
+	vertices(_vertices)
 {
-	indicesSize = indices.size();
-
-	vertices = _vertices;
-
 	glGenVertexArrays(1, &mVAO);
 	glBindVertexArray(mVAO);
 

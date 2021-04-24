@@ -3,7 +3,7 @@
 /***********************
  Description :   Initialise the audio engine and channels
 ********************/
-Audio::Audio(void)
+Audio::Audio()
 {
 	// create an instance of the audio engine
 	FMOD::System_Create(&audioSystem); 
@@ -14,7 +14,7 @@ Audio::Audio(void)
 /***********************
  Description :   Unallocate memories used by FMOD
 ********************/
-Audio::~Audio(void)
+Audio::~Audio()
 {
 	for (int i = 0; i < NUM_SOUNDS; i++)
 	{
