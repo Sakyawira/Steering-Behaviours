@@ -40,13 +40,9 @@ enum class CoordinateID {
 class GameObject
 {
 	public:
-		GameObject() = default;
 		GameObject(Shader* _shader, Mesh* _mesh, std::vector<Texture*>&&, float _initial_x, float _initial_y);
-		~GameObject() = default;
-	
 		void Draw(Camera& _camera, const GLchar* s_currentTime, GLfloat f_currentTime);
 		void Draw(Camera& _camera, const GLchar* s_currentTime, GLfloat f_currentTime, const GLchar* s_frameTime, GLint i_frameTime);
-
 		glm::vec3 GetPosition();
 		void SetPosition(float _x_pos, float _y_pos);
 		float GetBoundingCoordinate(CoordinateID COORDINATE_ID);
